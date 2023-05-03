@@ -1,5 +1,12 @@
 # no_Yongsan_yes_Doksan
 파이널 프로젝트
+
+## Members
+`공통`: 데이터 전처리   
+`김강직`: 프론트엔드   
+`김민수`: 백엔드  
+`민병창`: 백엔드, 데이터베이스  
+`이병호`: 프론트엔드  
    
 ## 개요
 - 전자제품 전용 커뮤니티   
@@ -21,7 +28,7 @@
 ## 구성
 - WEB FE : React
 - WEB BE : Spring
-- DB : MySql
+- DB : MySQL
 - ML/DL : Tensorflow or Pytorch or ScikitLearn
 
 ## DB
