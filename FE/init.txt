@@ -1,2 +1,2 @@
 초기 설정
-git push test
+git push test 찐막..
