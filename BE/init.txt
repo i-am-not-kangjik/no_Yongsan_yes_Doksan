@@ -1,2 +1,2 @@
 초기 설정
-pr test
+pre test
