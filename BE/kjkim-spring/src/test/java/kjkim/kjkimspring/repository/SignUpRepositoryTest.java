@@ -19,9 +19,9 @@ public class SignUpRepositoryTest {
     @Test
     void testJpa(){
         SignUp user1 = new SignUp();
-        user1.setEmail("aaaaa@bbb.ccc");
+        user1.setEmail("aaaaaa@bbb.ccc");
         user1.setPasswordHash("1234");
-        user1.setName("username");
+        user1.setName("username2");
         user1.setPhoneNumber("12312341234");
         this.signUpRepository.save(user1);
     }
@@ -43,5 +43,11 @@ public class SignUpRepositoryTest {
             SignUp user = up.get();
             Assertions.assertEquals("username", user.getName());
         }
+    }
+
+    @Test
+    void testJpa_4() {
+        SignUp user = this.signUpRepository.findByName("username2");
+        Assertions.assertEquals(5, user.getUserId());
     }
 }
