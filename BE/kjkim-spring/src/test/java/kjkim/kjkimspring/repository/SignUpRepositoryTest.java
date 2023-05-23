@@ -15,7 +15,7 @@ public class SignUpRepositoryTest {
     @Test
     void testJpa(){
         SignUp user1 = new SignUp();
-        user1.setEmail("aaaa@bbb.ccc");
+        user1.setEmail("aaaaa@bbb.ccc");
         user1.setPasswordHash("1234");
         user1.setName("username");
         user1.setPhoneNumber("12312341234");
