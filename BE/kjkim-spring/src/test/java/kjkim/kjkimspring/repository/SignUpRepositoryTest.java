@@ -58,4 +58,11 @@ public class SignUpRepositoryTest {
         );
         Assertions.assertEquals(1, user.getUserId());
     }
+
+    @Test
+    void testJpa_6(){
+        List<SignUp> userlist = this.signUpRepository.findByEmailLike("%ccc");
+        SignUp user = userlist.get(1);
+        Assertions.assertEquals("aaaa@bbb.ccc", user.getEmail());
+    }
 }
