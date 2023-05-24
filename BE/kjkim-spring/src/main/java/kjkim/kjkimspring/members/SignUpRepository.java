@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SignUpRepository extends JpaRepository<SignUp, Long> {
-    SignUp findByEmail(String email);
     SignUp findByName(String name);
-
+    SignUp findByNameAndEmail(String name, String email);
 }

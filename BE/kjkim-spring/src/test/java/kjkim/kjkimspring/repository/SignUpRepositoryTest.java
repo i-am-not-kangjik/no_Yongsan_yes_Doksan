@@ -50,4 +50,12 @@ public class SignUpRepositoryTest {
         SignUp user = this.signUpRepository.findByName("username2");
         Assertions.assertEquals(5, user.getUserId());
     }
+
+    @Test
+    void testJpa_5() {
+        SignUp user = this.signUpRepository.findByNameAndEmail(
+          "username", "aaa@bbb.ccc"
+        );
+        Assertions.assertEquals(1, user.getUserId());
+    }
 }
