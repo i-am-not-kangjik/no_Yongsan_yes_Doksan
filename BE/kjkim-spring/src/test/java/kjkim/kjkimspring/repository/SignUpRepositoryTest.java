@@ -65,4 +65,13 @@ public class SignUpRepositoryTest {
         SignUp user = userlist.get(1);
         Assertions.assertEquals("aaaa@bbb.ccc", user.getEmail());
     }
+
+    @Test
+    void testJpa_7() {
+        Optional<SignUp> user = this.signUpRepository.findById(5L);
+        Assertions.assertTrue(user.isPresent());
+        SignUp u = user.get();
+        u.setName("username5");
+        this.signUpRepository.save(u);
+    }
 }
