@@ -16,10 +16,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public SignUp create(String name, String email, String password) {
+    public SignUp create(String email, String name, String password) {
         SignUp user = new SignUp();
-        user.setName(name);
         user.setEmail(email);
+        user.setName(name);
         user.setPasswordHash(passwordEncoder.encode(password));
         this.signUpRepository.save(user);
         return user;
