@@ -1,8 +1,10 @@
 package kjkim.kjkimspring.user;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "\"user\"")
 public class SignUp {
@@ -11,7 +13,7 @@ public class SignUp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(unique = true, nullable = false, length = 255)
     private String username;
 
     @Column(nullable = false, length = 255)
@@ -25,6 +27,19 @@ public class SignUp {
 
     @Column(length = 20)
     private String oauthProvider;
+
+    @Column(length = 255)
+    private String oauthId;
+
+    @CreationTimestamp
+    @Column
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column
+    private LocalDateTime updatedAt;
+
+    // getters and setters ...
 
     public Long getId() {
         return id;
@@ -97,18 +112,5 @@ public class SignUp {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    @Column(length = 255)
-    private String oauthId;
-
-    @Column(nullable = false, updatable = false,
-            columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false,
-            columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime updatedAt;
-
-    // Getter and Setter methods
 }
 
