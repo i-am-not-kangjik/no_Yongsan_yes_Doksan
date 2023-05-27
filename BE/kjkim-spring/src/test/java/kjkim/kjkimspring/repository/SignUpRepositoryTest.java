@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class SignUpRepositoryTest {
@@ -37,5 +38,14 @@ public class SignUpRepositoryTest {
 
         SignUp user = all.get(0);
         Assertions.assertEquals("user1", user.getUsername());
+    }
+
+    @Test
+    void testJpa_3() {
+        Optional<SignUp> up = this.signUpRepository.findById(11L);
+        if(up.isPresent()) {
+            SignUp user = up.get();
+            Assertions.assertEquals("user1", user.getUsername());
+        }
     }
 }
