@@ -78,4 +78,14 @@ public class SignUpRepositoryTest {
         u.setEmail("user2@naver.com");
         this.signUpRepository.save(u);
     }
+
+    @Test
+    void testJpa_8() {
+        Assertions.assertEquals(2, this.signUpRepository.count());
+        Optional<SignUp> user = this.signUpRepository.findById(11L);
+        Assertions.assertTrue(user.isPresent());
+        SignUp u = user.get();
+        this.signUpRepository.delete(u);
+        Assertions.assertEquals(1, this.signUpRepository.count());
+    }
 }
