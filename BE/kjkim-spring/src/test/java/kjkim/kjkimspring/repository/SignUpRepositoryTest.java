@@ -48,4 +48,10 @@ public class SignUpRepositoryTest {
             Assertions.assertEquals("user1", user.getUsername());
         }
     }
+
+    @Test
+    void testJpa_4() {
+        SignUp user = this.signUpRepository.findByUsername("user1");
+        Assertions.assertEquals(11, user.getId());
+    }
 }
