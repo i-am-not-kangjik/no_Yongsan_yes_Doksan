@@ -1,4 +1,4 @@
-package kjkim.kjkimspring.members;
+package kjkim.kjkimspring.user;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
