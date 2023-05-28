@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -24,7 +23,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
         </div>
       </div>
   </nav>
-  <th:block layout:gragment="content"></th:block>
+  <th:block layout:fragment="content"></th:block>
   <script th:src="@{/bootstrap.min.js}"></script>
 </body>
 </html>
