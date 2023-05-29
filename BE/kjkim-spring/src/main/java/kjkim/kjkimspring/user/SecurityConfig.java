@@ -17,7 +17,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests().antMatchers("/**").permitAll().and().csrf()
                 .and().headers().addHeaderWriter(new XFrameOptionsHeaderWriter(
                         XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
-                ));
+                )).and().formLogin().loginPage("/user/login").defaultSuccessUrl("/");
         return http.build();
     }
 
