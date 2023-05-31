@@ -3,6 +3,8 @@ package kjkim.kjkimspring.sell;
 import kjkim.kjkimspring.buy.Buy;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,7 +25,13 @@ public class Sell {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createDate;
+    @CreationTimestamp
+    @Column
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "sell", cascade = CascadeType.REMOVE)
     private List<Buy> buyList;
