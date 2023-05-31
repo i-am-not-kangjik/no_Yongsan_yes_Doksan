@@ -86,7 +86,7 @@ public class SellAndBuyRepositoryTest {
         Sell s = os.get();
 
         Buy b = new Buy();
-        b.setContent("제가 구매하겠습니다. 10만원이요");
+        b.setContent("10만원도 비싼데 제가 5만원에 살게요");
         b.setSell(s);
         this.buyRepository.save(b);
     }
