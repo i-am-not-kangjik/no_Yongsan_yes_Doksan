@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HelloController {
     @GetMapping("/")
     public String root() {
-        return "index";
+        return "redirect:sell";
     }
 
     @GetMapping("hello")
