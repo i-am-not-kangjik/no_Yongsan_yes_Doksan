@@ -1,15 +1,18 @@
 package kjkim.kjkimspring.controller;
 
 import kjkim.kjkimspring.sell.Sell;
+import kjkim.kjkimspring.sell.SellForm;
 import kjkim.kjkimspring.service.SellService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -33,13 +36,16 @@ public class SellController {
     }
 
     @GetMapping("/sell/create")
-    public String sellCreate() {
+    public String sellCreate(SellForm sellForm) {
         return "sell_form";
     }
 
     @PostMapping("/sell/create")
-    public String sellCreate(@RequestParam String subject, @RequestParam String content) {
-        this.sellService.create(subject, content);
+    public String sellCreate(@Valid SellForm sellForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "sell_form";
+        }
+        this.sellService.create(sellForm.getSubject(), sellForm.getContent());
         return "redirect:/sell";
     }
 }
