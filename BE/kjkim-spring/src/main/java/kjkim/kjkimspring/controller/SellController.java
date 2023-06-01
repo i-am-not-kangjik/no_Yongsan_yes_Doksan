@@ -1,5 +1,6 @@
 package kjkim.kjkimspring.controller;
 
+import kjkim.kjkimspring.buy.BuyForm;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellForm;
 import kjkim.kjkimspring.service.SellService;
@@ -29,7 +30,7 @@ public class SellController {
     }
 
     @GetMapping(value = "/sell/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id) {
+    public String detail(Model model, @PathVariable("id") Integer id, BuyForm buyForm) {
         Sell sell = this.sellService.getSell(id);
         model.addAttribute("sell", sell);
         return "sell_detail";
