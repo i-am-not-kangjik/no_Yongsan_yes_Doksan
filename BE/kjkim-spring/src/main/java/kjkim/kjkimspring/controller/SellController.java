@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -28,5 +30,16 @@ public class SellController {
         Sell sell = this.sellService.getSell(id);
         model.addAttribute("sell", sell);
         return "sell_detail";
+    }
+
+    @GetMapping("/sell/create")
+    public String sellCreate() {
+        return "sell_form";
+    }
+
+    @PostMapping("/sell/create")
+    public String sellCreate(@RequestParam String subject, @RequestParam String content) {
+        this.sellService.create(subject, content);
+        return "redirect:/sell";
     }
 }

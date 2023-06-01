@@ -27,4 +27,11 @@ public class SellService {
             throw new DataNotFoundException("sell is not found");
         }
     }
+
+    public void create(String subject, String content) {
+        Sell s = new Sell();
+        s.setSubject(subject);
+        s.setContent(content);
+        this.sellRepository.save(s);
+    }
 }
