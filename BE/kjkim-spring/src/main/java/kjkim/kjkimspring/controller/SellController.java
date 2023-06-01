@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -20,5 +21,12 @@ public class SellController {
         List<Sell> sellList = this.sellService.getList();
         model.addAttribute("sellList", sellList);
         return "sell_list";
+    }
+
+    @GetMapping(value = "/sell/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        Sell sell = this.sellService.getSell(id);
+        model.addAttribute("sell", sell);
+        return "sell_detail";
     }
 }
