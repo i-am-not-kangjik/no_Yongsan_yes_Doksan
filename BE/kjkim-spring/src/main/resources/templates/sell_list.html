@@ -9,68 +9,68 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card my-3">
                         <img src="https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg" class="card-image-top" alt="thumbnail">
-                        <div class="card-body">
-                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>
+                        <div class="card-body" th:each="sell : ${sellList}">
+                            <h5 class="card-title text-center"><a href="#" class="text-secondary" th:text="${sell.subject}">제목이 들어감</a></h5>
                             <p class="card-text text-center">가격</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card my-3">
+<!--                <div class="col-md-6 col-lg-4">-->
+<!--                    <div class="card my-3">-->
 
-                        <img src="https://images.pexels.com/photos/3848158/pexels-photo-3848158.jpeg" class="card-image-top" alt="thumbnail">
+<!--                        <img src="https://images.pexels.com/photos/3848158/pexels-photo-3848158.jpeg" class="card-image-top" alt="thumbnail">-->
 
-                        <div class="card-body">
-                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>
-                            <p class="card-text text-center">가격</p>
-                        </div>
-                    </div>
-                </div>
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>-->
+<!--                            <p class="card-text text-center">가격</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card my-3">
+<!--                <div class="col-md-6 col-lg-4">-->
+<!--                    <div class="card my-3">-->
 
-                        <img src="https://images.pexels.com/photos/2343170/pexels-photo-2343170.jpeg" class="card-image-top" alt="thumbnail">
-                        <div class="card-body">
-                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>
-                            <p class="card-text text-center">가격</p>
-                        </div>
-                    </div>
-                </div>
+<!--                        <img src="https://images.pexels.com/photos/2343170/pexels-photo-2343170.jpeg" class="card-image-top" alt="thumbnail">-->
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>-->
+<!--                            <p class="card-text text-center">가격</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card my-3">
-                        <img src="https://images.pexels.com/photos/1519088/pexels-photo-1519088.jpeg" class="card-image-top" alt="thumbnail">
-                        <div class="card-body">
-                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>
-                            <p class="card-text text-center">가격</p>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="col-md-6 col-lg-4">-->
+<!--                    <div class="card my-3">-->
+<!--                        <img src="https://images.pexels.com/photos/1519088/pexels-photo-1519088.jpeg" class="card-image-top" alt="thumbnail">-->
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>-->
+<!--                            <p class="card-text text-center">가격</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card my-3">
+<!--                <div class="col-md-6 col-lg-4">-->
+<!--                    <div class="card my-3">-->
 
-                        <img src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg" class="card-image-top" alt="thumbnail">
-                        <div class="card-body">
-                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>
-                            <p class="card-text text-center">가격</p>
-                        </div>
-                    </div>
-                </div>
+<!--                        <img src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg" class="card-image-top" alt="thumbnail">-->
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>-->
+<!--                            <p class="card-text text-center">가격</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card my-3">
+<!--                <div class="col-md-6 col-lg-4">-->
+<!--                    <div class="card my-3">-->
 
-                        <img src="https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg" class="card-image-top" alt="thumbnail">
+<!--                        <img src="https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg" class="card-image-top" alt="thumbnail">-->
 
-                        <div class="card-body">
-                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>
-                            <p class="card-text text-center">가격</p>
-                        </div>
-                    </div>
-                </div>
+<!--                        <div class="card-body">-->
+<!--                            <h5 class="card-title text-center"><a href="#" class="text-secondary">제목이 들어감</a></h5>-->
+<!--                            <p class="card-text text-center">가격</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
     </section>
