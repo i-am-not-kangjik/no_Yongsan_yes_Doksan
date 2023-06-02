@@ -4,7 +4,10 @@ import kjkim.kjkimspring.buy.BuyForm;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellForm;
 import kjkim.kjkimspring.service.SellService;
+import kjkim.kjkimspring.service.UserService;
+import kjkim.kjkimspring.user.SignUp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -21,6 +25,7 @@ import java.util.List;
 public class SellController {
 
     private final SellService sellService;
+    private final UserService userService;
 
     @GetMapping("/sell")
     public String sell(Model model) {
@@ -36,17 +41,20 @@ public class SellController {
         return "sell_detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/sell/create")
     public String sellCreate(SellForm sellForm) {
         return "sell_form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/sell/create")
-    public String sellCreate(@Valid SellForm sellForm, BindingResult bindingResult) {
+    public String sellCreate(@Valid SellForm sellForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "sell_form";
         }
-        this.sellService.create(sellForm.getSubject(), sellForm.getContent());
+        SignUp signUp = this.userService.getUser(principal.getName());
+        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), signUp);
         return "redirect:/sell";
     }
 }

@@ -1,13 +1,14 @@
 package kjkim.kjkimspring.sell;
 
 import kjkim.kjkimspring.buy.Buy;
+import kjkim.kjkimspring.user.SignUp;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,4 +36,14 @@ public class Sell {
 
     @OneToMany(mappedBy = "sell", cascade = CascadeType.REMOVE)
     private List<Buy> buyList;
+
+    private String imgName;
+
+    private String imgPath;
+
+    @NotNull
+    private Integer price;
+
+    @ManyToOne
+    private SignUp author;
 }

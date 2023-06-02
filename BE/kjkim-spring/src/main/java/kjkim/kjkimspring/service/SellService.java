@@ -3,6 +3,7 @@ package kjkim.kjkimspring.service;
 import kjkim.kjkimspring.DataNotFoundException;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellRepository;
+import kjkim.kjkimspring.user.SignUp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,11 @@ public class SellService {
         }
     }
 
-    public void create(String subject, String content) {
+    public void create(String subject, String content, SignUp user) {
         Sell s = new Sell();
         s.setSubject(subject);
         s.setContent(content);
+        s.setAuthor(user);
         this.sellRepository.save(s);
     }
 }

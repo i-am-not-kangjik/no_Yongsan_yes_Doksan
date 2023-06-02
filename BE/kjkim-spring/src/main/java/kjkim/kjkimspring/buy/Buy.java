@@ -1,11 +1,12 @@
 package kjkim.kjkimspring.buy;
 
 import kjkim.kjkimspring.sell.Sell;
+import kjkim.kjkimspring.user.SignUp;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,4 +33,7 @@ public class Buy {
 
     @ManyToOne
     private Sell sell;
+
+    @ManyToOne
+    private SignUp author;
 }
