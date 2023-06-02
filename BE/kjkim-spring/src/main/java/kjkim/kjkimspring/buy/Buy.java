@@ -1,9 +1,12 @@
 package kjkim.kjkimspring.buy;
 
 import kjkim.kjkimspring.sell.Sell;
+import kjkim.kjkimspring.user.SignUp;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,9 +23,17 @@ public class Buy {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @CreatedDate
-    private LocalDateTime createDate;
+    @CreationTimestamp
+    @Column
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     private Sell sell;
+
+    @ManyToOne
+    private SignUp author;
 }
