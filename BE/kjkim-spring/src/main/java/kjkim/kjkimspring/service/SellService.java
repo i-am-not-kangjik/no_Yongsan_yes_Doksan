@@ -5,6 +5,10 @@ import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellRepository;
 import kjkim.kjkimspring.user.SignUp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +24,10 @@ public class SellService {
 
     private final SellRepository sellRepository;
 
-    public List<Sell> getList() {
-        return this.sellRepository.findAll();
+    public Page<Sell> getList(int page) {
+        Sort sort = Sort.by("createdAt").descending();
+        Pageable pageable = PageRequest.of(page, 9, sort);
+        return this.sellRepository.findAll(pageable);
     }
 
     public Sell getSell(Integer id) {

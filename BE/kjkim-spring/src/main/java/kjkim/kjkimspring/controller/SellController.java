@@ -7,6 +7,7 @@ import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.SignUp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +31,8 @@ public class SellController {
     private final UserService userService;
 
     @GetMapping("/sell")
-    public String sell(Model model) {
-        List<Sell> sellList = this.sellService.getList();
+    public String sell(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Sell> sellList = this.sellService.getList(page);
         model.addAttribute("sellList", sellList);
         return "sell_list";
     }
