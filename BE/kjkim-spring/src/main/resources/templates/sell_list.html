@@ -16,7 +16,12 @@
                                                                   th:text="${sell.subject}">제목이 들어감</a>
                             <span class="text-danger small ms-2" th:if="${#lists.size(sell.buyList) > 0}" th:text="${#lists.size(sell.buyList)}"></span>
                             </h5>
-                            <p class="card-text text-center">가격</p>
+                            <div style="display: flex; justify-content: space-between">
+                                <p class="card-text text-success" th:if="${sell.author != null}" th:text="${sell.author.username}">글쓴이</p>
+                                <p class="card-text text-success" th:if="${sell.author == null}" th:text="글쓴이"></p>
+                                <p class="card-text text-danger" th:if="${sell.price != null}" th:text="${sell.price} + 원">가격</p>
+                                <p class="card-text text-danger" th:if="${sell.price == null}" th:text="null원">가격</p>
+                            </div>
                         </div>
                     </div>
                 </div>
