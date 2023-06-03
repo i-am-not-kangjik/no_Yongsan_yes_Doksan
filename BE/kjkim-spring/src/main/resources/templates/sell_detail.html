@@ -5,9 +5,17 @@
 
     <div class="card my-3">
         <div class="card-body">
+            <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif" class="img-fluid">
+            <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}" class="img-fluid">
             <div class="card-text" style="white-space: pre-line;" th:text="${sell.content}"></div>
             <div class="d-flex justify-content-end">
+                <div class="p-2 bg-success text-white">
+                    <span th:if="${sell.price != null}" th:text="${sell.price} + 원"></span>
+                </div>
                 <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">
+                        <span th:if="${sell.author != null}" th:text="${sell.author.username}"></span>
+                    </div>
                     <div th:text="${#temporals.format(sell.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
@@ -22,6 +30,9 @@
             <div class="card-text" style="white-space: pre-line;" th:text="${buy.content}"></div>
             <div class="d-flex justify-content-end">
                 <div class="badge bg-light text-dark p-2 text-start">
+                    <div>
+                        <span th:if="${sell.author != null}" th:text="${buy.author.username}"></span>
+                    </div>
                     <div th:text="${#temporals.format(buy.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>

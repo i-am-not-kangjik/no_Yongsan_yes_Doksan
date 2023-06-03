@@ -98,4 +98,26 @@ public class SellAndBuyRepositoryTest {
         Buy b = ob.get();
         assertEquals(18, b.getSell().getId());
     }
+
+    @Test
+    void testJpa_9() {
+        for (int i = 1; i <= 100; i++) {
+            Sell s = new Sell();
+            s.setSubject(String.format("테스트 판매글 [%03d]", i));
+            s.setContent("내용 없음");
+            s.setPrice(5000);
+            this.sellRepository.save(s);
+        }
+    }
+
+    @Test
+    void testJpa_10() {
+        for (int i = 101; i <= 200; i++) {
+            Sell s = new Sell();
+            s.setSubject(String.format("테스트 판매글 [%03d]", i));
+            s.setContent("내용 음슴");
+            s.setPrice(5000);
+            this.sellRepository.save(s);
+        }
+    }
 }

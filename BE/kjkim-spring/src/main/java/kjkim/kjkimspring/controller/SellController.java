@@ -7,6 +7,7 @@ import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.SignUp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -28,8 +31,8 @@ public class SellController {
     private final UserService userService;
 
     @GetMapping("/sell")
-    public String sell(Model model) {
-        List<Sell> sellList = this.sellService.getList();
+    public String sell(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Sell> sellList = this.sellService.getList(page);
         model.addAttribute("sellList", sellList);
         return "sell_list";
     }
@@ -49,12 +52,12 @@ public class SellController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/sell/create")
-    public String sellCreate(@Valid SellForm sellForm, BindingResult bindingResult, Principal principal) {
+    public String sellCreate(@Valid SellForm sellForm, BindingResult bindingResult, Principal principal, MultipartFile upload) throws IOException {
         if (bindingResult.hasErrors()) {
             return "sell_form";
         }
         SignUp signUp = this.userService.getUser(principal.getName());
-        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), signUp);
+        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(),signUp, upload);
         return "redirect:/sell";
     }
 }
