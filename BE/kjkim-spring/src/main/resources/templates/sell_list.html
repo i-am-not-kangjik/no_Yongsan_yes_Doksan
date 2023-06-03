@@ -9,23 +9,47 @@
                 </div>
                 <div class="col-md-6 col-lg-4" th:each="sell : ${sellList}">
                     <div class="card my-3">
-                        <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif" class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">
-                        <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}" class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">
+                        <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif"
+                             class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">
+                        <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}"
+                             class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">
                         <div class="card-body">
                             <h5 class="card-title text-center"><a th:href="@{|/sell/${sell.id}|}" class="text-secondary"
                                                                   th:text="${sell.subject}">제목이 들어감</a>
-                            <span class="text-danger small ms-2" th:if="${#lists.size(sell.buyList) > 0}" th:text="${#lists.size(sell.buyList)}"></span>
+                                <span class="text-danger small ms-2" th:if="${#lists.size(sell.buyList) > 0}"
+                                      th:text="${#lists.size(sell.buyList)}"></span>
                             </h5>
                             <div style="display: flex; justify-content: space-between">
-                                <p class="card-text text-success" th:if="${sell.author != null}" th:text="${sell.author.username}">글쓴이</p>
+                                <p class="card-text text-success" th:if="${sell.author != null}"
+                                   th:text="${sell.author.username}">글쓴이</p>
                                 <p class="card-text text-success" th:if="${sell.author == null}" th:text="글쓴이"></p>
-                                <p class="card-text text-danger" th:if="${sell.price != null}" th:text="${sell.price} + 원">가격</p>
+                                <p class="card-text text-danger" th:if="${sell.price != null}"
+                                   th:text="${sell.price} + 원">가격</p>
                                 <p class="card-text text-danger" th:if="${sell.price == null}" th:text="null원">가격</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div th:if="${!sellList.isEmpty()}">
+            <ul class="pagination pagination-lg justify-content-center">
+                <li class="page-item" th:classappend="${!sellList.hasPrevious} ? 'disabled'">
+                    <a class="page-link" th:href="@{|?page=${sellList.number-1}|}">
+                        <span>이전</span>
+                    </a>
+                </li>
+                <li th:each="page: ${#numbers.sequence(0, sellList.totalPages-1)}"
+                    th:if="${page >= sellList.number-5 and page <= sellList.number+5}"
+                    th:classappend="${page == sellList.number} ? 'active'" class="page-item">
+                    <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                </li>
+                <li class="page-item" th:classappend="${!sellList.hasNext} ? 'disabled'">
+                    <a class="page-link" th:href="@{|?page=${sellList.number+1}|}">
+                        <span>다음</span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </section>
 </div>
