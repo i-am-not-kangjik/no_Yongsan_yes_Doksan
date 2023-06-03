@@ -11,6 +11,10 @@
       <label for="content" class="form-label">내용</label>
       <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
     </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">가격</label>
+      <input type="number" th:field="*{price}" class="form-control" style="width: 10%" step="1000" min="0">
+    </div>
     <input type="submit" value="저장하기" class="btn btn-primary my-2">
   </form>
 </div>

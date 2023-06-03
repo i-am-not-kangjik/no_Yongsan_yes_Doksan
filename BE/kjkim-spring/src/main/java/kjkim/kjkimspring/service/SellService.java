@@ -29,10 +29,11 @@ public class SellService {
         }
     }
 
-    public void create(String subject, String content, SignUp user) {
+    public void create(String subject, String content, Integer price, SignUp user) {
         Sell s = new Sell();
         s.setSubject(subject);
         s.setContent(content);
+        s.setPrice(price);
         s.setAuthor(user);
         this.sellRepository.save(s);
     }

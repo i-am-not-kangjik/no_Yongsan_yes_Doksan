@@ -54,7 +54,7 @@ public class SellController {
             return "sell_form";
         }
         SignUp signUp = this.userService.getUser(principal.getName());
-        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), signUp);
+        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(),signUp);
         return "redirect:/sell";
     }
 }
