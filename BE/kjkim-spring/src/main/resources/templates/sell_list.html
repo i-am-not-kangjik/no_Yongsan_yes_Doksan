@@ -9,8 +9,8 @@
                 </div>
                 <div class="col-md-6 col-lg-4" th:each="sell : ${sellList}">
                     <div class="card my-3">
-                        <img src="https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg"
-                             class="card-image-top" alt="thumbnail">
+                        <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif" class="card-image-top img-thumbnail" alt="thumbnail">
+                        <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}" class="card-image-top img-thumbnail" alt="thumbnail">
                         <div class="card-body">
                             <h5 class="card-title text-center"><a th:href="@{|/sell/${sell.id}|}" class="text-secondary"
                                                                   th:text="${sell.subject}">제목이 들어감</a>
