@@ -8,6 +8,7 @@ import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.SignUp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -59,5 +61,38 @@ public class SellController {
         SignUp signUp = this.userService.getUser(principal.getName());
         this.sellService.create(sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(),signUp, upload);
         return "redirect:/sell";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sell/modify/{id}")
+    public String sellModify(Model model, SellForm sellForm, @PathVariable("id") Integer id, Principal principal) {
+        Sell sell = this.sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
+        } else {
+            sellForm.setSubject(sell.getSubject());
+            sellForm.setContent(sell.getContent());
+            sellForm.setPrice(sell.getPrice());
+            String originalFileName = sell.getImgName();
+            model.addAttribute("filename", originalFileName);
+            return "sell_form";
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/sell/modify/{id}")
+    public String sellModify(@Valid SellForm sellForm, BindingResult bindingResult,
+                             @PathVariable("id") Integer id, Principal principal, MultipartFile upload) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "sell_form";
+        }
+
+        Sell sell = this.sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new  ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
+        } else {
+            this.sellService.modify(sell, sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(), upload);
+            return String.format("redirect:/sell/%s", id);
+        }
     }
 }

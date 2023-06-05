@@ -16,7 +16,7 @@
                     <div class="mb-2">
                         <span th:if="${sell.author != null}" th:text="${sell.author.username}"></span>
                     </div>
-                    <div th:text="${#temporals.format(sell.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+                    <div th:text="${#temporals.format(sell.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
             <div class="my-3">
