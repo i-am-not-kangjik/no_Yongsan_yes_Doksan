@@ -41,6 +41,8 @@ public class Sell {
 
     private String imgPath;
 
+    private String oriImgName;
+
     @NotNull
     private Integer price;
 
