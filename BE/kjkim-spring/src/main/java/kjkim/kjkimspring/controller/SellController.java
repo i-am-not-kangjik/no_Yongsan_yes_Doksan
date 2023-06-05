@@ -95,4 +95,16 @@ public class SellController {
             return String.format("redirect:/sell/%s", id);
         }
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sell/delete/{id}")
+    public String sellDelete(Principal principal, @PathVariable("id") Integer id) {
+        Sell sell = this.sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없는 사용자입니다.");
+        } else {
+            this.sellService.delete(sell);;
+            return "redirect:/";
+        }
+    }
 }

@@ -91,4 +91,8 @@ public class SellService {
             this.sellRepository.save(sell);
         }
     }
+
+    public void delete(Sell sell) {
+        this.sellRepository.delete(sell);
+    }
 }
