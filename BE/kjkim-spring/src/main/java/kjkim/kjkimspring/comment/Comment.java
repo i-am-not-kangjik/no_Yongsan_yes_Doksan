@@ -1,7 +1,7 @@
-package kjkim.kjkimspring.buy;
+package kjkim.kjkimspring.comment;
 
 import kjkim.kjkimspring.sell.Sell;
-import kjkim.kjkimspring.user.SignUp;
+import kjkim.kjkimspring.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 
-public class Buy {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,5 +35,5 @@ public class Buy {
     private Sell sell;
 
     @ManyToOne
-    private SignUp author;
+    private User author;
 }

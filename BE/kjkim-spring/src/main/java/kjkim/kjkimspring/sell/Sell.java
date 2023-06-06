@@ -1,7 +1,7 @@
 package kjkim.kjkimspring.sell;
 
-import kjkim.kjkimspring.buy.Buy;
-import kjkim.kjkimspring.user.SignUp;
+import kjkim.kjkimspring.comment.Comment;
+import kjkim.kjkimspring.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,7 +35,7 @@ public class Sell {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "sell", cascade = CascadeType.REMOVE)
-    private List<Buy> buyList;
+    private List<Comment> commentList;
 
     private String imgName;
 
@@ -47,5 +47,5 @@ public class Sell {
     private Integer price;
 
     @ManyToOne
-    private SignUp author;
+    private User author;
 }

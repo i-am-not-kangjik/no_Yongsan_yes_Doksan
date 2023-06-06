@@ -16,8 +16,8 @@
                         <div class="card-body">
                             <h5 class="card-title text-center"><a th:href="@{|/sell/${sell.id}|}" class="text-secondary"
                                                                   th:text="${sell.subject}">제목이 들어감</a>
-                                <span class="text-danger small ms-2" th:if="${#lists.size(sell.buyList) > 0}"
-                                      th:text="${#lists.size(sell.buyList)}"></span>
+                                <span class="text-danger small ms-2" th:if="${#lists.size(sell.commentList) > 0}"
+                                      th:text="${#lists.size(sell.commentList)}"></span>
                             </h5>
                             <div style="display: flex; justify-content: space-between">
                                 <p class="card-text text-success" th:if="${sell.author != null}"

@@ -1,11 +1,11 @@
 package kjkim.kjkimspring.controller;
 
-import kjkim.kjkimspring.buy.BuyForm;
+import kjkim.kjkimspring.comment.CommentForm;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellForm;
 import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
-import kjkim.kjkimspring.user.SignUp;
+import kjkim.kjkimspring.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class SellController {
     }
 
     @GetMapping(value = "/sell/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, BuyForm buyForm) {
+    public String detail(Model model, @PathVariable("id") Integer id, CommentForm commentForm) {
         Sell sell = this.sellService.getSell(id);
         model.addAttribute("sell", sell);
         return "sell_detail";
@@ -58,8 +57,8 @@ public class SellController {
         if (bindingResult.hasErrors()) {
             return "sell_form";
         }
-        SignUp signUp = this.userService.getUser(principal.getName());
-        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(),signUp, upload);
+        User user = this.userService.getUser(principal.getName());
+        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(), user, upload);
         return "redirect:/sell";
     }
 
