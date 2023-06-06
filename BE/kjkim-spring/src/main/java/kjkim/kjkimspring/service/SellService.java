@@ -3,7 +3,7 @@ package kjkim.kjkimspring.service;
 import kjkim.kjkimspring.DataNotFoundException;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellRepository;
-import kjkim.kjkimspring.user.SignUp;
+import kjkim.kjkimspring.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +38,7 @@ public class SellService {
         }
     }
 
-    public void create(String subject, String content, Integer price, SignUp user, MultipartFile upload) throws IOException {
+    public void create(String subject, String content, Integer price, User user, MultipartFile upload) throws IOException {
         Sell s = new Sell();
         s.setSubject(subject);
         s.setContent(content);

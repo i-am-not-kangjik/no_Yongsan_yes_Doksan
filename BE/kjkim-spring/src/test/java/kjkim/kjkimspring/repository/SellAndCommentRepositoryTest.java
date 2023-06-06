@@ -1,10 +1,9 @@
 package kjkim.kjkimspring.repository;
 
-import kjkim.kjkimspring.buy.Buy;
-import kjkim.kjkimspring.buy.BuyRepository;
+import kjkim.kjkimspring.comment.Comment;
+import kjkim.kjkimspring.comment.CommentRepository;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,13 +14,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class SellAndBuyRepositoryTest {
+public class SellAndCommentRepositoryTest {
 
     @Autowired
     private SellRepository sellRepository;
 
     @Autowired
-    private BuyRepository buyRepository;
+    private CommentRepository commentRepository;
 
     @Test
     void testJpa_1() {
@@ -85,17 +84,17 @@ public class SellAndBuyRepositoryTest {
         assertTrue(os.isPresent());
         Sell s = os.get();
 
-        Buy b = new Buy();
+        Comment b = new Comment();
         b.setContent("10만원도 비싼데 제가 5만원에 살게요");
         b.setSell(s);
-        this.buyRepository.save(b);
+        this.commentRepository.save(b);
     }
 
     @Test
     void testJpa_8() {
-        Optional<Buy> ob = this.buyRepository.findById(1);
+        Optional<Comment> ob = this.commentRepository.findById(1);
         assertTrue(ob.isPresent());
-        Buy b = ob.get();
+        Comment b = ob.get();
         assertEquals(18, b.getSell().getId());
     }
 

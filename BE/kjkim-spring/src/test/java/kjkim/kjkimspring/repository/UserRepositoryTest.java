@@ -1,7 +1,7 @@
 package kjkim.kjkimspring.repository;
 
-import kjkim.kjkimspring.user.SignUp;
-import kjkim.kjkimspring.user.SignUpRepository;
+import kjkim.kjkimspring.user.User;
+import kjkim.kjkimspring.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,59 +11,59 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-public class SignUpRepositoryTest {
+public class UserRepositoryTest {
 
     @Autowired
-    private SignUpRepository signUpRepository;
+    private UserRepository userRepository;
 
     @Test
     void testJpa() {
-        SignUp user1 = new SignUp();
+        User user1 = new User();
         user1.setUsername("user1");
         user1.setPassword("user1user1");
         user1.setEmail("user1@user1.com");
-        this.signUpRepository.save(user1);
+        this.userRepository.save(user1);
 
-        SignUp user2 = new SignUp();
+        User user2 = new User();
         user2.setUsername("user2");
         user2.setPassword("user2user2");
         user2.setEmail("user2@user2.com");
-        this.signUpRepository.save(user2);
+        this.userRepository.save(user2);
     }
 
     @Test
     void testJpa_2() {
-        List<SignUp> all = this.signUpRepository.findAll();
+        List<User> all = this.userRepository.findAll();
         Assertions.assertEquals(2, all.size());
 
-        SignUp user = all.get(0);
+        User user = all.get(0);
         Assertions.assertEquals("user1", user.getUsername());
     }
 
     @Test
     void testJpa_3() {
-        Optional<SignUp> up = this.signUpRepository.findById(11L);
+        Optional<User> up = this.userRepository.findById(11L);
         if(up.isPresent()) {
-            SignUp user = up.get();
+            User user = up.get();
             Assertions.assertEquals("user1", user.getUsername());
         }
     }
 
     @Test
     void testJpa_4() {
-        Optional<SignUp> up = this.signUpRepository.findByUsername("user1");
+        Optional<User> up = this.userRepository.findByUsername("user1");
         if(up.isPresent()){
-            SignUp user = up.get();
+            User user = up.get();
             Assertions.assertEquals(11, user.getId());
         }
 
-//        SignUp user = this.signUpRepository.findByUsername("user1");
+//        User user = this.userRepository.findByUsername("user1");
 //        Assertions.assertEquals(11, user.getId());
     }
 
     @Test
     void testJpa_5() {
-        SignUp user = this.signUpRepository.findByUsernameAndEmail(
+        User user = this.userRepository.findByUsernameAndEmail(
                 "user1", "user1@user1.com"
         );
         Assertions.assertEquals(11, user.getId());
@@ -71,27 +71,27 @@ public class SignUpRepositoryTest {
 
     @Test
     void testJpa_6() {
-        List<SignUp> userlist = this.signUpRepository.findByEmailLike("%com");
-        SignUp user = userlist.get(1);
+        List<User> userlist = this.userRepository.findByEmailLike("%com");
+        User user = userlist.get(1);
         Assertions.assertEquals("user2@user2.com", user.getEmail());
     }
 
     @Test
     void testJpa_7() {
-        Optional<SignUp> user = this.signUpRepository.findById(12L);
+        Optional<User> user = this.userRepository.findById(12L);
         Assertions.assertTrue(user.isPresent());
-        SignUp u = user.get();
+        User u = user.get();
         u.setEmail("user2@naver.com");
-        this.signUpRepository.save(u);
+        this.userRepository.save(u);
     }
 
     @Test
     void testJpa_8() {
-        Assertions.assertEquals(2, this.signUpRepository.count());
-        Optional<SignUp> user = this.signUpRepository.findById(11L);
+        Assertions.assertEquals(2, this.userRepository.count());
+        Optional<User> user = this.userRepository.findById(11L);
         Assertions.assertTrue(user.isPresent());
-        SignUp u = user.get();
-        this.signUpRepository.delete(u);
-        Assertions.assertEquals(1, this.signUpRepository.count());
+        User u = user.get();
+        this.userRepository.delete(u);
+        Assertions.assertEquals(1, this.userRepository.count());
     }
 }
