@@ -20,6 +20,8 @@
                                       th:text="${#lists.size(sell.commentList)}"></span>
                             </h5>
                             <div style="display: flex; justify-content: space-between">
+                                <p class="card-text text-secondary" th:if="${sell.region != null}"
+                                   th:text="${sell.region}"></p>
                                 <p class="card-text text-success" th:if="${sell.author != null}"
                                    th:text="${sell.author.username}">글쓴이</p>
                                 <p class="card-text text-success" th:if="${sell.author == null}" th:text="글쓴이"></p>

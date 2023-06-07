@@ -14,6 +14,9 @@ public class SellForm {
     @Size(max = 200)
     private String title;
 
+    @NotEmpty(message = "지역은 필수항목입니다.")
+    private String region;
+
     @NotEmpty(message = "내용은 필수항목입니다.")
     private String content;
 

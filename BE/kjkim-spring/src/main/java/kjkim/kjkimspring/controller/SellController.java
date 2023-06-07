@@ -60,7 +60,7 @@ public class SellController {
             return "sell_form";
         }
         User user = this.userService.getUser(principal.getName());
-        this.sellService.create(sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), user, upload);
+        this.sellService.create(sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), user, upload);
         return "redirect:/sell";
     }
 
@@ -68,12 +68,14 @@ public class SellController {
     @GetMapping("/sell/modify/{id}")
     public String sellModify(Model model, SellForm sellForm, @PathVariable("id") Integer id, Principal principal) {
         Sell sell = this.sellService.getSell(id);
+
         if (!sell.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
         } else {
             sellForm.setTitle(sell.getTitle());
             sellForm.setContent(sell.getContent());
             sellForm.setPrice(sell.getPrice());
+            sellForm.setRegion(sell.getRegion());
             String originalFileName = sell.getImgName();
             model.addAttribute("filename", originalFileName);
             return "sell_form";
@@ -92,7 +94,7 @@ public class SellController {
         if (!sell.getAuthor().getUsername().equals(principal.getName())) {
             throw new  ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
         } else {
-            this.sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), upload);
+            this.sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), upload);
             return String.format("redirect:/sell/%s", id);
         }
     }

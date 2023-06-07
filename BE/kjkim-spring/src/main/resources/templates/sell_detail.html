@@ -8,24 +8,30 @@
             <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif" class="img-fluid">
             <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}" class="img-fluid">
             <div class="card-text" style="white-space: pre-line;" th:text="${sell.content}"></div>
-            <div class="d-flex justify-content-end">
-                <div class="badge bg-light text-dark p-2 text-start mx-1">
+            <div class="d-flex">
+                <div class="badge bg-light text-dark p-2">
                     <div class="mb-2">판매 가격</div>
                     <div th:if="${sell.price != null}" th:text="${sell.price} + 원"></div>
                 </div>
-                <div class="badge bg-light text-dark p-2 text-start mx-1">
+                <div class="badge bg-light text-dark p-2">
                     <div class="mb-2">판매자</div>
                     <div th:if="${sell.author != null}" th:text="${sell.author.username}"></div>
                 </div>
-                <div class="badge bg-light text-dark p-2 text-start mx-1">
+                <div class="badge bg-light text-dark p-2">
+                    <div class="mb-2">지역</div>
+                    <div th:if="${sell.region != null}" th:text="${sell.region}"></div>
+                </div>
+            </div>
+            <div class="d-flex mt-3">
+                <div class="badge bg-light text-dark p-2">
                     <div class="mb-2">작성일</div>
                     <div th:text="${#temporals.format(sell.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
-                <div class="badge bg-light text-dark p-2 text-start mx-1">
+                <div class="badge bg-light text-dark p-2">
                     <div class="mb-2">최종 수정일</div>
                     <div th:text="${#temporals.format(sell.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
-                <div class="badge bg-light text-dark p-2 text-start mx-1">
+                <div class="badge bg-light text-dark p-2">
                     <div class="mb-2">조회수</div>
                     <div th:if="${sell.viewCount != null}" th:text="${sell.viewCount}"></div>
                 </div>

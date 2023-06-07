@@ -9,6 +9,10 @@
             <input type="text" th:field="*{title}" class="form-control">
         </div>
         <div class="mb-3">
+            <label for="region" class="form-label">지역</label> <!-- Add a label for the region field -->
+            <input type="text" th:field="*{region}" class="form-control"> <!-- Add an input field for the region -->
+        </div>
+        <div class="mb-3">
             <label for="content" class="form-label">내용</label>
             <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
         </div>

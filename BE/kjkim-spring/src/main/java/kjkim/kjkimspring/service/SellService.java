@@ -38,11 +38,12 @@ public class SellService {
         }
     }
 
-    public void create(String title, String content, Integer price, User user, MultipartFile upload) throws IOException {
+    public void create(String title, String content, Integer price, String region, User user, MultipartFile upload) throws IOException {
         Sell s = new Sell();
         s.setTitle(title);
         s.setContent(content);
         s.setPrice(price);
+        s.setRegion(region);
         s.setAuthor(user);
         s.setViewCount(0);
 
@@ -66,10 +67,11 @@ public class SellService {
         }
     }
 
-    public void modify(Sell sell, String title, String content, Integer price, MultipartFile upload) throws IOException {
+    public void modify(Sell sell, String title, String content, Integer price, String region, MultipartFile upload) throws IOException {
         sell.setTitle(title);
         sell.setContent(content);
         sell.setPrice(price);
+        sell.setRegion(region);
 
         String originalImgName = upload.getOriginalFilename();
         String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/images/";
