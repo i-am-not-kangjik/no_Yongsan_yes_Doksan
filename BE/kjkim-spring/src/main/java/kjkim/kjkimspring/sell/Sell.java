@@ -55,6 +55,9 @@ public class Sell {
     @Column(length = 20)
     private String region;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private Integer likeCount;
+
     public void increaseViewCount() {
         viewCount = viewCount == null ? 1 : viewCount + 1;
     }

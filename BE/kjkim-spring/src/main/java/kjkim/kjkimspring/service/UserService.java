@@ -1,8 +1,12 @@
 package kjkim.kjkimspring.service;
 
 import kjkim.kjkimspring.DataNotFoundException;
+import kjkim.kjkimspring.sell.Sell;
+import kjkim.kjkimspring.sell.SellRepository;
 import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.user.UserRepository;
+import kjkim.kjkimspring.userlikessell.UserLikesSell;
+import kjkim.kjkimspring.userlikessell.UserLikesSellRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +16,15 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SellRepository sellRepository;
+    private final UserLikesSellRepository userLikesSellRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SellRepository sellRepository, UserLikesSellRepository userLikesSellRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.sellRepository = sellRepository;
+        this.userLikesSellRepository = userLikesSellRepository;
     }
 
     public User create(String username, String email, String password) {
@@ -35,4 +44,24 @@ public class UserService {
             throw new DataNotFoundException("user is not found");
         }
     }
+
+    public void addLike(User user, Sell sell) {
+        UserLikesSell userLikesSell = new UserLikesSell();
+        userLikesSell.setUser(user);
+        userLikesSell.setSell(sell);
+        userLikesSellRepository.save(userLikesSell);
+    }
+
+    public void likeSell(User user, Sell sell) {
+        addLike(user, sell);
+        sell.setLikeCount(sell.getLikeCount() + 1);
+        sellRepository.save(sell); // 변경 내용 저장
+    }
+
+    public void removeLike(User user, Sell sell) {
+        userLikesSellRepository.deleteByUserAndSell(user, sell);
+        sell.setLikeCount(sell.getLikeCount() - 1);
+        sellRepository.save(sell); // 변경 내용 저장
+    }
+
 }

@@ -1,5 +1,6 @@
 package kjkim.kjkimspring.user;
 
+import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,5 +45,8 @@ public class User {
     @UpdateTimestamp
     @Column
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserLikesSell> likesSells;
 }
 
