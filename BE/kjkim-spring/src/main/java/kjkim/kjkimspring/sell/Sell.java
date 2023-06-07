@@ -21,7 +21,7 @@ public class Sell {
     private Integer id;
 
     @Column(length = 200)
-    private String subject;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -48,4 +48,11 @@ public class Sell {
 
     @ManyToOne
     private User author;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private Integer viewCount;
+
+    public void increaseViewCount() {
+        viewCount = viewCount == null ? 1 : viewCount + 1;
+    }
 }

@@ -1,7 +1,7 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
 
-    <h2 class="border-bottom py-2" th:text="${sell.subject}"></h2>
+    <h2 class="border-bottom py-2" th:text="${sell.title}"></h2>
 
     <div class="card my-3">
         <div class="card-body">
@@ -24,6 +24,10 @@
                 <div class="badge bg-light text-dark p-2 text-start mx-1">
                     <div class="mb-2">최종 수정일</div>
                     <div th:text="${#temporals.format(sell.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+                <div class="badge bg-light text-dark p-2 text-start mx-1">
+                    <div class="mb-2">조회수</div>
+                    <div th:if="${sell.viewCount != null}" th:text="${sell.viewCount}"></div>
                 </div>
             </div>
             <div class="my-3">

@@ -15,7 +15,7 @@
                              class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">
                         <div class="card-body">
                             <h5 class="card-title text-center"><a th:href="@{|/sell/${sell.id}|}" class="text-secondary"
-                                                                  th:text="${sell.subject}">제목이 들어감</a>
+                                                                  th:text="${sell.title}">제목이 들어감</a>
                                 <span class="text-danger small ms-2" th:if="${#lists.size(sell.commentList) > 0}"
                                       th:text="${#lists.size(sell.commentList)}"></span>
                             </h5>
@@ -26,6 +26,7 @@
                                 <p class="card-text text-danger" th:if="${sell.price != null}"
                                    th:text="${sell.price} + 원">가격</p>
                                 <p class="card-text text-danger" th:if="${sell.price == null}" th:text="null원">가격</p>
+                                <p class="card-text text-dark">조회수: <span th:text="${sell.viewCount}"></span></p>
                             </div>
                         </div>
                     </div>

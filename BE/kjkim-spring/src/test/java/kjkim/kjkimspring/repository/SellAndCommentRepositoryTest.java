@@ -25,12 +25,12 @@ public class SellAndCommentRepositoryTest {
     @Test
     void testJpa_1() {
         Sell s1 = new Sell();
-        s1.setSubject("자전거 판매합니다.");
+        s1.setTitle("자전거 판매합니다.");
         s1.setContent("자전거 급매로 내놓습니다.");
         this.sellRepository.save(s1);
 
         Sell s2 = new Sell();
-        s2.setSubject("갤럭시 S22 판매합니다.");
+        s2.setTitle("갤럭시 S22 판매합니다.");
         s2.setContent("갤럭시 S22 급매로 내놓습니다. 얼른 구입하세요!");
         this.sellRepository.save(s2);
     }
@@ -41,7 +41,7 @@ public class SellAndCommentRepositoryTest {
         assertEquals(12, all.size());
 
         Sell s = all.get(0);
-        assertEquals("자전거 판매합니다.", s.getSubject());
+        assertEquals("자전거 판매합니다.", s.getTitle());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class SellAndCommentRepositoryTest {
 
     @Test
     void testJpa_4() {
-        Sell s = this.sellRepository.findBySubject("갤럭시 S22 판매합니다.");
+        Sell s = this.sellRepository.findByTitle("갤럭시 S22 판매합니다.");
         assertEquals(16, s.getId());
     }
 
@@ -64,7 +64,7 @@ public class SellAndCommentRepositoryTest {
         Optional<Sell> os = this.sellRepository.findById(17);
         assertTrue(os.isPresent());
         Sell s = os.get();
-        s.setSubject("자전거 초초초초초초초초 급처합니다. 가격 다운!");
+        s.setTitle("자전거 초초초초초초초초 급처합니다. 가격 다운!");
         this.sellRepository.save(s);
     }
 
@@ -102,7 +102,7 @@ public class SellAndCommentRepositoryTest {
     void testJpa_9() {
         for (int i = 1; i <= 100; i++) {
             Sell s = new Sell();
-            s.setSubject(String.format("테스트 판매글 [%03d]", i));
+            s.setTitle(String.format("테스트 판매글 [%03d]", i));
             s.setContent("내용 없음");
             s.setPrice(5000);
             this.sellRepository.save(s);
@@ -113,7 +113,7 @@ public class SellAndCommentRepositoryTest {
     void testJpa_10() {
         for (int i = 101; i <= 200; i++) {
             Sell s = new Sell();
-            s.setSubject(String.format("테스트 판매글 [%03d]", i));
+            s.setTitle(String.format("테스트 판매글 [%03d]", i));
             s.setContent("내용 음슴");
             s.setPrice(5000);
             this.sellRepository.save(s);

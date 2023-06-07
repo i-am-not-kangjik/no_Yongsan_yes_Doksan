@@ -38,12 +38,13 @@ public class SellService {
         }
     }
 
-    public void create(String subject, String content, Integer price, User user, MultipartFile upload) throws IOException {
+    public void create(String title, String content, Integer price, User user, MultipartFile upload) throws IOException {
         Sell s = new Sell();
-        s.setSubject(subject);
+        s.setTitle(title);
         s.setContent(content);
         s.setPrice(price);
         s.setAuthor(user);
+        s.setViewCount(0);
 
         String originalImgName = upload.getOriginalFilename();
         String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/images/";
@@ -65,8 +66,8 @@ public class SellService {
         }
     }
 
-    public void modify(Sell sell, String subject, String content, Integer price, MultipartFile upload) throws IOException {
-        sell.setSubject(subject);
+    public void modify(Sell sell, String title, String content, Integer price, MultipartFile upload) throws IOException {
+        sell.setTitle(title);
         sell.setContent(content);
         sell.setPrice(price);
 
@@ -93,5 +94,9 @@ public class SellService {
 
     public void delete(Sell sell) {
         this.sellRepository.delete(sell);
+    }
+
+    public Sell saveSell(Sell sell) {
+        return sellRepository.save(sell);
     }
 }
