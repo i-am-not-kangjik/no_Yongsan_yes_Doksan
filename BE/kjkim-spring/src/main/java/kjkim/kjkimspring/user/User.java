@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Getter
 @Setter
 @Entity
@@ -46,7 +45,6 @@ public class User {
     @Column
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserLikesSell> likesSells;
+    @OneToMany(mappedBy = "user")
+    private List<UserLikesSell> likedSells;
 }
-

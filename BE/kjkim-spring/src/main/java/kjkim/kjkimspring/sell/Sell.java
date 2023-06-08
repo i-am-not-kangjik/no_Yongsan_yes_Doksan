@@ -56,11 +56,13 @@ public class Sell {
     @Column(length = 20)
     private String region;
 
-//    @Column(nullable = false, columnDefinition = "integer default 0")
-//    private Integer likeCount;
-
     @ManyToMany
-    Set<User> likedUser;
+    @JoinTable(
+            name = "user_likes_sell",
+            joinColumns = @JoinColumn(name = "sell_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> likedUser;
 
     public void increaseViewCount() {
         viewCount = viewCount == null ? 1 : viewCount + 1;

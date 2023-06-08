@@ -6,6 +6,7 @@ import kjkim.kjkimspring.sell.SellForm;
 import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
+import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -113,10 +114,16 @@ public class SellController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/sell/like/{id}")
-    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+    public String sellLike(Principal principal, @PathVariable("id") Integer id) {
         Sell sell = this.sellService.getSell(id);
         User user = this.userService.getUser(principal.getName());
-        this.sellService.vote(sell, user);
+
+        UserLikesSell userLikesSell = new UserLikesSell();
+        userLikesSell.setUser(user);
+        userLikesSell.setSell(sell);
+        this.sellService.saveUserLikesSell(userLikesSell);
+
         return String.format("redirect:/sell/%s", id);
     }
+
 }

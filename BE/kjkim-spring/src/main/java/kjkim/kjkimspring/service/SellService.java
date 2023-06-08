@@ -4,6 +4,8 @@ import kjkim.kjkimspring.DataNotFoundException;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellRepository;
 import kjkim.kjkimspring.user.User;
+import kjkim.kjkimspring.userlikessell.UserLikesSell;
+import kjkim.kjkimspring.userlikessell.UserLikesSellRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,8 @@ import java.util.UUID;
 public class SellService {
 
     private final SellRepository sellRepository;
+    private final UserLikesSellRepository userLikesSellRepository;
+
 
     public Page<Sell> getList(int page) {
         Sort sort = Sort.by("updatedAt").descending();
@@ -102,8 +106,16 @@ public class SellService {
         return sellRepository.save(sell);
     }
 
-    public void vote(Sell sell, User user) {
-        sell.getLikedUser().add(user);
-        this.sellRepository.save(sell);
+    public void like(Sell sell, User user) {
+        UserLikesSell userLikesSell = new UserLikesSell();
+        userLikesSell.setUser(user);
+        userLikesSell.setSell(sell);
+        this.userLikesSellRepository.save(userLikesSell);
     }
+
+
+    public void saveUserLikesSell(UserLikesSell userLikesSell) {
+        this.userLikesSellRepository.save(userLikesSell);
+    }
+
 }
