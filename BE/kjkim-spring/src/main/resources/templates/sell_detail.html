@@ -42,6 +42,12 @@
                     좋아요
                     <span class="badge rounded-pill bg-success" th:text="${#lists.size(sell.likedUser)}"></span>
                 </a>
+                <div class="my-3">
+                    <h6>이 상품을 좋아요 누른 사용자들:</h6>
+                    <ul>
+                        <li th:each="user : ${likedUsers}" th:text="${user.username}"></li>
+                    </ul>
+                </div>
                 <a th:href="@{|/sell/modify/${sell.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
                    th:if="${sell.author != null and #authentication.getPrincipal().getUsername() == sell.author.username}"

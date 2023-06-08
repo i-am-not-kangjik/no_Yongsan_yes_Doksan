@@ -16,8 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -126,4 +128,15 @@ public class SellService {
         this.userLikesSellRepository.save(userLikesSell);
     }
 
+    public List<User> getLikedUsers(Integer id) {
+        // 판매 아이템의 ID로 해당 아이템에 좋아요를 누른 UserLikesSell 객체들을 모두 가져옵니다.
+        List<UserLikesSell> userLikesSells = this.userLikesSellRepository.findAllBySell_Id(id);
+
+        // UserLikesSell 객체들에서 User 객체들만 추출하여 List에 저장합니다.
+        List<User> likedUsers = userLikesSells.stream()
+                .map(UserLikesSell::getUser)
+                .collect(Collectors.toList());
+
+        return likedUsers;
+    }
 }

@@ -24,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,9 +45,14 @@ public class SellController {
         Sell sell = this.sellService.getSell(id);
         sell.increaseViewCount(); // Increase view count
         this.sellService.saveSell(sell); // Save the updated Sell object
+
+        List<User> likedUsers = this.sellService.getLikedUsers(id);
+        model.addAttribute("likedUsers", likedUsers);
+
         model.addAttribute("sell", sell);
         return "sell_detail";
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/sell/create")
