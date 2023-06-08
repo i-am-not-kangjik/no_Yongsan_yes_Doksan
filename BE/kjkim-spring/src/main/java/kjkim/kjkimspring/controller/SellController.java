@@ -113,17 +113,16 @@ public class SellController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/sell/like/{id}")
+    @GetMapping("/sell/toggleLike/{id}")
     public String sellLike(Principal principal, @PathVariable("id") Integer id) {
         Sell sell = this.sellService.getSell(id);
         User user = this.userService.getUser(principal.getName());
 
-        UserLikesSell userLikesSell = new UserLikesSell();
-        userLikesSell.setUser(user);
-        userLikesSell.setSell(sell);
-        this.sellService.saveUserLikesSell(userLikesSell);
+        // 좋아요 상태를 토글합니다.
+        this.sellService.toggleLike(sell, user);
 
         return String.format("redirect:/sell/%s", id);
     }
+
 
 }

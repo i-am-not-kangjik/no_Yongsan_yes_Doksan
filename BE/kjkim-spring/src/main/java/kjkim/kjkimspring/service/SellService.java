@@ -106,12 +106,20 @@ public class SellService {
         return sellRepository.save(sell);
     }
 
-    public void like(Sell sell, User user) {
-        UserLikesSell userLikesSell = new UserLikesSell();
-        userLikesSell.setUser(user);
-        userLikesSell.setSell(sell);
-        this.userLikesSellRepository.save(userLikesSell);
+    public void toggleLike(Sell sell, User user) {
+        Optional<UserLikesSell> userLikesSell = this.userLikesSellRepository.findBySellAndUser(sell, user);
+        if (userLikesSell.isPresent()) {
+            // 좋아요가 이미 있으므로, 좋아요를 취소(삭제)합니다.
+            this.userLikesSellRepository.delete(userLikesSell.get());
+        } else {
+            // 좋아요가 아직 없으므로, 좋아요를 추가합니다.
+            UserLikesSell newUserLikesSell = new UserLikesSell();
+            newUserLikesSell.setUser(user);
+            newUserLikesSell.setSell(sell);
+            this.userLikesSellRepository.save(newUserLikesSell);
+        }
     }
+
 
 
     public void saveUserLikesSell(UserLikesSell userLikesSell) {

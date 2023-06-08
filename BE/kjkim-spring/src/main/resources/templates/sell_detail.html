@@ -38,7 +38,7 @@
             </div>
             <div class="my-3">
                 <a href="javascript:void(0);" class="like btn btn-sm btn-outline-secondary"
-                   th:data-uri="@{|/sell/like/${sell.id}|}">
+                   th:data-uri="@{|/sell/toggleLike/${sell.id}|}">
                     좋아요
                     <span class="badge rounded-pill bg-success" th:text="${#lists.size(sell.likedUser)}"></span>
                 </a>

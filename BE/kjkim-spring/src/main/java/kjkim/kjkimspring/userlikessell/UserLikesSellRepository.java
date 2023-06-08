@@ -5,10 +5,8 @@ import kjkim.kjkimspring.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserLikesSellRepository extends JpaRepository<UserLikesSell, Long> {
-    List<UserLikesSell> findByUser(User user);
-    List<UserLikesSell> findBySell(Sell sell);
-    void deleteByUserAndSell(User user, Sell sell);
-
+    Optional<UserLikesSell> findBySellAndUser(Sell sell, User user);
 }
