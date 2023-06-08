@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface UserLikesSellRepository extends JpaRepository<UserLikesSell, Long> {
     Optional<UserLikesSell> findBySellAndUser(Sell sell, User user);
     List<UserLikesSell> findAllBySell_Id(Integer sellId);
+    List<UserLikesSell> findAllByUser_Id(Long userId);
 }

@@ -113,9 +113,7 @@
     const recommend_elements = document.getElementsByClassName("like");
     Array.from(recommend_elements).forEach(function(element) {
         element.addEventListener('click', function() {
-            if(confirm("좋아요를 누르시겠습니까?")) {
-                location.href = this.dataset.uri;
-            };
+            location.href = this.dataset.uri;
         });
     });
 </script>
