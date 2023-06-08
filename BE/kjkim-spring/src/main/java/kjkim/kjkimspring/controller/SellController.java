@@ -110,4 +110,13 @@ public class SellController {
             return "redirect:/";
         }
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sell/like/{id}")
+    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+        Sell sell = this.sellService.getSell(id);
+        User user = this.userService.getUser(principal.getName());
+        this.sellService.vote(sell, user);
+        return String.format("redirect:/sell/%s", id);
+    }
 }

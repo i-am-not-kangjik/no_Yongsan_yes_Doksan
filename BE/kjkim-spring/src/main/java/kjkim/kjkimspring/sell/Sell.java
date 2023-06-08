@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -55,8 +56,11 @@ public class Sell {
     @Column(length = 20)
     private String region;
 
-    @Column(nullable = false, columnDefinition = "integer default 0")
-    private Integer likeCount;
+//    @Column(nullable = false, columnDefinition = "integer default 0")
+//    private Integer likeCount;
+
+    @ManyToMany
+    Set<User> likedUser;
 
     public void increaseViewCount() {
         viewCount = viewCount == null ? 1 : viewCount + 1;

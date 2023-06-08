@@ -101,4 +101,9 @@ public class SellService {
     public Sell saveSell(Sell sell) {
         return sellRepository.save(sell);
     }
+
+    public void vote(Sell sell, User user) {
+        sell.getLikedUser().add(user);
+        this.sellRepository.save(sell);
+    }
 }

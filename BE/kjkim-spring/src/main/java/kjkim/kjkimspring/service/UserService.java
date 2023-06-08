@@ -52,16 +52,16 @@ public class UserService {
         userLikesSellRepository.save(userLikesSell);
     }
 
-    public void likeSell(User user, Sell sell) {
-        addLike(user, sell);
-        sell.setLikeCount(sell.getLikeCount() + 1);
-        sellRepository.save(sell); // 변경 내용 저장
-    }
-
-    public void removeLike(User user, Sell sell) {
-        userLikesSellRepository.deleteByUserAndSell(user, sell);
-        sell.setLikeCount(sell.getLikeCount() - 1);
-        sellRepository.save(sell); // 변경 내용 저장
-    }
+//    public void likeSell(User user, Sell sell) {
+//        addLike(user, sell);
+//        sell.setLikeCount(sell.getLikeCount() + 1);
+//        sellRepository.save(sell); // 변경 내용 저장
+//    }
+//
+//    public void removeLike(User user, Sell sell) {
+//        userLikesSellRepository.deleteByUserAndSell(user, sell);
+//        sell.setLikeCount(sell.getLikeCount() - 1);
+//        sellRepository.save(sell); // 변경 내용 저장
+//    }
 
 }

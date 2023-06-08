@@ -37,6 +37,11 @@
                 </div>
             </div>
             <div class="my-3">
+                <a href="javascript:void(0);" class="like btn btn-sm btn-outline-secondary"
+                   th:data-uri="@{|/sell/like/${sell.id}|}">
+                    좋아요
+                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(sell.likedUser)}"></span>
+                </a>
                 <a th:href="@{|/sell/modify/${sell.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
                    th:if="${sell.author != null and #authentication.getPrincipal().getUsername() == sell.author.username}"
@@ -97,6 +102,14 @@
             if (confirm("정말로 삭제하시겠습니까?")) {
                 location.href = this.dataset.uri;
             }
+        });
+    });
+    const recommend_elements = document.getElementsByClassName("like");
+    Array.from(recommend_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("좋아요를 누르시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
         });
     });
 </script>
