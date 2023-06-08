@@ -64,6 +64,9 @@ public class Sell {
     )
     private Set<User> likedUser;
 
+    @Column(length = 50)
+    private String category;
+
     public void increaseViewCount() {
         viewCount = viewCount == null ? 1 : viewCount + 1;
     }

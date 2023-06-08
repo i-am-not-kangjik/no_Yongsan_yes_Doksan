@@ -2,7 +2,11 @@
 <div layout:fragment="content" class="container my-3">
 
     <h2 class="border-bottom py-2" th:text="${sell.title}"></h2>
-
+    <span th:if="${sell.category}" class="text-secondary">
+                                        <span> (카테고리: </span>
+                                        <span th:text="${sell.category}"></span>
+                                        <span>)</span>
+                                    </span>
     <div class="card my-3">
         <div class="card-body">
             <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif" class="img-fluid">
