@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class Sell {
     private Integer id;
 
     @Column(length = 200)
-    private String subject;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -48,4 +49,25 @@ public class Sell {
 
     @ManyToOne
     private User author;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private Integer viewCount;
+
+    @Column(length = 20)
+    private String region;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_likes_sell",
+            joinColumns = @JoinColumn(name = "sell_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> likedUser;
+
+    @Column(length = 50)
+    private String category;
+
+    public void increaseViewCount() {
+        viewCount = viewCount == null ? 1 : viewCount + 1;
+    }
 }

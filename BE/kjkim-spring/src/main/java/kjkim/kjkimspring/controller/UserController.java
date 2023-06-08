@@ -1,22 +1,30 @@
 package kjkim.kjkimspring.controller;
 
+import kjkim.kjkimspring.sell.Sell;
+import kjkim.kjkimspring.service.SellService;
+import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.user.UserCreateForm;
 import kjkim.kjkimspring.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final SellService sellService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -55,4 +63,14 @@ public class UserController {
     public String login(){
         return "login_form";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/likedSells")
+    public String likedSells(Model model, Principal principal) {
+        User user = this.userService.getUser(principal.getName());
+        List<Sell> likedSells = this.sellService.getLikedSellsByUser(user.getId());
+        model.addAttribute("likedSells", likedSells);
+        return "liked_sells";
+    }
+
 }

@@ -1,0 +1,30 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+
+    <h1 class="mt-5">찜한 상품</h1>
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Price</th>
+            <th scope="col" colspan="2">Image</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sell, stat : ${likedSells}">
+            <th scope="row" th:text="${stat.count + 1}"></th>
+            <td><a th:href="@{/sell/{id}(id=${sell.id})}" th:text="${sell.title}"></a></td>
+            <td th:text="${sell.price}"></td>
+            <td colspan="2">
+                <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif"
+                     class="card-image-top img-thumbnail" alt="image" style="height: 200px; width: 300px">
+                <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}"
+                     class="card-image-top img-thumbnail" alt="image" style="height: 200px; width: 300px">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+</html>

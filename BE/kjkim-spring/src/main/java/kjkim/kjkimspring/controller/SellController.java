@@ -6,6 +6,7 @@ import kjkim.kjkimspring.sell.SellForm;
 import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
+import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,9 +43,16 @@ public class SellController {
     @GetMapping(value = "/sell/{id}")
     public String detail(Model model, @PathVariable("id") Integer id, CommentForm commentForm) {
         Sell sell = this.sellService.getSell(id);
+        sell.increaseViewCount(); // Increase view count
+        this.sellService.saveSell(sell); // Save the updated Sell object
+
+        List<User> likedUsers = this.sellService.getLikedUsers(id);
+        model.addAttribute("likedUsers", likedUsers);
+
         model.addAttribute("sell", sell);
         return "sell_detail";
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/sell/create")
@@ -58,7 +67,7 @@ public class SellController {
             return "sell_form";
         }
         User user = this.userService.getUser(principal.getName());
-        this.sellService.create(sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(), user, upload);
+        this.sellService.create(sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), sellForm.getCategory(), user, upload);
         return "redirect:/sell";
     }
 
@@ -66,12 +75,15 @@ public class SellController {
     @GetMapping("/sell/modify/{id}")
     public String sellModify(Model model, SellForm sellForm, @PathVariable("id") Integer id, Principal principal) {
         Sell sell = this.sellService.getSell(id);
+
         if (!sell.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
         } else {
-            sellForm.setSubject(sell.getSubject());
+            sellForm.setTitle(sell.getTitle());
             sellForm.setContent(sell.getContent());
             sellForm.setPrice(sell.getPrice());
+            sellForm.setRegion(sell.getRegion());
+            sellForm.setCategory(sell.getCategory());
             String originalFileName = sell.getImgName();
             model.addAttribute("filename", originalFileName);
             return "sell_form";
@@ -90,7 +102,7 @@ public class SellController {
         if (!sell.getAuthor().getUsername().equals(principal.getName())) {
             throw new  ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
         } else {
-            this.sellService.modify(sell, sellForm.getSubject(), sellForm.getContent(), sellForm.getPrice(), upload);
+            this.sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), sellForm.getCategory(), upload);
             return String.format("redirect:/sell/%s", id);
         }
     }
@@ -106,4 +118,18 @@ public class SellController {
             return "redirect:/";
         }
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sell/toggleLike/{id}")
+    public String sellLike(Principal principal, @PathVariable("id") Integer id) {
+        Sell sell = this.sellService.getSell(id);
+        User user = this.userService.getUser(principal.getName());
+
+        // 좋아요 상태를 토글합니다.
+        this.sellService.toggleLike(sell, user);
+
+        return String.format("redirect:/sell/%s", id);
+    }
+
+
 }
