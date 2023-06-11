@@ -9,7 +9,7 @@
                                     </span>
     <div class="card my-3">
         <div class="card-body">
-            <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif" class="img-fluid">
+            <img th:if="${sell.getImgPath == null}" src="https://no-yongsan-yes-doksan.s3.ap-northeast-2.amazonaws.com/noimg.gif" class="img-fluid">
             <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}" class="img-fluid">
             <div class="card-text" style="white-space: pre-line;" th:text="${sell.content}"></div>
             <div class="d-flex">
