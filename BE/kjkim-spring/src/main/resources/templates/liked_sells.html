@@ -17,7 +17,7 @@
             <td><a th:href="@{/sell/{id}(id=${sell.id})}" th:text="${sell.title}"></a></td>
             <td th:text="${sell.price}"></td>
             <td colspan="2">
-                <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif"
+                <img th:if="${sell.getImgPath == null}" src="https://no-yongsan-yes-doksan.s3.ap-northeast-2.amazonaws.com/noimg.gif"
                      class="card-image-top img-thumbnail" alt="image" style="height: 200px; width: 300px">
                 <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}"
                      class="card-image-top img-thumbnail" alt="image" style="height: 200px; width: 300px">

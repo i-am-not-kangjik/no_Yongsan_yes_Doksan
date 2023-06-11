@@ -14,7 +14,7 @@
                                         <span th:text="${sell.category}"></span>
                                         <span>)</span>
                                     </span>
-                        <img th:if="${sell.getImgPath == null}" src="/images/noimg.gif"
+                        <img th:if="${sell.getImgPath == null}" src="https://no-yongsan-yes-doksan.s3.ap-northeast-2.amazonaws.com/noimg.gif"
                              class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">
                         <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}"
                              class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">

@@ -13,6 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +32,8 @@ public class SellService {
 
     private final SellRepository sellRepository;
     private final UserLikesSellRepository userLikesSellRepository;
+    private final S3Client s3Client;
+    private final String bucketName = "no-yongsan-yes-doksan";
 
 
     public Page<Sell> getList(int page) {
@@ -56,24 +62,25 @@ public class SellService {
         s.setViewCount(0);
 
         String originalImgName = upload.getOriginalFilename();
-        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
         UUID uuid = UUID.randomUUID();
-        String imgName = uuid + "_" + originalImgName;
+        String imgName = "sell-image/" + uuid + "_" + originalImgName;
 
-        if(imgName.contains(".")) {
-            File saveFile = new File(projectPath, imgName);
-
-            upload.transferTo(saveFile);
-
+        if (originalImgName != null && !originalImgName.isEmpty()) {
+            // S3에 업로드
+            s3Client.putObject(PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(imgName)
+                            .build(),
+                    RequestBody.fromBytes(upload.getBytes()));
             s.setImgName(imgName);
-            s.setImgPath("/images/" + imgName);
+            s.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
             this.sellRepository.save(s);
-        }
-        else {
+        } else {
             this.sellRepository.save(s);
         }
     }
+
 
     public void modify(Sell sell, String title, String content, Integer price, String region, String category, MultipartFile upload) throws IOException {
         sell.setTitle(title);
@@ -83,31 +90,32 @@ public class SellService {
         sell.setCategory(category);
 
         String originalImgName = upload.getOriginalFilename();
-        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
         UUID uuid = UUID.randomUUID();
-        String imgName = uuid + "_" + originalImgName;
+        String imgName = "sell-image/" + uuid + "_" + originalImgName;
 
-        if (imgName.contains(".")) {
-            File saveFile = new File(projectPath, imgName);
-
-            upload.transferTo(saveFile);
-
+        if (originalImgName != null && !originalImgName.isEmpty()) {
             // 이전 이미지 삭제
             if (sell.getImgName() != null) {
-                File previousFile = new File(projectPath, sell.getImgName());
-                previousFile.delete();
+                String deleteKey = sell.getImgName();
+                s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucketName).key(deleteKey).build());
             }
 
-            sell.setOriImgName(originalImgName);
+            // 새 이미지 S3에 업로드
+            s3Client.putObject(PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(imgName)
+                            .build(),
+                    RequestBody.fromBytes(upload.getBytes()));
             sell.setImgName(imgName);
-            sell.setImgPath("/images/" + imgName);
+            sell.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
 
             this.sellRepository.save(sell);
         } else {
             this.sellRepository.save(sell);
         }
     }
+
 
 
     public void delete(Sell sell) {

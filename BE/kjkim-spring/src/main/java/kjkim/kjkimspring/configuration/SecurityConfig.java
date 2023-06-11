@@ -1,4 +1,4 @@
-package kjkim.kjkimspring;
+package kjkim.kjkimspring.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
