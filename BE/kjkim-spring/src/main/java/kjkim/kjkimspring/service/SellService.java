@@ -93,6 +93,12 @@ public class SellService {
 
             upload.transferTo(saveFile);
 
+            // 이전 이미지 삭제
+            if (sell.getImgName() != null) {
+                File previousFile = new File(projectPath, sell.getImgName());
+                previousFile.delete();
+            }
+
             sell.setOriImgName(originalImgName);
             sell.setImgName(imgName);
             sell.setImgPath("/images/" + imgName);
@@ -102,6 +108,7 @@ public class SellService {
             this.sellRepository.save(sell);
         }
     }
+
 
     public void delete(Sell sell) {
         this.sellRepository.delete(sell);
