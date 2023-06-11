@@ -3,6 +3,7 @@ package kjkim.kjkimspring.controller;
 import kjkim.kjkimspring.comment.CommentForm;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellForm;
+import kjkim.kjkimspring.sell.SellState;
 import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -130,6 +133,55 @@ public class SellController {
 
         return String.format("redirect:/sell/%s", id);
     }
+
+    public void initBinder(WebDataBinder dataBinder) {
+        dataBinder.registerCustomEditor(SellState.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(SellState.valueOf(text.toUpperCase()));
+            }
+        });
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sell/markReserved/{id}")
+    public String markSellAsReserved(Principal principal, @PathVariable("id") Integer id) {
+        Sell sell = this.sellService.getSell(id);
+
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "상태를 변경할 권한이 없는 사용자입니다.");
+        } else {
+            this.sellService.changeSellStateToReserved(sell);
+            return String.format("redirect:/sell/%s", id);
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sell/markSold/{id}")
+    public String markSellAsSold(Principal principal, @PathVariable("id") Integer id) {
+        Sell sell = this.sellService.getSell(id);
+
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "상태를 변경할 권한이 없는 사용자입니다.");
+        } else {
+            this.sellService.changeSellStateToCompleted(sell);
+            return String.format("redirect:/sell/%s", id);
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sell/markSelling/{id}")
+    public String markSellAsSelling(Principal principal, @PathVariable("id") Integer id) {
+        Sell sell = this.sellService.getSell(id);
+
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "상태를 변경할 권한이 없는 사용자입니다.");
+        } else {
+            this.sellService.changeSellStateToSelling(sell);
+            return String.format("redirect:/sell/%s", id);
+        }
+    }
+
 
 
 }

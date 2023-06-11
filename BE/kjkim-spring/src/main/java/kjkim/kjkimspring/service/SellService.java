@@ -3,6 +3,7 @@ package kjkim.kjkimspring.service;
 import kjkim.kjkimspring.DataNotFoundException;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellRepository;
+import kjkim.kjkimspring.sell.SellState;
 import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import kjkim.kjkimspring.userlikessell.UserLikesSellRepository;
@@ -60,6 +61,7 @@ public class SellService {
         s.setCategory(category);
         s.setAuthor(user);
         s.setViewCount(0);
+        s.setSellState(SellState.SELLING);
 
         String originalImgName = upload.getOriginalFilename();
 
@@ -164,6 +166,22 @@ public class SellService {
         return userLikes.stream()
                 .map(UserLikesSell::getSell)
                 .collect(Collectors.toList());
+    }
+
+
+    public void changeSellStateToSelling(Sell sell) {
+        sell.setSellState(SellState.SELLING);
+        this.sellRepository.save(sell);
+    }
+
+    public void changeSellStateToReserved(Sell sell) {
+        sell.setSellState(SellState.RESERVED);
+        this.sellRepository.save(sell);
+    }
+
+    public void changeSellStateToCompleted(Sell sell) {
+        sell.setSellState(SellState.SOLD_OUT);
+        this.sellRepository.save(sell);
     }
 
 }

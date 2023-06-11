@@ -26,3 +26,4 @@ public class SellForm {
     @NotNull(message = "가격은 필수항목 입니다.")
     private Integer price;
 }
+

@@ -2,6 +2,18 @@
 <div layout:fragment="content" class="container my-3">
 
     <h2 class="border-bottom py-2" th:text="${sell.title}"></h2>
+    <div class="badge"
+         th:classappend="${sell.sellState.name() == 'SELLING' ? 'bg-primary text-white' :
+                   sell.sellState.name() == 'RESERVED' ? 'bg-warning' :
+                   sell.sellState.name() == 'SOLD_OUT' ? 'bg-danger text-white' : 'bg-light text-dark'}">
+        <div class="mb-2">상태</div>
+        <div th:if="${sell.sellState.name() == 'SELLING'}">판매중</div>
+        <div th:if="${sell.sellState.name() == 'RESERVED'}">예약중</div>
+        <div th:if="${sell.sellState.name() == 'SOLD_OUT'}">거래완료</div>
+    </div>
+
+
+
     <span th:if="${sell.category}" class="text-secondary">
                                         <span> (카테고리: </span>
                                         <span th:text="${sell.category}"></span>
@@ -60,6 +72,25 @@
                    class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
                    th:if="${sell.author != null and #authentication.getPrincipal().getUsername() == sell.author.username}"
                    th:text="삭제"></a>
+
+                <a href="javascript:void(0);" th:data-uri="@{|/sell/markReserved/${sell.id}|}"
+                   class="markReserved btn btn-sm btn-outline-secondary bg-warning text-white" sec:authorize="isAuthenticated()"
+                   th:if="${sell.author != null and #authentication.getPrincipal().getUsername() == sell.author.username and (sell.sellState.name() == 'SELLING' or sell.sellState.name() == 'SOLD_OUT')}">
+                    예약중으로 변경
+                </a>
+
+                <a href="javascript:void(0);" th:data-uri="@{|/sell/markSold/${sell.id}|}"
+                   class="markSold btn btn-sm btn-outline-secondary btn-danger text-white" sec:authorize="isAuthenticated()"
+                   th:if="${sell.author != null and #authentication.getPrincipal().getUsername() == sell.author.username and (sell.sellState.name() == 'SELLING' or sell.sellState.name() == 'RESERVED')}">
+                    거래완료로 변경
+                </a>
+
+                <a href="javascript:void(0);" th:data-uri="@{|/sell/markSelling/${sell.id}|}"
+                   class="markSelling btn btn-sm btn-outline-secondary btn-primary text-white" sec:authorize="isAuthenticated()"
+                   th:if="${sell.author != null and #authentication.getPrincipal().getUsername() == sell.author.username and sell.sellState.name() != 'SELLING'}">
+                    판매중으로 변경
+                </a>
+
             </div>
         </div>
     </div>
@@ -118,6 +149,33 @@
     Array.from(recommend_elements).forEach(function(element) {
         element.addEventListener('click', function() {
             location.href = this.dataset.uri;
+        });
+    });
+
+    const markReserved_elements = document.getElementsByClassName("markReserved");
+    Array.from(markReserved_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if (confirm("정말로 예약중으로 변경하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            }
+        });
+    });
+
+    const markSold_elements = document.getElementsByClassName("markSold");
+    Array.from(markSold_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if (confirm("정말로 거래완료로 변경하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            }
+        });
+    });
+
+    const markSelling_elements = document.getElementsByClassName("markSelling");
+    Array.from(markSelling_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if (confirm("정말로 판매중으로 변경하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            }
         });
     });
 </script>
