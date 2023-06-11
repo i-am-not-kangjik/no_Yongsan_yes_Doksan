@@ -67,6 +67,10 @@ public class Sell {
     @Column(length = 50)
     private String category;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, columnDefinition = "varchar(20) default 'SELLING'")
+    private SellState sellState;
+
     public void increaseViewCount() {
         viewCount = viewCount == null ? 1 : viewCount + 1;
     }

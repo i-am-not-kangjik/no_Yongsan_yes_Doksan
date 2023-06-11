@@ -9,11 +9,20 @@
                 </div>
                 <div class="col-md-6 col-lg-4" th:each="sell : ${sellList}">
                     <div class="card my-3">
-                        <span th:if="${sell.category}" class="text-secondary">
-                                        <span> (카테고리: </span>
-                                        <span th:text="${sell.category}"></span>
-                                        <span>)</span>
-                                    </span>
+                        <div class="position-relative">
+                            <span class="sell-state-badge position-absolute top-0 start-0 translate-middle badge rounded-pill"
+                                  th:classappend="${sell.sellState.name() == 'SELLING'} ? 'bg-success' :
+                                                 (${sell.sellState.name() == 'RESERVED'} ? 'bg-warning' :
+                                                 (${sell.sellState.name() == 'SOLD_OUT'} ? 'bg-danger' : 'bg-light'))"
+                                  style="font-size: 14px;">
+                                <span th:if="${sell.sellState.name() == 'SELLING'}">판매중</span>
+                                <span th:if="${sell.sellState.name() == 'RESERVED'}">예약중</span>
+                                <span th:if="${sell.sellState.name() == 'SOLD_OUT'}">판매완료</span>
+                            </span>
+                        </div>
+                        <div th:if="${sell.category}" class="text-secondary text-end mr-2" style="white-space: nowrap;">
+                            <div>(카테고리: <span th:text="${sell.category}"></span>)</div>
+                        </div>
                         <img th:if="${sell.getImgPath == null}" src="https://no-yongsan-yes-doksan.s3.ap-northeast-2.amazonaws.com/noimg.gif"
                              class="card-image-top img-thumbnail" alt="thumbnail" style="height: 200px">
                         <img th:if="${sell.getImgPath != null}" th:src="@{${sell.getImgPath}}"
