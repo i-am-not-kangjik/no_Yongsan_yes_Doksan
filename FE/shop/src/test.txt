@@ -1,0 +1,227 @@
+import React, { useState } from 'react';
+
+const Post = () => {
+  const [image, setImage] = useState(null); // 이미지
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    // TODO: 상품 등록 로직 작성
+
+    // 예시로 등록 완료 메시지 출력
+    console.log('상품이 등록되었습니다.');
+
+    // 등록 후 입력값 초기화
+    setImage(null);
+  };
+
+  const handleImageChange = (event) => {
+    const selectedImage = event.target.files[0];
+
+    if (selectedImage) {
+      // Set the selected image to state
+      setImage(selectedImage);
+
+      // Read the selected image file and create a preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
+
+  return (
+    <div>
+      <h2>상품 등록</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="title">제목:</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="content">내용:</label>
+          <textarea
+            id="content"
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="image">Image:</label>
+          <input
+            type="file"
+            id="image"
+            onChange={handleImageChange}
+          />
+        </div>
+        {imagePreview && (
+          <div>
+            <img src={imagePreview} alt="Preview" style={{ maxWidth: '200px' }} />
+          </div>
+        )}
+
+        <div>
+          <label htmlFor="category">카테고리 선택:</label>
+          <select
+            id="category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            <option value="">-- 선택하세요 --</option>
+            <option value="clothing">의류</option>
+            <option value="appliances">가전제품</option>
+            <option value="books">도서</option>
+            <option value="furniture">가구</option>
+            <option value="miscellaneous">기타</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="region">지역 선택:</label>
+          <select
+            id="region"
+            value={selectedRegion}
+            onChange={handleRegionChange}
+          >
+            <option value="">시/도 선택</option>
+            <option value="gangwon">강원</option>
+            <option value="gyeonggi">경기</option>
+            <option value="gyeongsangnam">경남</option>
+            <option value="gyeongsangbuk">경북</option>
+            <option value="gwangju">광주</option>
+            <option value="daegu">대구</option>
+            <option value="daejeon">대전</option>
+            <option value="busan">부산</option>
+            <option value="seoul">서울</option>
+            <option value="ulsan">울산</option>
+            <option value="incheon">인천</option>
+            <option value="jeonnam">전남</option>
+            <option value="jeonbuk">전북</option>
+            <option value="jeju">제주</option>
+            <option value="chungnam">충남</option>
+            <option value="chungbuk">충북</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="district">구역 선택:</label>
+          <select
+            id="district"
+            value={selectedDistrict}
+            onChange={handleDistrictChange}
+          >
+            <option value="">-- 선택하세요 --</option>
+            {selectedRegion === 'gangwon' &&
+              gangwon.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+            {selectedRegion === 'gyeonggi' &&
+              gyeonggi.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'gyeongsangnam' &&
+              gyeongsangnam.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'gyeongsangbuk' &&
+              gyeongsangbuk.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'gwangju' &&
+              gwangju.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'daegu' &&
+              daegu.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'daejeon' &&
+              daejeon.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'busan' &&
+              busan.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'seoul' &&
+              seoul.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'ulsan' &&
+              ulsan.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'incheon' &&
+              incheon.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'jeonnam' &&
+              jeonnam.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'jeonbuk' &&
+              jeonbuk.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'jeju' &&
+              jeju.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'chungnam' &&
+              chungnam.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+              {selectedRegion === 'chungbuk' &&
+              chungbuk.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+
+          </select>
+        </div>
+
+        <button type="submit">등록</button>
+      </form>
+    </div>
+  );
+};
+
+export default Post;
