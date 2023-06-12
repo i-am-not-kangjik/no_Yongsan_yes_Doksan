@@ -1,0 +1,181 @@
+body {
+    background-color: #eee;
+    margin-top: 100px;
+}
+
+h4 {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+.App {
+    text-align: center;
+}
+
+.main_title {
+    color: #444;
+}
+
+.main_area {
+    color: gray;
+    width: 15rem;
+    margin: auto;
+}
+
+.main_price {
+    font-weight: bold;
+    font-size: 20px;
+    width: 15rem;
+    margin: auto;
+}
+
+.main_img {
+    width: 100%;
+    min-height: 180px;
+    object-fit: cover;
+}
+
+.detail_title {}
+
+.detail_ct {}
+
+.detail_price {}
+
+.detail_content {}
+
+.detail_img {
+    height: 700px;
+    object-fit: cover
+}
+
+.Link {
+    text-decoration: none;
+}
+
+.detail {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    background-color: #fff;
+}
+
+.blurOn {
+    opacity: 0.5;
+}
+
+.blurOff {
+    opacity: 1;
+}
+
+.outside-alerter {
+    transform: scale(0);
+    transition: transform 0.2s;
+}
+
+.outside-alerter.show {
+    transform: scale(1);
+    position: fixed;
+    left: 12.5%;
+    top: 10%;
+}
+
+.maincolor {
+    color: #0052A4;
+}
+
+.text_overflow {
+    width: 15rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: auto;
+}
+
+.detail_margin {
+    margin: 15px auto;
+}
+
+.grey {
+    color: grey;
+    font-size: 15px;
+    word-spacing: -2px;
+}
+
+.post_box {
+    padding: 30px 0;
+    border-bottom: 1px solid grey;
+    font-size: 18px;
+    display: flex;
+}
+
+.post_box_left {
+    width: 20%;
+}
+
+.post_box_right {
+    width: 80%;
+}
+
+.post_box input {
+    width: 80%;
+    padding: 5px;
+}
+
+.text_center { 
+    display: flex;
+    align-items:  center;
+}
+
+.post_img_box {
+    margin-right: 21.6px;
+    margin-bottom: 10px;
+    background-color: white;
+    border: 1px solid grey;
+}
+
+.login_box{
+    width: 500px;
+    height: 700px;
+    background-color: #F6F6f6;
+    padding-top: 50px;
+    margin: 150px auto;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+}
+
+.login_input{
+    width: 80%;
+    height: 50px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+/* .idpw_id {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-bottom: 10px;
+} */
+
+.idpw_pw {
+    /* margin-bottom: 50px; */
+}
+
+.login_btn {
+    background-color : #0052A4;
+    width: 80%;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.radio {
+    font-size: 20px;
+    margin-right: 5px;
+}
