@@ -1,41 +1,13 @@
 import React from 'react';
-import {  useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
-import axios from 'axios';
 
-const Myshop = (props) => {
-
-    const [pg, setPg] = useState([]);
-
-    console.log(pg)
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await axios.get('http://localhost:8081/api/sell');
-    //             setPg(response.data);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
-
-    const fetchData = async () => {
-        try {
-          const response = await axios.get('http://localhost:8081/api/sell');
-          setPg(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+const Myshop = ({pg}) => {
 
     return (
         <div style={{ width: '50%', backgroundColor: '#F6F6f6', margin: 'auto', border: '1px solid #ddd', borderRadius: '15px', minHeight: '750px', padding: '40px 0' }}>
             <h3 style={{ paddingBottom: '50px', borderBottom: '1px solid gray', margin: '0' }}>나의 판매내역</h3>
             {
-                pg.sellData && pg.sellData.map(function (item) {
+                pg.content && pg.content.map(function (item) {
                     const detailDate = (created_at) => {
                         const milliseconds = new Date() - new Date(created_at);
                         const seconds = milliseconds / 1000;
@@ -66,14 +38,14 @@ const Myshop = (props) => {
                         return `${Math.floor(years)}년 전`;
                       };
                       
-                      const nowDate = detailDate(item.created_at);
+                      const nowDate = detailDate(item.createdAt);
 
                     return (
                         <div style={{ borderBottom: '1px solid gray', display: 'flex' }}>
                             <div style={{ padding: '20px' }}>
                                 <div style={{ width: '200px', height: '200px', borderRadius: '10px', overflow: 'hidden', backgroundColor: 'antiquewhite' }}>
                                     {
-                                        item.img_path == null ? null : <img src="https://no-yongsan-yes-doksan.s3.amazonaws.com/sell-image/78223ed4-e4dd-44a8-8cbe-0201591c4012_laptop5.jpg" style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }} alt="thumbnail"></img>
+                                        item.imgPath == null ? null : <img src="https://no-yongsan-yes-doksan.s3.amazonaws.com/sell-image/78223ed4-e4dd-44a8-8cbe-0201591c4012_laptop5.jpg" style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }} alt="thumbnail"></img>
                                     }
                                 </div>
                             </div>
@@ -82,10 +54,10 @@ const Myshop = (props) => {
                                 <p style={{ color: 'gray' }}>{item.region} ∙ {nowDate}</p>
                                 <div style={{ display: 'flex', marginTop: '15px' }}>
                                     {
-                                        item.sell_state === 'RESERVED' && <div style={{ width: '80px', height: '30px', backgroundColor: '#65D35D', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid #eee', borderRadius: '7px', marginRight: '10px' }}><span style={{ color: 'white' }}>예약중</span></div>
+                                        item.sellState === 'RESERVED' && <div style={{ width: '80px', height: '30px', backgroundColor: '#65D35D', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid #eee', borderRadius: '7px', marginRight: '10px' }}><span style={{ color: 'white' }}>예약중</span></div>
                                     }
                                     {
-                                        item.sell_state === 'SOLD_OUT' && <div style={{ width: '80px', height: '30px', backgroundColor: '#ddd', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid #eee', borderRadius: '7px', marginRight: '10px' }}><span style={{ color: 'black' }}>거래완료</span></div>
+                                        item.sellState === 'SOLD_OUT' && <div style={{ width: '80px', height: '30px', backgroundColor: '#ddd', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid #eee', borderRadius: '7px', marginRight: '10px' }}><span style={{ color: 'black' }}>거래완료</span></div>
                                     }
                                     <h4 className='' style={{ fontSize: '25px', fontWeight: 'bold' }}>{item.price.toLocaleString()}원</h4>
                                 </div>

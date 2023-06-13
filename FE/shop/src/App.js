@@ -24,7 +24,13 @@ import Test from './test'
 
 function App() {
 
+  
+
   const [pg, setPg] = useState([]);
+
+  {
+    pg.content && console.log(pg.content[1].img_path)
+  }
 
   useEffect(() => {
     const fetchData = async () => {

@@ -8,19 +8,6 @@ const LoginPage = (props) => {
 
   let navigate = useNavigate();
 
-  const [pg, setPg] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:5001/api/data');
-        setPg(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,26 +23,26 @@ const LoginPage = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 입력한 이메일과 일치하는 사용자를 찾습니다.
-    const user = pg.userData.find((user) => user.email === email);
+    // // 입력한 이메일과 일치하는 사용자를 찾습니다.
+    // const user = pg.userData.find((user) => user.email === email);
 
-    if (user) {
-      // 입력한 비밀번호와 저장된 암호화된 비밀번호를 비교합니다.
-      const isPasswordCorrect = bcrypt.compareSync(password, user.password);
+    // if (user) {
+    //   // 입력한 비밀번호와 저장된 암호화된 비밀번호를 비교합니다.
+    //   const isPasswordCorrect = bcrypt.compareSync(password, user.password);
 
-      if (isPasswordCorrect) {
-        // 비밀번호가 일치하는 경우, 로그인 로직을 수행합니다.
-        console.log('로그인 성공');
-        props.handleLogin(user.username)
-        navigate('/sell');
-      } else {
-        // 비밀번호가 일치하지 않는 경우
-        console.log('비밀번호가 올바르지 않습니다');
-      }
-    } else {
-      // 사용자가 존재하지 않는 경우
-      console.log('사용자를 찾을 수 없습니다');
-    }
+    //   if (isPasswordCorrect) {
+    //     // 비밀번호가 일치하는 경우, 로그인 로직을 수행합니다.
+    //     console.log('로그인 성공');
+    //     props.handleLogin(user.username)
+    //     navigate('/sell');
+    //   } else {
+    //     // 비밀번호가 일치하지 않는 경우
+    //     console.log('비밀번호가 올바르지 않습니다');
+    //   }
+    // } else {
+    //   // 사용자가 존재하지 않는 경우
+    //   console.log('사용자를 찾을 수 없습니다');
+    // }
   };
 
   return (
