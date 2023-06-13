@@ -9,18 +9,27 @@ const Myshop = (props) => {
 
     console.log(pg)
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:5001/api/data');
-                setPg(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get('http://localhost:8081/api/sell');
+    //             setPg(response.data);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
 
-        fetchData();
-    }, []);
+    //     fetchData();
+    // }, []);
+
+    const fetchData = async () => {
+        try {
+          const response = await axios.get('http://localhost:8081/api/sell');
+          setPg(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     return (
         <div style={{ width: '50%', backgroundColor: '#F6F6f6', margin: 'auto', border: '1px solid #ddd', borderRadius: '15px', minHeight: '750px', padding: '40px 0' }}>
