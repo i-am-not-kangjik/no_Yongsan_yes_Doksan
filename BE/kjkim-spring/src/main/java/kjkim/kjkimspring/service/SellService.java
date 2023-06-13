@@ -1,6 +1,7 @@
 package kjkim.kjkimspring.service;
 
 import kjkim.kjkimspring.DataNotFoundException;
+import kjkim.kjkimspring.dto.SellDTO;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellRepository;
 import kjkim.kjkimspring.sell.SellState;
@@ -21,10 +22,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -184,4 +182,29 @@ public class SellService {
         this.sellRepository.save(sell);
     }
 
+    public SellDTO convertToDTO(Sell sell) {
+        SellDTO sellDTO = new SellDTO();
+
+        sellDTO.setId(sell.getId());
+        sellDTO.setTitle(sell.getTitle());
+        sellDTO.setContent(sell.getContent());
+        sellDTO.setCreatedAt(sell.getCreatedAt());
+        sellDTO.setUpdatedAt(sell.getUpdatedAt());
+        sellDTO.setImgName(sell.getImgName());
+        sellDTO.setImgPath(sell.getImgPath());
+        sellDTO.setPrice(sell.getPrice());
+        sellDTO.setAuthorUsername(sell.getAuthor().getUsername());
+        sellDTO.setViewCount(sell.getViewCount());
+        sellDTO.setRegion(sell.getRegion());
+
+        Set<String> likedUsernames = sell.getLikedUser().stream()
+                .map(User::getUsername)
+                .collect(Collectors.toSet());
+        sellDTO.setLikedUsernames(likedUsernames);
+
+        sellDTO.setCategory(sell.getCategory());
+        sellDTO.setSellState(sell.getSellState());
+
+        return sellDTO;
+    }
 }
