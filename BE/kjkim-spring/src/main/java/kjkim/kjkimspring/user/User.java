@@ -1,5 +1,5 @@
 package kjkim.kjkimspring.user;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,5 +46,6 @@ public class User {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<UserLikesSell> likedSells;
 }

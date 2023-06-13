@@ -1,5 +1,6 @@
 package kjkim.kjkimspring.userlikessell;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.user.User;
 import lombok.Getter;
@@ -18,10 +19,12 @@ public class UserLikesSell {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") // Specify a unique name for the join column
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "sell_id") // Specify a unique name for the join column
     private Sell sell;
 }
