@@ -1,5 +1,8 @@
 package kjkim.kjkimspring.sell;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kjkim.kjkimspring.comment.Comment;
 import kjkim.kjkimspring.user.User;
 import lombok.Getter;
@@ -16,6 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Sell {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +66,7 @@ public class Sell {
             joinColumns = @JoinColumn(name = "sell_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonIdentityReference(alwaysAsId = true) // otherwise first ref as POJO, others as id
     private Set<User> likedUser;
 
     @Column(length = 50)
