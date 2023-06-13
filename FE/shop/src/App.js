@@ -44,8 +44,22 @@ function App() {
 
   const handleLogin = (user) => {
     setLoggedInUser(user);
+    localStorage.setItem('loggedInUser', JSON.stringify(user)); // Store user information in local storage
   };
+  useEffect(() => {
+    const user = localStorage.getItem('loggedInUser');
+    if (user) {
+      setLoggedInUser(JSON.parse(user));
+    }
+  }, []);
+  
+  const handleLogout = () => {
+    localStorage.removeItem('loggedInUser');
+    setLoggedInUser(null);
+    window.location.reload();
 
+  };
+  
   // 임시데이터
   let [data, setdata] = useState(Temporarydata)
 
@@ -66,7 +80,7 @@ function App() {
     <div className={'App '}>
       <Navbar bg="light" expand="lg" className={`fixed-top ${blur}`}>
         <Container fluid style={{ width: '80%', padding: '10px' }}>
-          <Navbar.Brand onClick={() => { navigate('/') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
+          <Navbar.Brand onClick={() => { navigate('/sell') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
@@ -103,7 +117,7 @@ function App() {
             </Form>
             {loggedInUser ? (
                 <span style={{ fontSize: '15px', marginLeft: '30px' }}>
-                {loggedInUser}/<Link onClick={() => setLoggedInUser(null)} className='Link' style={{ color : 'black' }}>로그아웃</Link>
+                {loggedInUser}/<Link onClick={handleLogout} className='Link' style={{ color : 'black' }}>로그아웃</Link>
                 </span>
             ) : (
               <Nav.Link onClick={() => navigate('/signin')} style={{ fontSize: '15px', marginLeft: '30px' }}>
@@ -116,7 +130,7 @@ function App() {
       </Navbar>
 
       <Routes>
-        <Route path='/' element={<Main setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur}></Main>} />
+        <Route path='/sell' element={<Main setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />

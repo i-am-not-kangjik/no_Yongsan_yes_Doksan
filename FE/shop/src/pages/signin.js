@@ -47,7 +47,7 @@ const LoginPage = (props) => {
         // 비밀번호가 일치하는 경우, 로그인 로직을 수행합니다.
         console.log('로그인 성공');
         props.handleLogin(user.username)
-        navigate('/');
+        navigate('/sell');
       } else {
         // 비밀번호가 일치하지 않는 경우
         console.log('비밀번호가 올바르지 않습니다');
