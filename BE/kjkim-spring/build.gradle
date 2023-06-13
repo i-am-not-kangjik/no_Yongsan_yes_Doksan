@@ -26,7 +26,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	implementation 'software.amazon.awssdk:s3:2.20.83'
-
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	runtimeOnly('io.jsonwebtoken:jjwt-jackson:0.11.2')
 }
 
 tasks.named('test') {
