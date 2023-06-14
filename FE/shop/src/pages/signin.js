@@ -1,20 +1,19 @@
 /*eslint-disable*/
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import bcrypt from 'bcryptjs'; // bcryptjs 라이브러리를 사용하여 비밀번호를 암호화합니다.
 
 const LoginPage = (props) => {
-
   let navigate = useNavigate();
 
-
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleIdChange = (e) => {
+    setId(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -23,27 +22,29 @@ const LoginPage = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // send login request
 
-    // // 입력한 이메일과 일치하는 사용자를 찾습니다.
-    // const user = pg.userData.find((user) => user.email === email);
+    axios
+      .post('http://localhost:8081/api/user/login', {
+        username: id, // 아이디를 "username"으로 변경
+        password1: password,
+      })
+      .then((response) => {
+        // 로그인 성공 시 처리
+        const token = response.data.token;
 
-    // if (user) {
-    //   // 입력한 비밀번호와 저장된 암호화된 비밀번호를 비교합니다.
-    //   const isPasswordCorrect = bcrypt.compareSync(password, user.password);
+        // 토큰을 로컬 스토리지에 저장
+        localStorage.setItem('token', token);
 
-    //   if (isPasswordCorrect) {
-    //     // 비밀번호가 일치하는 경우, 로그인 로직을 수행합니다.
-    //     console.log('로그인 성공');
-    //     props.handleLogin(user.username)
-    //     navigate('/sell');
-    //   } else {
-    //     // 비밀번호가 일치하지 않는 경우
-    //     console.log('비밀번호가 올바르지 않습니다');
-    //   }
-    // } else {
-    //   // 사용자가 존재하지 않는 경우
-    //   console.log('사용자를 찾을 수 없습니다');
-    // }
+        // 원하는 페이지로 리다이렉트
+        window.location.href = '/sell';
+      })
+      .catch((error) => {
+        // 로그인 에러 처리
+        console.log(error);
+        setError(true);
+        setErrorMessage('아이디나 비밀번호가 잘못 입력되었습니다');
+      });
   };
 
   return (
@@ -51,14 +52,14 @@ const LoginPage = (props) => {
       <h1 style={{ marginBottom: '50px' }}>로그인</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor='email'></label>
+          <label htmlFor='id'></label>
           <input
-            type='email'
-            id='email'
-            placeholder='이메일 주소 또는 아이디'
-            className='login_input idpw_id'
-            value={email}
-            onChange={handleEmailChange}
+            type='text'
+            id='id'
+            placeholder='아이디를 입력해주세요'
+            className='login_input'
+            value={id}
+            onChange={handleIdChange}
           />
         </div>
         <div>
@@ -66,25 +67,23 @@ const LoginPage = (props) => {
           <input
             type='password'
             id='password'
-            placeholder='비밀번호'
-            className='login_input idpw_pw'
+            placeholder='비밀번호를 입력해주세요'
+            className='login_input'
             value={password}
             onChange={handlePasswordChange}
           />
         </div>
+        {error && <p style={{ color: 'orange' }}>{errorMessage}</p>}
         <Button type='submit' className='login_btn'>
           로그인
         </Button>
       </form>
       <div style={{ width: '60%', margin: 'auto' }}>
-        <Link to='/findid' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
+        <Link to='/forgot-password' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
           아이디 찾기
         </Link>
-        <Link to='/findpw' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
-          비밀번호 찾기
-        </Link>
         <Link to='/signup' className='Link' style={{ color: 'gray', padding: '0 10px' }}>
-          회원가입
+          회원 가입
         </Link>
       </div>
     </div>

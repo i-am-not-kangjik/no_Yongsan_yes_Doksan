@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
 
 
 const Post = () => {
@@ -19,50 +20,70 @@ const Post = () => {
   const [price, setPrice] = useState(''); // 가격
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
 
+
+  const saveFormData = async () => {
+    try {
+      // 백엔드 서버 엔드포인트로 API 요청을 보냅니다
+      const response = await axios.post('http://localhost:8081/api/sell', {
+        title: title,
+        content: content,
+        images: images,
+        region: selectedRegion + selectedDistrict,
+        category: category,
+        price: price,
+      });
+  
+      // 필요한 경우 응답을 처리합니다
+  
+      // 사용자에게 성공 메시지를 표시합니다
+      alert('제품이 등록되었습니다.');
+  
+      // 폼 값 초기화
+      setImages([]);
+      setImagePreviews([]);
+      setTitle('');
+      setCategory('');
+      setSelectedRegion('');
+      setSelectedDistrict('');
+      setPrice('');
+      setContent('');
+    } catch (error) {
+      // API 요청 중 발생한 오류를 처리합니다
+      console.log(error);
+      alert('데이터 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     if (images.length < 1) {
-      alert("이미지를 업로드 해주세요.");
+      alert('이미지를 업로드해주세요');
+      return;
+    } else if (title.length < 1) {
+      alert('제목을 입력해주세요');
+      return;
+    } else if (category.trim() === '') {
+      alert('카테고리를 선택해주세요');
+      return;
+    } else if (price < 1000) {
+      alert('가격을 입력해주세요');
+      return;
+    } else if (selectedRegion.trim() === '') {
+      alert('지역을 선택해주세요');
+      return;
+    } else if (selectedDistrict.trim() === '') {
+      alert('지역을 선택해주세요');
+      return;
+    } else if (content.length < 10) {
+      alert('상세 내용을 입력해주세요');
       return;
     }
-    else if (title.length < 1) {
-      alert("제목을 입력해주세요.");
-      return;
-    }
-    else if (category.trim() === '') {
-      alert("카테고리를 선택해주세요.");
-      return;
-    }
-    else if (price < 1000) {
-      alert("가격을 입력해주세요.");
-      return;
-    }
-    else if (selectedRegion.trim() === '') {
-      alert("지역을 선택해주세요.");
-      return;
-    }
-    else if (selectedDistrict.trim() === '') {
-      alert("구역을 선택해주세요.");
-      return;
-    }
-    else if (content.length < 10) {
-      alert("내용을 입력해주세요.");
-      return;
-    }
-
-
-    alert("상품이 등록되었습니다.");
-    // 등록 후 입력값 초기화
-    setImages([]);
-    setImagePreviews([]);
-    setTitle('');
-    setCategory('');
-    setSelectedRegion('');
-    setSelectedDistrict('');
-    setPrice('');
-    setContent('');
+  
+    // 백엔드에 데이터 저장을 위해 saveFormData 함수 호출
+    saveFormData();
   };
+  
 
   const handleRegionChange = (event) => {
     setSelectedRegion(event.target.value);
