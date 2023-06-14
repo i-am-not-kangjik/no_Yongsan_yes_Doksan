@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom'
@@ -48,7 +49,7 @@ function Detail(props) {
                 {
                     props.data[props.id].img_path.map(function (item, i) {
                         return (
-                            <Carousel.Item>
+                            <Carousel.Item key={i}>
                                 <img
                                     className="d-block w-100 detail_img"
                                     src={item}

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from 'react';
 import { Link } from 'react-router-dom'
 
@@ -7,7 +8,7 @@ const Myshop = ({pg}) => {
         <div style={{ width: '50%', backgroundColor: '#F6F6f6', margin: 'auto', border: '1px solid #ddd', borderRadius: '15px', minHeight: '750px', padding: '40px 0' }}>
             <h3 style={{ paddingBottom: '50px', borderBottom: '1px solid gray', margin: '0' }}>나의 판매내역</h3>
             {
-                pg.content && pg.content.map(function (item) {
+                pg.content && pg.content.map(function (item, i) {
                     const detailDate = (created_at) => {
                         const milliseconds = new Date() - new Date(created_at);
                         const seconds = milliseconds / 1000;
@@ -41,11 +42,11 @@ const Myshop = ({pg}) => {
                       const nowDate = detailDate(item.createdAt);
 
                     return (
-                        <div style={{ borderBottom: '1px solid gray', display: 'flex' }}>
+                        <div style={{ borderBottom: '1px solid gray', display: 'flex' }} key={i}>
                             <div style={{ padding: '20px' }}>
                                 <div style={{ width: '200px', height: '200px', borderRadius: '10px', overflow: 'hidden', backgroundColor: 'antiquewhite' }}>
                                     {
-                                        item.imgPath == null ? null : <img src="https://no-yongsan-yes-doksan.s3.amazonaws.com/sell-image/78223ed4-e4dd-44a8-8cbe-0201591c4012_laptop5.jpg" style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }} alt="thumbnail"></img>
+                                        item.imgPath == null ? <img src='https://no-yongsan-yes-doksan.s3.ap-northeast-2.amazonaws.com/noimg.gif' style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }}></img> : <img src="https://no-yongsan-yes-doksan.s3.amazonaws.com/sell-image/78223ed4-e4dd-44a8-8cbe-0201591c4012_laptop5.jpg" style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }} alt="thumbnail"></img>
                                     }
                                 </div>
                             </div>

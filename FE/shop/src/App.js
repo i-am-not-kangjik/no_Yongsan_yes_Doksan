@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Navbar, Container, Nav, Spinner, Card, NavDropdown, Form } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import './App.css';
@@ -24,7 +24,7 @@ import Test from './test'
 
 function App() {
 
-  
+
 
   const [pg, setPg] = useState([]);
 
@@ -58,14 +58,14 @@ function App() {
       setLoggedInUser(JSON.parse(user));
     }
   }, []);
-  
+
   const handleLogout = () => {
     localStorage.removeItem('loggedInUser');
     setLoggedInUser(null);
     window.location.reload();
 
   };
-  
+
   // 임시데이터
   let [data, setdata] = useState(Temporarydata)
 
@@ -84,7 +84,7 @@ function App() {
 
   return (
     <div className={'App '}>
-      <Navbar bg="light" expand="lg" className={`fixed-top ${blur}`}>
+      <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
         <Container fluid style={{ width: '80%', padding: '10px' }}>
           <Navbar.Brand onClick={() => { navigate('/sell') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
@@ -93,13 +93,7 @@ function App() {
               className="me-auto my-2 my-lg-0"
               style={{ maxHeight: '100px' }}
               navbarScroll>
-              <Nav.Link onClick={() => { if (loggedInUser == null) {
-                navigate('/signin');
-                return; 
-              } else {
-                navigate('/post');
-                return;
-              } }}>판매하기</Nav.Link>
+              <Nav.Link onClick={() => {navigate('/post')}}>판매하기</Nav.Link>
               <Nav.Link onClick={() => { navigate('/myshop') }}>내상점</Nav.Link>
               <Nav.Link href="#action3">채팅</Nav.Link>
               <NavDropdown title="카테고리" id="navbarScrollingDropdown">
@@ -121,15 +115,9 @@ function App() {
               />
               <Button variant="outline-secondary">검색하기</Button>{' '}
             </Form>
-            {loggedInUser ? (
-                <span style={{ fontSize: '15px', marginLeft: '30px' }}>
-                {loggedInUser}/<Link onClick={handleLogout} className='Link' style={{ color : 'black' }}>로그아웃</Link>
-                </span>
-            ) : (
-              <Nav.Link onClick={() => navigate('/signin')} style={{ fontSize: '15px', marginLeft: '30px' }}>
-                로그인/회원가입
-              </Nav.Link>
-            )}
+            <Nav.Link onClick={() => navigate('/signin')} style={{ fontSize: '15px', marginLeft: '30px' }}>
+              로그인/회원가입
+            </Nav.Link>
 
           </Navbar.Collapse>
         </Container>
@@ -145,7 +133,7 @@ function App() {
         <Route path='/findid' element={<FindId></FindId>} />
         <Route path='/findpw' element={<FindPw></FindPw>} />
         <Route path='/myshop' element={<Myshop data={data} setdata={setdata} pg={pg}></Myshop>} />
-        <Route path='/test' element={<Test/>} />
+        <Route path='/test' element={<Test />} />
         <Route path='*' element={<div>없는페이지입니다</div>} />
       </Routes>
     </div>
@@ -176,7 +164,7 @@ function Main(props) {
             {
               props.recentList.map(function (img, i) {
                 return (
-                  <Link onClick={() => { setd(true); props.setblur('blurOn'); }}>
+                  <Link onClick={() => { setd(true); props.setblur('blurOn'); }} key={i}>
                     <Card.Img src={img} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
                   </Link>
                 )
@@ -193,7 +181,7 @@ function Main(props) {
             {
               props.data.map(function (a, i) {
                 return (
-                  <MainCard data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
+                  <MainCard key={i} data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
                 )
               })
             }
@@ -237,7 +225,7 @@ function Main(props) {
           }
         </div>
       </div>
-      {d && <div style={{ width : '100%', height : '100%', backgroundColor : '#eee', position : 'fixed', top : '0px' }}  className={props.blur}></div>}
+      {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
       {d && <OutsideAlerter recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} />}
     </div>
   )
@@ -263,7 +251,7 @@ function MainCard(props) {
             <p className='main_price maincolor'>{props.data[props.i].price.toLocaleString()}원</p>
             {props.data[props.i].viewCount > 0 && (
               <>
-                <span style={{ marginRight : '3px', fontSize: '18px' }}>
+                <span style={{ marginRight: '3px', fontSize: '18px' }}>
                   <FontAwesomeIcon icon={faHeart} />
                 </span>
                 <span style={{ color: 'black', fontSize: '18px' }}>{props.data[props.i].likeCount}</span>

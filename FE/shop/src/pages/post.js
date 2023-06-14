@@ -179,8 +179,8 @@ const Post = () => {
   };
 
   return (
-    // <div style={{ width: '72%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px' }}>
-    <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}>
+    <div style={{ width: '72%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px' }}>
+    {/* <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}> */}
       <h2 style={{ borderBottom: '3px solid', padding: '30px 0' }}>상품 등록</h2>
       <form onSubmit={handleSubmit}>
 
