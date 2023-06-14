@@ -14,17 +14,50 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+//@Configuration
+//@EnableWebSecurity
+//@EnableMethodSecurity(prePostEnabled = true)
+//public class SecurityConfig {
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.authorizeHttpRequests().antMatchers("/**").permitAll().and().csrf()
+//                .and().headers().addHeaderWriter(new XFrameOptionsHeaderWriter(
+//                        XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
+//                )).and().formLogin().loginPage("/user/login").defaultSuccessUrl("/")
+//                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+//                .logoutSuccessUrl("/").invalidateHttpSession(true);
+//        return http.build();
+//    }
+//
+//    @Bean
+//    PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
+//}
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().antMatchers("/**").permitAll().and().csrf()
-                .and().headers().addHeaderWriter(new XFrameOptionsHeaderWriter(
+        http
+                .csrf().disable() // 이 줄을 추가하여 CSRF를 비활성화합니다.
+                .authorizeRequests()
+                .antMatchers("/**").permitAll()
+                .and()
+                .headers().addHeaderWriter(new XFrameOptionsHeaderWriter(
                         XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
-                )).and().formLogin().loginPage("/user/login").defaultSuccessUrl("/")
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                ))
+                .and()
+                .formLogin().loginPage("/user/login").defaultSuccessUrl("/")
+                .and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                 .logoutSuccessUrl("/").invalidateHttpSession(true);
         return http.build();
     }
@@ -35,7 +68,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
