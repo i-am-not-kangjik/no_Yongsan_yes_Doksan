@@ -1,5 +1,6 @@
 package kjkim.kjkimspring.restcontroller;
 
+import kjkim.kjkimspring.dto.UserCreateDto;
 import kjkim.kjkimspring.dto.UserDto;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
@@ -31,10 +32,15 @@ public class UserRestController {
     private final JwtService jwtService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signup(@RequestBody UserCreateForm userCreateForm) {
-        User user = userService.create(userCreateForm.getUsername(), userCreateForm.getEmail(), userCreateForm.getPassword1());
-        return new ResponseEntity<>(new UserDto(user), HttpStatus.CREATED);
+    public ResponseEntity<UserDto> signup(@RequestBody UserCreateDto userCreateDto) {
+        if (userCreateDto.getPassword1().equals(userCreateDto.getPassword2())) {
+            User user = userService.create(userCreateDto.getUsername(), userCreateDto.getEmail(), userCreateDto.getPassword1());
+            return new ResponseEntity<>(new UserDto(user), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Or any other error response
+        }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginForm userLoginForm) {
