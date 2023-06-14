@@ -51,6 +51,15 @@ public class UserService {
         userLikesSell.setSell(sell);
         userLikesSellRepository.save(userLikesSell);
     }
+    public User findByEmail(String email) {
+        Optional<User> user = this.userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new DataNotFoundException("User with email " + email + " not found");
+        }
+    }
+
 
 //    public void likeSell(User user, Sell sell) {
 //        addLike(user, sell);

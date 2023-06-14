@@ -6,6 +6,7 @@ import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.user.UserCreateForm;
 import kjkim.kjkimspring.service.JwtService;
 
+import kjkim.kjkimspring.user.UserLoginForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -34,21 +37,21 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserCreateForm userCreateForm) {
-        UserDetails userDetails;
+    public ResponseEntity<?> login(@RequestBody UserLoginForm userLoginForm) {
+        User user;
         try {
-            userDetails = userDetailsService.loadUserByUsername(userCreateForm.getUsername());
-        } catch (UsernameNotFoundException e) {
+            user = userService.findByEmail(userLoginForm.getEmail());
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
         }
 
-        String rawPassword = userCreateForm.getPassword1();
-        if (rawPassword == null || !passwordEncoder.matches(rawPassword, userDetails.getPassword())) {
+        String rawPassword = userLoginForm.getPassword();
+        if (rawPassword == null || !passwordEncoder.matches(rawPassword, user.getPassword())) {
             return new ResponseEntity<>("Invalid password", HttpStatus.UNAUTHORIZED);
         }
 
         // At this point, the user has been successfully authenticated.
-        // Here you should generate and return a token (for example, JWT) to the user.
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
 
         return new ResponseEntity<>(token, HttpStatus.OK);
