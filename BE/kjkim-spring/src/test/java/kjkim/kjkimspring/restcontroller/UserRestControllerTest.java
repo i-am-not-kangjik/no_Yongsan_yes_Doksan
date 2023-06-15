@@ -1,6 +1,7 @@
 package kjkim.kjkimspring.restcontroller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kjkim.kjkimspring.dto.UserCreateDto;
 import kjkim.kjkimspring.user.UserCreateForm;
 import kjkim.kjkimspring.user.UserLoginForm;
 import org.junit.jupiter.api.Test;
@@ -27,17 +28,20 @@ public class UserRestControllerTest {
 
     @Test
     public void testSignup() throws Exception {
-        UserCreateForm form = new UserCreateForm();
-        form.setUsername("user8");
-        form.setEmail("user8@naver.com");
-        form.setPassword1("user6user6");
-        form.setPassword2("user6user6");
+        UserCreateDto dto = new UserCreateDto();
+        dto.setUsername("user4");
+        dto.setEmail("user4@naver.com");
+        dto.setPassword1("user4user4");
+        dto.setPassword2("user4user4");
+        dto.setPhoneNumber("01044444444");
+        dto.setFullName("유저사");
 
         mockMvc.perform(post("/api/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(form)))
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
     }
+
 
 
     @Test

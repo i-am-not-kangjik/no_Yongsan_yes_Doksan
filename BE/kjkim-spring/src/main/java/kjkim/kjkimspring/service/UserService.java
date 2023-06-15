@@ -10,6 +10,7 @@ import kjkim.kjkimspring.userlikessell.UserLikesSellRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.Optional;
 
 @Service
@@ -27,11 +28,13 @@ public class UserService {
         this.userLikesSellRepository = userLikesSellRepository;
     }
 
-    public User create(String username, String email, String password) {
+    public User create(String username, String email, String password, String phonenumber, String fullname) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setPhoneNumber(phonenumber);
+        user.setFullName(fullname);
         this.userRepository.save(user);
         return user;
     }
@@ -76,6 +79,8 @@ public class UserService {
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
+
+    public boolean existsByPhoneNumber(String phoneNumber) { return userRepository.existsByPhoneNumber(phoneNumber);}
 
 
 //    public void likeSell(User user, Sell sell) {

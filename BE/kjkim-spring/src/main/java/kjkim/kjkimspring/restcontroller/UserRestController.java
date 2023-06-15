@@ -37,6 +37,16 @@ public class UserRestController {
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserCreateDto userCreateDto) {
         try {
+            // 필수 정보 누락 여부 확인
+            if (userCreateDto.getUsername() == null ||
+                    userCreateDto.getPassword1() == null ||
+                    userCreateDto.getPassword2() == null ||
+                    userCreateDto.getEmail() == null ||
+                    userCreateDto.getPhoneNumber() == null ||
+                    userCreateDto.getFullName() == null) {
+                return ResponseEntity.badRequest().body("Required information is missing");
+            }
+
             // 이메일 중복 검사
             if (userService.existsByEmail(userCreateDto.getEmail())) {
                 return ResponseEntity.badRequest().body("Email is already taken");
@@ -47,18 +57,25 @@ public class UserRestController {
                 return ResponseEntity.badRequest().body("Username is already taken");
             }
 
+            // 전화번호 중복 검사
+            if (userService.existsByPhoneNumber(userCreateDto.getPhoneNumber())) {
+                return ResponseEntity.badRequest().body("Phone number is already taken");
+            }
+
             // 비밀번호 확인
             if (!userCreateDto.getPassword1().equals(userCreateDto.getPassword2())) {
                 return ResponseEntity.badRequest().body("Passwords do not match");
             }
 
             // 회원가입 처리
-            User user = userService.create(userCreateDto.getUsername(), userCreateDto.getEmail(), userCreateDto.getPassword1());
+            User user = userService.create(userCreateDto.getUsername(), userCreateDto.getEmail(), userCreateDto.getPassword1(), userCreateDto.getPhoneNumber(), userCreateDto.getFullName());
             return ResponseEntity.status(HttpStatus.CREATED).body(new UserDto(user).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
 
 
 
