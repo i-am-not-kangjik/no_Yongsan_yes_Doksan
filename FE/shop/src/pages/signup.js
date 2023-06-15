@@ -7,7 +7,6 @@ const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // const [mobileNumber, setMobileNumber] = useState('');
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,16 +24,6 @@ const SignupPage = () => {
     setPasswordMatchError(e.target.value !== password);
   };
 
-  // const handleMobileNumberChange = (e) => {
-  //   const inputValue = e.target.value;
-  //   const numericValue = inputValue.replace(/[^0-9]/g, '');
-  //   const formattedValue = numericValue
-  //     .slice(0, 11)
-  //     .replace(/(\d{3})(\d{1,4})(\d{1,4})/, '$1-$2-$3');
-
-  //   setMobileNumber(formattedValue);
-  // };
-
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -47,7 +36,6 @@ const SignupPage = () => {
       return;
     }
 
-    // 회원가입 요청 보내기
     axios
       .post('http://localhost:8081/api/user/signup', {
         username: name,
@@ -56,25 +44,15 @@ const SignupPage = () => {
         password2: confirmPassword,
       })
       .then((response) => {
-        // 회원가입 성공 시 처리
         console.log(response);
-
-        // 폼 초기화
         setName('');
         setPassword('');
         setConfirmPassword('');
-        // setMobileNumber('');
         setEmail('');
         setPasswordMatchError(false);
       })
       .catch((error) => {
-        // 회원가입 에러 처리
         console.log(error);
-        console.log(name);
-        console.log(email);
-        console.log(password);
-        console.log(confirmPassword);
-
         setError(true);
         setErrorMessage('Error: Failed to sign up. Please check your input data.');
       });
@@ -132,17 +110,6 @@ const SignupPage = () => {
           </p>
         )}
       </div>
-      {/* <div>
-        <label htmlFor="mobileNumber"></label>
-        <input
-          type="text"
-          id="mobileNumber"
-          className="login_input"
-          placeholder="휴대폰 번호"
-          value={mobileNumber}
-          onChange={handleMobileNumberChange}
-        />
-      </div> */}
       {error && <p className="error">{errorMessage}</p>}
       <Button type="submit" className="login_btn" onClick={handleSubmit}>
         회원가입
