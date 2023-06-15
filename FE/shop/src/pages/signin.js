@@ -33,9 +33,6 @@ const handleSubmit = (e) => {
       // 로그인 성공 시 처리
       const token = response.data;
 
-      console.log(response);
-
-
       if (token) {
 
         // 토큰을 로컬 스토리지에 저장합니다.
@@ -53,7 +50,7 @@ const handleSubmit = (e) => {
       // 로그인 에러 처리
       console.log(error);
       setError(true);
-      setErrorMessage('에러: 잘못된 이메일 또는 비밀번호입니다.');
+      setErrorMessage('잘못된 이메일 또는 비밀번호입니다.');
     });
 };
 

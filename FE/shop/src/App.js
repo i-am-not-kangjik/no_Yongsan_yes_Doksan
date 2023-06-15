@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 import { Button, Navbar, Container, Nav, Spinner, Card, NavDropdown, Form } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+
 import './App.css';
 import Detail from './pages/detail'
 import Post from './pages/post'
@@ -56,9 +57,9 @@ function App() {
 
   const [pg, setPg] = useState([]);
 
-  {
-    pg.content && console.log(pg.content[1].img_path)
-  }
+  // {
+  //   pg.content && console.log(pg.content[1].img_path)
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
