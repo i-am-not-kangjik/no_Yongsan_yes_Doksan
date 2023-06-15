@@ -31,12 +31,14 @@ const handleSubmit = (e) => {
     })
     .then((response) => {
       // 로그인 성공 시 처리
-      const token = response.data;
+      const token = response.data.token;
+      const username = response.data.username;
 
       if (token) {
 
         // 토큰을 로컬 스토리지에 저장합니다.
         localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
 
         // 원하는 페이지로 리다이렉트
         window.location.href = '/sell';
@@ -53,6 +55,7 @@ const handleSubmit = (e) => {
       setErrorMessage('잘못된 이메일 또는 비밀번호입니다.');
     });
 };
+
 
 return (
 <div className='login_box'>
@@ -86,8 +89,11 @@ return (
 </Button>
 </form>
 <div style={{ width: '60%', margin: 'auto' }}>
-<Link to='/forgot-password' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
+<Link to='/findid' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
 이메일 찾기
+</Link>
+<Link to='/findpw' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
+비밀번호 찾기
 </Link>
 <Link to='/signup' className='Link' style={{ color: 'gray', padding: '0 10px' }}>
 회원 가입

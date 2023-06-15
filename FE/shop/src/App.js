@@ -36,8 +36,8 @@ function App() {
 
     if (token) {
       // 사용자가 로그인되어 있는 경우
-      const userId = localStorage.getItem('userId'); // 로컬 스토리지 또는 서버에서 사용자 ID 가져오기
-      setLoggedInUser({ username: userId }); // 사용자 ID를 loggedInUser 상태에 설정
+      const username = localStorage.getItem('username'); // 로컬 스토리지 또는 서버에서 사용자 ID 가져오기
+      setLoggedInUser({ username: username }); // 사용자 ID를 loggedInUser 상태에 설정
     } else {
       // 사용자가 로그인되어 있지 않은 경우
       setLoggedInUser(null);
@@ -50,16 +50,13 @@ function App() {
 
     // 로컬 스토리지에서 토큰 제거
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
 
     // 원하는 페이지로 이동
     window.location.href = '/sell';
   };
 
   const [pg, setPg] = useState([]);
-
-  // {
-  //   pg.content && console.log(pg.content[1].img_path)
-  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,14 +98,24 @@ function App() {
               className="me-auto my-2 my-lg-0"
               style={{ maxHeight: '100px' }}
               navbarScroll>
-              <Nav.Link onClick={() => { if (loggedInUser == null) {
-                navigate('/signin');
-                return;
-              }else {
-                navigate('/post')
-                return;
-              }}}>판매하기</Nav.Link>
-              <Nav.Link onClick={() => { navigate('/myshop') }}>내상점</Nav.Link>
+              <Nav.Link onClick={() => {
+                if (loggedInUser == null) {
+                  navigate('/signin');
+                  return;
+                } else {
+                  navigate('/post')
+                  return;
+                }
+              }}>판매하기</Nav.Link>
+              <Nav.Link onClick={() => {
+                if (loggedInUser == null) {
+                  navigate('/signin');
+                  return;
+                } else {
+                  navigate('/myshop')
+                  return;
+                }
+              }}>내상점</Nav.Link>
               <Nav.Link href="#action3">채팅</Nav.Link>
               <NavDropdown title="카테고리" id="navbarScrollingDropdown">
                 <NavDropdown.Item href="#action4">노트북</NavDropdown.Item>
@@ -133,7 +140,7 @@ function App() {
               // 로그인된 사용자인 경우
               <div>
                 <Nav.Link style={{ fontSize: '15px', marginLeft: '30px' }}>
-                  {loggedInUser.username}<span onClick={handleLogout}>로그아웃</span>
+                  {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
                 </Nav.Link>
               </div>
             ) : (
@@ -173,7 +180,7 @@ function Main(props) {
   const [d, setd] = useState(false)
 
   // 페이지추가 state
-  let [datapage, setDatapage] = useState(0)
+  let [datapage, setDatapage] = useState(3)
 
   // 로딩이펙트 상태 state
   let [load, setLoad] = useState(false)
@@ -203,7 +210,7 @@ function Main(props) {
 
             {/* 메인컨텐츠영역 */}
             {
-              props.data.map(function (a, i) {
+              props.data.slice(0, datapage).map(function (a, i) {
                 return (
                   <MainCard key={i} data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
                 )
@@ -212,33 +219,20 @@ function Main(props) {
 
             {/* 추가 페이지 (더보기 눌렀을 때) */}
             {
-              datapage < 9 ? <Link onClick={() => {
-                setLoad(true);
-                let copy = [...props.data];
-                copy.push(props.data[datapage]);
-                copy.push(props.data[datapage + 1]);
-                copy.push(props.data[datapage + 2]);
-                props.setdata(copy)
-                setDatapage(datapage + 3)
-                setLoad(false);
-              }} style={{ textDecoration: 'None', color: 'gray', fontSize: '18px', padding: '20px', borderTop: '1px solid gray' }}>더보기</Link> : null
+              props.data.length > datapage && (
+                <Link
+                  onClick={() => {
+                    setLoad(true);
+                    setDatapage(datapage+3)
+                    setLoad(false);
+                  }}
+                  style={{ textDecoration: 'None', color: 'gray', fontSize: '18px', padding: '20px', borderTop: '1px solid gray' }}
+                >
+                  더보기
+                </Link>
+              )
             }
-            {/* {
-              datapage < 4 ? <Link onClick={() => {
-                setLoad(true)
-                axois.get('https://codingapple1.github.io/shop/data' + datapage + '.json')
-                  .then((data) => {
-                    let copy = [...props.shoes, ...data.data];
-                    props.setShoes(copy)
-                    setLoad(false)
-                  })
-                  .catch(() => {
-                    setLoad(false)
-                  })
 
-                setDatapage(datapage + 1)
-              }} style={{ textDecoration: 'None', color: 'gray', fontSize: '18px', padding: '20px', borderTop: '1px solid gray' }}>더보기</Link> : null
-            } */}
           </div>
 
           {/* 로딩중 이펙트 */}
