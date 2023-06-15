@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -62,25 +65,30 @@ public class UserRestController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginForm userLoginForm) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserLoginForm userLoginForm) {
         User user;
         try {
             user = userService.findByEmail(userLoginForm.getEmail());
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", "User not found"));
         }
 
         String rawPassword = userLoginForm.getPassword();
         if (rawPassword == null || !passwordEncoder.matches(rawPassword, user.getPassword())) {
-            return new ResponseEntity<>("Invalid password", HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", "Invalid password"));
         }
 
         // At this point, the user has been successfully authenticated.
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
 
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("username", user.getUsername());
+        response.put("token", token);
+
+        return ResponseEntity.ok(response);
     }
+
 
     // 추가적인 API 구현...
 }
