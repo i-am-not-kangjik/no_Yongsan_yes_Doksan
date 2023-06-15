@@ -63,7 +63,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8081/api/sell');
+        const response = await axios.get('http://localhost:8081/api/sell/');
         setPg(response.data);
       } catch (error) {
         console.error(error);
