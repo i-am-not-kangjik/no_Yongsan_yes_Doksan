@@ -37,6 +37,9 @@ public class User {
     @Column(length = 255)
     private String oauthId;
 
+    @Column(length = 20)
+    private String fullName;
+
     @CreationTimestamp
     @Column
     private LocalDateTime createdAt;
