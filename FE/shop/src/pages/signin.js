@@ -33,8 +33,10 @@ const handleSubmit = (e) => {
       // 로그인 성공 시 처리
       const token = response.data;
 
+      console.log(response);
+
+
       if (token) {
-        console.log(token);
 
         // 토큰을 로컬 스토리지에 저장합니다.
         localStorage.setItem('token', token);
