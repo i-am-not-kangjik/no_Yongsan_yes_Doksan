@@ -10,6 +10,7 @@ public class UserCreateDto {
     private String email;
     private String password1;
     private String password2;
+    private String phoneNumber;
 
     // getters and setters
 }
