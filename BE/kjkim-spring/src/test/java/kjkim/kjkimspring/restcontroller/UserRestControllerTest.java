@@ -9,7 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,17 +39,26 @@ public class UserRestControllerTest {
                 .andExpect(status().isCreated());
     }
 
+
     @Test
     public void testLogin() throws Exception {
         UserLoginForm form = new UserLoginForm();
         form.setEmail("user1@naver.com");
         form.setPassword("user1user1");
 
-        mockMvc.perform(post("/api/user/login")
+        MvcResult result = mockMvc.perform(post("/api/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(form)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("user1"))
+                .andExpect(jsonPath("$.token").isString())
+                .andReturn();
+
+        // Print the response body
+        System.out.println(result.getResponse().getContentAsString());
     }
+
+
 
     // 추가적인 테스트 구현...
 }
