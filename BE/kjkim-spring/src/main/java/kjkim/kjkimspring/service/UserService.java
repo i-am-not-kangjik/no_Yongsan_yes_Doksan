@@ -45,6 +45,15 @@ public class UserService {
         }
     }
 
+    public User getUserByEmail(String email) {
+        Optional<User> user = this.userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new DataNotFoundException("user is not found");
+        }
+    }
+
     public void addLike(User user, Sell sell) {
         UserLikesSell userLikesSell = new UserLikesSell();
         userLikesSell.setUser(user);
@@ -58,6 +67,14 @@ public class UserService {
         } else {
             throw new DataNotFoundException("User with email " + email + " not found");
         }
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 
 

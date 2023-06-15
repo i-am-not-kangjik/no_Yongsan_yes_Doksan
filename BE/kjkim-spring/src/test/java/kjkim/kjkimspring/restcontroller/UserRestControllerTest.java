@@ -26,10 +26,10 @@ public class UserRestControllerTest {
     @Test
     public void testSignup() throws Exception {
         UserCreateForm form = new UserCreateForm();
-        form.setUsername("user5");
-        form.setEmail("user5@naver.com");
-        form.setPassword1("user5user5");
-        form.setPassword2("user5user5");
+        form.setUsername("user8");
+        form.setEmail("user8@naver.com");
+        form.setPassword1("user6user6");
+        form.setPassword2("user6user6");
 
         mockMvc.perform(post("/api/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -40,8 +40,8 @@ public class UserRestControllerTest {
     @Test
     public void testLogin() throws Exception {
         UserLoginForm form = new UserLoginForm();
-        form.setEmail("test@test.com");
-        form.setPassword("testPassword");
+        form.setEmail("user1@naver.com");
+        form.setPassword("user1user1");
 
         mockMvc.perform(post("/api/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
