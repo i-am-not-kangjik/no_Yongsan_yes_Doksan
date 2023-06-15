@@ -29,4 +29,7 @@ public class UserCreateForm {
     @Size(max = 20, message = "전화번호는 최대 20자리까지 입력 가능합니다.")
     private String phoneNumber;
 
+    @NotBlank(message = "실명을 입력해주세요.")
+    @Size(max = 20, message = "실명은 최대 20자까지 입력 가능합니다.")
+    private String fullName;
 }

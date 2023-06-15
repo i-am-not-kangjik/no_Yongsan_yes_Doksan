@@ -28,12 +28,13 @@ public class UserService {
         this.userLikesSellRepository = userLikesSellRepository;
     }
 
-    public User create(String username, String email, String password, String phonenumber) {
+    public User create(String username, String email, String password, String phonenumber, String fullname) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setPhoneNumber(phonenumber);
+        user.setFullName(fullname);
         this.userRepository.save(user);
         return user;
     }

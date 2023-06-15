@@ -34,6 +34,7 @@ public class UserRestControllerTest {
         dto.setPassword1("user4user4");
         dto.setPassword2("user4user4");
         dto.setPhoneNumber("01044444444");
+        dto.setFullName("유저사");
 
         mockMvc.perform(post("/api/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -37,6 +37,16 @@ public class UserRestController {
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserCreateDto userCreateDto) {
         try {
+            // 필수 정보 누락 여부 확인
+            if (userCreateDto.getUsername() == null ||
+                    userCreateDto.getPassword1() == null ||
+                    userCreateDto.getPassword2() == null ||
+                    userCreateDto.getEmail() == null ||
+                    userCreateDto.getPhoneNumber() == null ||
+                    userCreateDto.getFullName() == null) {
+                return ResponseEntity.badRequest().body("Required information is missing");
+            }
+
             // 이메일 중복 검사
             if (userService.existsByEmail(userCreateDto.getEmail())) {
                 return ResponseEntity.badRequest().body("Email is already taken");
@@ -58,12 +68,13 @@ public class UserRestController {
             }
 
             // 회원가입 처리
-            User user = userService.create(userCreateDto.getUsername(), userCreateDto.getEmail(), userCreateDto.getPassword1(), userCreateDto.getPhoneNumber());
+            User user = userService.create(userCreateDto.getUsername(), userCreateDto.getEmail(), userCreateDto.getPassword1(), userCreateDto.getPhoneNumber(), userCreateDto.getFullName());
             return ResponseEntity.status(HttpStatus.CREATED).body(new UserDto(user).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
 
 
