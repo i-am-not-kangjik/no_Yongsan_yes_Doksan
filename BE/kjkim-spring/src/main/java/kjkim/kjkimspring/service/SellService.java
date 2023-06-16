@@ -61,12 +61,11 @@ public class SellService {
         s.setViewCount(0);
         s.setSellState(SellState.SELLING);
 
-        String originalImgName = upload.getOriginalFilename();
+        if (upload != null && !upload.isEmpty()) {
+            String originalImgName = upload.getOriginalFilename();
+            UUID uuid = UUID.randomUUID();
+            String imgName = "sell-image/" + uuid + "_" + originalImgName;
 
-        UUID uuid = UUID.randomUUID();
-        String imgName = "sell-image/" + uuid + "_" + originalImgName;
-
-        if (originalImgName != null && !originalImgName.isEmpty()) {
             // S3에 업로드
             s3Client.putObject(PutObjectRequest.builder()
                             .bucket(bucketName)
@@ -75,10 +74,9 @@ public class SellService {
                     RequestBody.fromBytes(upload.getBytes()));
             s.setImgName(imgName);
             s.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
-            this.sellRepository.save(s);
-        } else {
-            this.sellRepository.save(s);
         }
+
+        this.sellRepository.save(s);
     }
 
 
