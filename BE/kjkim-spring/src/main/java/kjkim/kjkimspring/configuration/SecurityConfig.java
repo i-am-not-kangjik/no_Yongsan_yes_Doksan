@@ -67,13 +67,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/user/signup", "/api/user/login").permitAll()
+                .antMatchers("/api/sell", "/api/sell/**").permitAll() // "/api/sell"와 "/api/sell/{id}"에 대해서 인가 없이 접근 허용
+                .antMatchers("/api/sell/create").authenticated() // "/api/sell/create"에 대해서는 인증된 사용자만 접근 가능
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtService),
-                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
