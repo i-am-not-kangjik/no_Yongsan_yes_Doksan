@@ -24,22 +24,28 @@ const Post = () => {
 
   const saveFormData = async () => {
     try {
-      // 백엔드 서버 엔드포인트로 API 요청을 보냅니다
-      const response = await axios.post('http://localhost:8081/api/sell', {
+      const requestData = {
         title: title,
         content: content,
-        images: images,
+        price: price,
         region: selectedRegion + selectedDistrict,
         category: category,
-        price: price,
+        file: imageUploadRef.current.files[0]
+      };
+  
+      const response = await axios.post('http://localhost:8081/api/sell/create', requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTY4Njg4OTIzMywiZXhwIjoxNjg2ODkyODMzfQ.bPLToRm72kR-JfGv4xtQ_IIq-piBzeg_cwvpNGywB6I'
+        }
       });
   
-      // 필요한 경우 응답을 처리합니다
+      // Handle the response as needed
   
-      // 사용자에게 성공 메시지를 표시합니다
+      // Display a success message to the user
       alert('제품이 등록되었습니다.');
   
-      // 폼 값 초기화
+      // Reset form values
       setImages([]);
       setImagePreviews([]);
       setTitle('');
@@ -49,12 +55,12 @@ const Post = () => {
       setPrice('');
       setContent('');
     } catch (error) {
-      // API 요청 중 발생한 오류를 처리합니다
+      // Handle any errors that occur during the API request
       console.log(error);
       alert('데이터 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
   
@@ -84,6 +90,7 @@ const Post = () => {
     // 백엔드에 데이터 저장을 위해 saveFormData 함수 호출
     saveFormData();
   };
+  
   
 
   const handleRegionChange = (event) => {

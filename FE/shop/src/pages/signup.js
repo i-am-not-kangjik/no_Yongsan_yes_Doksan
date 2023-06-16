@@ -58,12 +58,12 @@ const SignupPage = () => {
     
     axios
       .post('http://localhost:8081/api/user/signup', {
-        username: username,
-        email: email,
-        password1: password,
-        password2: confirmPassword,
-        phoneNumber: cleanedPhoneNumber,
-        fullName: fullName,
+        'username': username,
+        'email': email,
+        'password1': password,
+        'password2': confirmPassword,
+        'phoneNumber': cleanedPhoneNumber,
+        'fullName': fullName,
       })
       .then((response) => {
         setUsername('');
@@ -73,10 +73,7 @@ const SignupPage = () => {
         setPhoneNumber('');
         setFullName('');
         setPasswordMatchError(false);
-        // navigate('/signin');
-        console.log(username);
-        console.log(cleanedPhoneNumber);
-        console.log(fullName);
+        navigate('/signin');
       })
       .catch((error) => {
         console.log(error);
