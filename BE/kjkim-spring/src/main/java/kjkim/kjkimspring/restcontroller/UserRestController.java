@@ -4,8 +4,7 @@ import kjkim.kjkimspring.dto.UserCreateDto;
 import kjkim.kjkimspring.dto.UserDto;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
-import kjkim.kjkimspring.user.UserCreateForm;
-import kjkim.kjkimspring.service.JwtService;
+import kjkim.kjkimspring.jwt.JwtService;
 
 import kjkim.kjkimspring.user.UserLoginForm;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
