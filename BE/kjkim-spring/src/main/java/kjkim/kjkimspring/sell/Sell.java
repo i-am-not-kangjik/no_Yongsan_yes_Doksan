@@ -13,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -42,12 +43,6 @@ public class Sell {
     @OneToMany(mappedBy = "sell", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
-    private String imgName;
-
-    private String imgPath;
-
-    private String oriImgName;
-
     @NotNull
     private Integer price;
 
@@ -75,6 +70,24 @@ public class Sell {
     @Enumerated(EnumType.STRING)
     @Column(length = 20, columnDefinition = "varchar(20) default 'SELLING'")
     private SellState sellState;
+
+    @OneToMany(mappedBy = "sell", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> imageList = new ArrayList<>();
+
+    public List<Image> getImages() {
+        return imageList;
+    }
+
+    public void addImage(Image image) {
+        imageList.add(image);
+        image.setSell(this);
+    }
+
+    public void removeImage(Image image) {
+        imageList.remove(image);
+        image.setSell(null);
+    }
+
 
     public void increaseViewCount() {
         viewCount = viewCount == null ? 1 : viewCount + 1;
