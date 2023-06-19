@@ -6,6 +6,7 @@ import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellForm;
 import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
+import kjkim.kjkimspring.sell.Image;
 import kjkim.kjkimspring.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sell")
@@ -44,35 +46,49 @@ public class SellRestController {
         Sell updatedSell = sellService.getSell(id); // Get the updated Sell object
 
         SellDTO sellDTO = sellService.convertToDTO(updatedSell);
+
+        // Set the image URLs
+        List<String> imageUrls = updatedSell.getImages().stream()
+                .map(Image::getImgPath)
+                .collect(Collectors.toList());
+        sellDTO.setImageUrls(imageUrls);
+
         return ResponseEntity.ok(sellDTO);
     }
 
+
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public ResponseEntity<Void> createSell(@Valid SellForm sellForm,
+    public ResponseEntity<Void> createSell(@RequestParam("title") String title,
+                                           @RequestParam("content") String content,
+                                           @RequestParam("price") Integer price,
+                                           @RequestParam("region") String region,
+                                           @RequestParam("category") String category,
                                            Principal principal,
-                                           @RequestParam("file") MultipartFile upload) throws IOException {
+                                           @RequestParam("files") List<MultipartFile> uploads) throws IOException {
         User user = userService.getUser(principal.getName());
-        sellService.create(sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(),
-                sellForm.getCategory(), user, upload);
+        sellService.create(title, content, price, region, category, user, uploads);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-//    @PreAuthorize("isAuthenticated()")
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Void> updateSell(@Valid SellForm sellForm,
-//                                           @PathVariable("id") Integer id,
-//                                           Principal principal,
-//                                           @RequestParam("file") MultipartFile upload) throws IOException {
-//        Sell sell = sellService.getSell(id);
-//        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
-//        } else {
-//            sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(),
-//                    sellForm.getRegion(), sellForm.getCategory(), upload);
-//            return ResponseEntity.ok().build();
-//        }
-//    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateSell(@Valid SellForm sellForm,
+                                           @PathVariable("id") Integer id,
+                                           Principal principal,
+                                           @RequestParam("file") List<MultipartFile> uploads) throws IOException {
+        Sell sell = sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
+        } else {
+            sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(),
+                    sellForm.getRegion(), sellForm.getCategory(), uploads);
+            return ResponseEntity.ok().build();
+        }
+    }
 
 //    @PreAuthorize("isAuthenticated()")
 //    @DeleteMapping("/{id}")

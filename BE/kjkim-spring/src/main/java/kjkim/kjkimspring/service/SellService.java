@@ -2,9 +2,7 @@ package kjkim.kjkimspring.service;
 
 import kjkim.kjkimspring.DataNotFoundException;
 import kjkim.kjkimspring.dto.SellDTO;
-import kjkim.kjkimspring.sell.Sell;
-import kjkim.kjkimspring.sell.SellRepository;
-import kjkim.kjkimspring.sell.SellState;
+import kjkim.kjkimspring.sell.*;
 import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import kjkim.kjkimspring.userlikessell.UserLikesSellRepository;
@@ -33,6 +31,7 @@ public class SellService {
     private final UserLikesSellRepository userLikesSellRepository;
     private final S3Client s3Client;
     private final String bucketName = "no-yongsan-yes-doksan";
+    private final ImageRepository imageRepository;
 
 
     public Page<Sell> getList(int page) {
@@ -50,69 +49,101 @@ public class SellService {
         }
     }
 
-    public void create(String title, String content, Integer price, String region, String category, User user, MultipartFile upload) throws IOException {
-        Sell s = new Sell();
-        s.setTitle(title);
-        s.setContent(content);
-        s.setPrice(price);
-        s.setRegion(region);
-        s.setCategory(category);
-        s.setAuthor(user);
-        s.setViewCount(0);
-        s.setSellState(SellState.SELLING);
+    public void create(String title, String content, Integer price, String region, String category, User user, List<MultipartFile> uploads) throws IOException {
+        Sell sell = new Sell();
+        sell.setTitle(title);
+        sell.setContent(content);
+        sell.setPrice(price);
+        sell.setRegion(region);
+        sell.setCategory(category);
+        sell.setAuthor(user);
+        sell.setViewCount(0);
+        sell.setSellState(SellState.SELLING);
 
-        if (upload != null && !upload.isEmpty()) {
-            String originalImgName = upload.getOriginalFilename();
-            UUID uuid = UUID.randomUUID();
-            String imgName = "sell-image/" + uuid + "_" + originalImgName;
+        List<Image> images = new ArrayList<>();
+        if (uploads != null && !uploads.isEmpty()) {
+            for (MultipartFile upload : uploads) {
+                if (!upload.isEmpty()) {
+                    // 이미지를 S3에 업로드하는 코드
+                    String originalFilename = upload.getOriginalFilename();
+                    String objectKey = "sell-image/" + UUID.randomUUID() + "_" + originalFilename;
+                    String imageURL = "https://" + bucketName + ".s3.amazonaws.com/" + objectKey;
 
-            // S3에 업로드
-            s3Client.putObject(PutObjectRequest.builder()
-                            .bucket(bucketName)
-                            .key(imgName)
-                            .build(),
-                    RequestBody.fromBytes(upload.getBytes()));
-            s.setImgName(imgName);
-            s.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
+                    s3Client.putObject(PutObjectRequest.builder()
+                                    .bucket(bucketName)
+                                    .key(objectKey)
+                                    .build(),
+                            RequestBody.fromBytes(upload.getBytes()));
+
+                    // 이미지 정보를 Image 객체에 저장하고 Sell과 Image를 연결
+                    Image image = new Image();
+                    image.setImgName(originalFilename);
+                    image.setImgPath(imageURL);
+                    image.setOriName(originalFilename);
+                    image.setSell(sell);
+                    images.add(image);
+
+                    // Sell과 Image 연결
+                    sell.addImage(image);
+                }
+            }
         }
 
-        this.sellRepository.save(s);
+        sell.setImageList(images);
+        sellRepository.save(sell); // 모든 이미지가 리스트에 추가된 후에 Sell 객체를 저장합니다.
     }
 
 
-    public void modify(Sell sell, String title, String content, Integer price, String region, String category, MultipartFile upload) throws IOException {
+
+
+    public void modify(Sell sell, String title, String content, Integer price, String region, String category, List<MultipartFile> uploads) throws IOException {
         sell.setTitle(title);
         sell.setContent(content);
         sell.setPrice(price);
         sell.setRegion(region);
         sell.setCategory(category);
 
-        String originalImgName = upload.getOriginalFilename();
-
-        UUID uuid = UUID.randomUUID();
-        String imgName = "sell-image/" + uuid + "_" + originalImgName;
-
-        if (originalImgName != null && !originalImgName.isEmpty()) {
+        if (uploads != null && !uploads.isEmpty()) {
             // 이전 이미지 삭제
-            if (sell.getImgName() != null) {
-                String deleteKey = sell.getImgName();
-                s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucketName).key(deleteKey).build());
+            if (sell.getImageList() != null && !sell.getImageList().isEmpty()) {
+                for (Image oldImage : sell.getImageList()) {
+                    String deleteKey = oldImage.getImgName();
+                    s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucketName).key(deleteKey).build());
+                }
+                sell.getImageList().clear(); // clear the old images
             }
 
-            // 새 이미지 S3에 업로드
-            s3Client.putObject(PutObjectRequest.builder()
-                            .bucket(bucketName)
-                            .key(imgName)
-                            .build(),
-                    RequestBody.fromBytes(upload.getBytes()));
-            sell.setImgName(imgName);
-            sell.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
+            List<Image> images = new ArrayList<>();
+            for (MultipartFile upload : uploads) {
+                if (!upload.isEmpty()) {
+                    String originalImgName = upload.getOriginalFilename();
+                    UUID uuid = UUID.randomUUID();
+                    String imgName = "sell-image/" + uuid + "_" + originalImgName;
+
+                    // 새 이미지 S3에 업로드
+                    s3Client.putObject(PutObjectRequest.builder()
+                                    .bucket(bucketName)
+                                    .key(imgName)
+                                    .build(),
+                            RequestBody.fromBytes(upload.getBytes()));
+
+                    Image image = new Image();
+                    image.setImgName(imgName);
+                    image.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
+                    image.setSell(sell); // link image with the Sell
+                    images.add(image);
+                }
+            }
+
+            sell.setImageList(images);
 
             this.sellRepository.save(sell);
         } else {
             this.sellRepository.save(sell);
         }
     }
+
+
 
 
 
@@ -188,8 +219,9 @@ public class SellService {
         sellDTO.setContent(sell.getContent());
         sellDTO.setCreatedAt(sell.getCreatedAt());
         sellDTO.setUpdatedAt(sell.getUpdatedAt());
-        sellDTO.setImgName(sell.getImgName());
-        sellDTO.setImgPath(sell.getImgPath());
+        // convert list of Image objects to list of image names and paths
+        sellDTO.setImgNames(sell.getImageList().stream().map(Image::getImgName).collect(Collectors.toList()));
+        sellDTO.setImgPaths(sell.getImageList().stream().map(Image::getImgPath).collect(Collectors.toList()));
         sellDTO.setPrice(sell.getPrice());
         sellDTO.setAuthorUsername(sell.getAuthor().getUsername());
         sellDTO.setViewCount(sell.getViewCount());
@@ -205,4 +237,6 @@ public class SellService {
 
         return sellDTO;
     }
+
+
 }
