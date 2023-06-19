@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useEffect, useRef, useState } from 'react';
 import Detail from "./detail";
 
@@ -44,7 +45,7 @@ export default function OutsideAlerter(props) {
       className={`outside-alerter ${visible ? 'show' : ''}`}
       style={{ width: '75%' }}
     >
-      <Detail data={props.data} id={props.id} setRecentList={props.setRecentList} recentList={props.recentList}/>
+      <Detail cd={props.cd} data={props.data} id={props.id} setRecentList={props.setRecentList} recentList={props.recentList}/>
       {/* <Link style={{ position: 'fixed', top: '5px', right: '5px', color : 'black' }}><FontAwesomeIcon icon={faXmark} className='Link'size='2x'/></Link> */}
     </div>
   );

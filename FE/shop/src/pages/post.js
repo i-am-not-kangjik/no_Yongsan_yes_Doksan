@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons'
@@ -18,68 +19,128 @@ const Post = () => {
   const [category, setCategory] = useState(''); // 카테고리
   const [price, setPrice] = useState(''); // 가격
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
+  const token = localStorage.getItem('token');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
 
-    if (imageUploadRef.current.files.length < 1) {
-      alert('이미지를 업로드해주세요.');
-      return;
-    } else if (title.trim() === '') {
-      alert('제목을 입력해주세요.');
-      return;
-    } else if (category.trim() === '') {
-      alert('카테고리를 선택해주세요.');
-      return;
-    } else if (price.trim() === '' || price < 1000) {
-      alert('가격을 입력해주세요.');
-      return;
-    } else if (selectedRegion.trim() === '' || selectedDistrict.trim() === '') {
-      alert('지역을 선택해주세요.');
-      return;
-    } else if (content.trim() === '' || content.length < 10) {
-      alert('내용을 입력해주세요.');
-      return;
-    }
+  //   if (imageUploadRef.current.files.length < 1) {
+  //     alert('이미지를 업로드해주세요.');
+  //     return;
+  //   } else if (title.trim() === '') {
+  //     alert('제목을 입력해주세요.');
+  //     return;
+  //   } else if (category.trim() === '') {
+  //     alert('카테고리를 선택해주세요.');
+  //     return;
+  //   } else if (price.trim() === '' || price < 1000) {
+  //     alert('가격을 입력해주세요.');
+  //     return;
+  //   } else if (selectedRegion.trim() === '' || selectedDistrict.trim() === '') {
+  //     alert('지역을 선택해주세요.');
+  //     return;
+  //   } else if (content.trim() === '' || content.length < 10) {
+  //     alert('내용을 입력해주세요.');
+  //     return;
+  //   }
+
+  //  console.log(title)
+  //  console.log(content)
+  //  console.log(price.replace(/,/g, ''))
+  //  console.log(selectedRegion + ' ' + selectedDistrict)
+  //  console.log(category)
+  //  console.log(imageUploadRef.current.files[0])
+
+  //   const formData = new FormData();
+  //   formData.append('title', title);
+  //   formData.append('content', content);
+  //   formData.append('price', price.replace(/,/g, ''));
+  //   formData.append('region', selectedRegion + ' ' + selectedDistrict);
+  //   formData.append('category', category);
+  //   formData.append('file', imageUploadRef.current.files[0]);
+
+  //   const token = localStorage.getItem('token');
+
+  //   try {
+  //     const response = await axios.post(
+  //       'http://localhost:8081/api/sell/create',
+  //       formData,
+  //       {
+  //         headers: {
+  //           // 'Content-Type': 'multipart/form-data',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.data.success) {
+  //       alert('상품이 등록되었습니다.');
+
+  //       // Reset form values
+  //       setTitle('');
+  //       setContent('');
+  //       setSelectedRegion('');
+  //       setSelectedDistrict('');
+  //       setCategory('');
+  //       setPrice('');
+  //     } else {
+  //       console.error('Failed to create post');
+  //       alert('상품 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert('상품 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log(title)
+    console.log(content)
+    console.log(price.replace(/,/g, ''))
+    console.log(selectedRegion + ' ' + selectedDistrict)
+    console.log(category)
+    console.log(imageUploadRef.current.files[0])
 
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('price', price);
-    formData.append('region', selectedRegion + selectedDistrict);
+    formData.append('price', price.replace(/,/g, ''));
+    formData.append('region', selectedRegion + ' ' + selectedDistrict);
     formData.append('category', category);
-    formData.append('file', images);
-    console.log(title)
-    console.log(content)
-    console.log(price)
-    console.log(selectedRegion + " " + selectedDistrict)
-    console.log(category)
-    console.log(images)
+    formData.append('file', imageUploadRef.current.files[0]);
+
+    const token = localStorage.getItem('token');
 
     try {
-      const response = await axios.post('http://localhost:8081/api/sell/create', formData, {
+      const response = await fetch('http://localhost:8081/api/sell/create', {
+        method: 'POST',
         headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': localStorage.getItem('token'),
+          // 'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
         },
+        body: formData,
       });
 
       // Handle the response as needed
-
-      alert('상품이 등록되었습니다.');
-
-      // Reset form values
-      setTitle('');
-      setContent('');
-      setSelectedRegion('');
-      setSelectedDistrict('');
-      setCategory('');
-      setPrice('');
+      if (response.ok) {
+        // Request successful
+        alert("상품이 등록되었습니다.");
+        console.log('상품이 등록되었습니다.');
+        location.reload();
+      } else {
+        // Request failed
+        alert("상품 등록 중 오류가 발생했습니다.");
+        console.error('상품 등록 중 오류가 발생했습니다.');
+      }
     } catch (error) {
-      console.error(error);
-      alert('상품 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+      alert("상품 등록 중 오류가 발생했습니다.");
+      console.error('상품 등록 중 오류가 발생했습니다.', error);
     }
   };
+
+
 
   const handleRegionChange = (event) => {
     setSelectedRegion(event.target.value);
@@ -203,7 +264,7 @@ const Post = () => {
 
         <div className='post_box' style={{ paddingBottom: '20px' }}>
           <div className='post_box_left'>
-            <label htmlFor="image" style={{ marginBottom: '10px' }}>상품이미지 <span style={{ fontSize : '15px', color : 'gray' }}>({images.length}/11개)</span></label>
+            <label htmlFor="image" style={{ marginBottom: '10px' }}>상품이미지 <span style={{ fontSize: '15px', color: 'gray' }}>({images.length}/11개)</span></label>
             <input
               type="file"
               id="image"
@@ -231,7 +292,7 @@ const Post = () => {
                 onClick={() => imageUploadRef.current.click()}
               >
                 <FontAwesomeIcon icon={faCamera} size='2x' />
-                <p style={{ marginTop : '5px' }}>사진 선택</p>
+                <p style={{ marginTop: '5px' }}>사진 선택</p>
               </div>
               {imagePreviews.length > 0 && (
                 imagePreviews.map((preview, index) => (
@@ -294,7 +355,7 @@ const Post = () => {
             <select
               id="category"
               value={category}
-              style={{ height : '25px' }}
+              style={{ height: '25px' }}
               onChange={(event) => setCategory(event.target.value)}
             >
               <option value="">-- 선택하세요 --</option>
@@ -333,7 +394,7 @@ const Post = () => {
               id="region"
               value={selectedRegion}
               onChange={handleRegionChange}
-              style={{ marginLeft : '10px', height : '25px' }}
+              style={{ marginLeft: '10px', height: '25px' }}
             >
               <option value="">시/도 선택</option>
               <option value="강원도">강원</option>
@@ -361,7 +422,7 @@ const Post = () => {
               id="district"
               value={selectedDistrict}
               onChange={handleDistrictChange}
-              style={{ marginLeft : '10px', height : '25px' }}
+              style={{ marginLeft: '10px', height: '25px' }}
             >
               <option value="">시/군/구 선택</option>
               {selectedRegion === '강원도' &&

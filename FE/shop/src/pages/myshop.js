@@ -6,9 +6,9 @@ const Myshop = ({ pg }) => {
   const username = localStorage.getItem('username');
 
   // 사용자 이름과 일치하는 authorUsername을 기준으로 내용을 필터링합니다.
-  const filteredContent = pg.content.filter(
+  const filteredContent = pg.content ? pg.content.filter(
     (item) => item.authorUsername === username
-  );
+  ) : [];  
 
   return (
     <div
@@ -25,12 +25,27 @@ const Myshop = ({ pg }) => {
       <h3 style={{ paddingBottom: '50px', borderBottom: '1px solid gray', margin: '0' }}>나의 판매내역</h3>
       {filteredContent.map((item, i) => {
         // 날짜 계산 로직
-        const detailDate = (created_at) => {
-          // 날짜 계산 로직을 여기에 작성합니다.
+        const detailDate = (dateString) => {
+          const a = new Date(dateString);
+          const milliSeconds = new Date() - a;
+          const seconds = milliSeconds / 1000;
+          if (seconds < 60) return `방금 전`;
+          const minutes = seconds / 60;
+          if (minutes < 60) return `${Math.floor(minutes)}분 전`;
+          const hours = minutes / 60;
+          if (hours < 24) return `${Math.floor(hours)}시간 전`;
+          const days = hours / 24;
+          if (days < 7) return `${Math.floor(days)}일 전`;
+          const weeks = days / 7;
+          if (weeks < 5) return `${Math.floor(weeks)}주 전`;
+          const months = days / 30;
+          if (months < 12) return `${Math.floor(months)}개월 전`;
+          const years = days / 365;
+          return `${Math.floor(years)}년 전`;
         };
-
+        
         const nowDate = detailDate(item.createdAt);
-
+        
         return (
           <div style={{ borderBottom: '1px solid gray', display: 'flex' }} key={i}>
             <div style={{ padding: '20px' }}>

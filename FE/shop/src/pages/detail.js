@@ -8,21 +8,23 @@ import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function Detail(props) {
 
+    const item = props.cd.content.find(item => item.id === props.id);
+
     // 최근 본 상품 3개까지만 나오고 중복 안되게
     useEffect(() => {
         let copy = [...props.recentList];
-        const newElement = props.data[props.id].img_path[0];
+        const newElement = item.id;
         if (!copy.includes(newElement)) {
-          copy.unshift(newElement);
-          if (copy.length > 3) {
-            copy = copy.slice(0, 3); // Keep only the first 3 elements in the array
-          }
-          props.setRecentList(copy);
-          localStorage.setItem('watched', JSON.stringify(copy));
+            copy.unshift(newElement);
+            if (copy.length > 3) {
+                copy = copy.slice(0, 3); // Keep only the first 3 elements in the array
+            }
+            props.setRecentList(copy);
+            localStorage.setItem('watched', JSON.stringify(copy));
         }
-      }, []);
+    }, []);
 
-      
+
     const detailDate = (a) => {
         const milliSeconds = new Date() - a;
         const seconds = milliSeconds / 1000;
@@ -41,13 +43,13 @@ function Detail(props) {
         return `${Math.floor(years)}년 전`;
     };
 
-    const nowDate = detailDate(new Date(props.data[props.id].created_at));
+    const nowDate = detailDate(new Date(item.createdAt));
 
     return (
         <div className='detail'>
             <Carousel variant="light" style={{ width: '65%' }} prevIcon={<FontAwesomeIcon icon={faCircleArrowLeft} size='2x' />} nextIcon={<FontAwesomeIcon icon={faCircleArrowLeft} rotation={180} size='2x' />}>
-                {
-                    props.data[props.id].img_path.map(function (item, i) {
+                {/* {
+                    item.imgPath.map(function (item, i) {
                         return (
                             <Carousel.Item key={i}>
                                 <img
@@ -58,11 +60,16 @@ function Detail(props) {
                             </Carousel.Item>
                         )
                     })
-                }
+                } */}
+                <img
+                    className="d-block w-100 detail_img"
+                    src={item.imgPath}
+                    alt="First slide"
+                />
             </Carousel>
             <div style={{ width: '35%', padding: '15px', textAlign: 'left' }}>
                 <div className='detail_margin'>
-                    <h4 className='detail_title'>{props.data[props.id].title}</h4>
+                    <h4 className='detail_title'>{item.title}</h4>
                 </div>
 
                 <div className='detail_margin grey'>
@@ -70,15 +77,15 @@ function Detail(props) {
                 </div>
 
                 <div className='detail_margin'>
-                    <h4 className='detail_price'>{props.data[props.id].price}원</h4>
+                    <h4 className='detail_price'>{item.price}원</h4>
                 </div>
 
                 <div className='detail_margin' style={{ padding: '30px 0', borderTop: '1px solid black', borderBottom: '1px solid black', lineHeight: '1.8' }}>
-                    <p className='detail_content'>{props.data[props.id].content} -2017년도
+                    <p className='detail_content'>{item.content} -2017년도
                         구매한진 몇년된 제품이지만, 개인적으로 쓰는 별도 노트북이 2개나 있어서 이상품은 그대로 보관만 해둔 기능상태 좋은 제품이에요! 물론 가지고다니면서 생긴 생활기스들은 군데군데 있음 참고해주세오 (사진첨부)</p>
                 </div>
                 <div className='detail_margin grey' style={{ fontSize: '13px' }}>
-                    <p className='detail_price'>관심 {props.data[props.id].likeCount} ∙ 채팅 1 ∙ 조회 {props.data[props.id].viewCount}</p>
+                    <p className='detail_price'>관심 {item.likeCount} ∙ 채팅 1 ∙ 조회 {props.data[props.id].viewCount}</p>
                 </div>
             </div>
         </div>
