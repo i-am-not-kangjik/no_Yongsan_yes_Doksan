@@ -1,5 +1,6 @@
 package kjkim.kjkimspring.controller;
 
+import kjkim.kjkimspring.sell.Image;
 import kjkim.kjkimspring.comment.CommentForm;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellForm;
@@ -28,6 +29,7 @@ import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -65,12 +67,12 @@ public class SellController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/sell/create")
-    public String sellCreate(@Valid SellForm sellForm, BindingResult bindingResult, Principal principal, MultipartFile upload) throws IOException {
+    public String sellCreate(@Valid SellForm sellForm, BindingResult bindingResult, Principal principal, List<MultipartFile> uploads) throws IOException {
         if (bindingResult.hasErrors()) {
             return "sell_form";
         }
         User user = this.userService.getUser(principal.getName());
-        this.sellService.create(sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), sellForm.getCategory(), user, upload);
+        this.sellService.create(sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), sellForm.getCategory(), user, uploads);
         return "redirect:/sell";
     }
 
@@ -87,16 +89,19 @@ public class SellController {
             sellForm.setPrice(sell.getPrice());
             sellForm.setRegion(sell.getRegion());
             sellForm.setCategory(sell.getCategory());
-            String originalFileName = sell.getImgName();
-            model.addAttribute("filename", originalFileName);
+            // 수정된 부분: 모든 Image 객체의 이름을 가져옴
+            List<String> originalFileNames = sell.getImages().stream().map(Image::getImgName).collect(Collectors.toList());
+            model.addAttribute("filenames", originalFileNames);
             return "sell_form";
         }
     }
 
+
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/sell/modify/{id}")
     public String sellModify(@Valid SellForm sellForm, BindingResult bindingResult,
-                             @PathVariable("id") Integer id, Principal principal, MultipartFile upload) throws IOException {
+                             @PathVariable("id") Integer id, Principal principal, List<MultipartFile> uploads) throws IOException {
         if (bindingResult.hasErrors()) {
             return "sell_form";
         }
@@ -105,7 +110,7 @@ public class SellController {
         if (!sell.getAuthor().getUsername().equals(principal.getName())) {
             throw new  ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
         } else {
-            this.sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), sellForm.getCategory(), upload);
+            this.sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(), sellForm.getRegion(), sellForm.getCategory(), uploads);
             return String.format("redirect:/sell/%s", id);
         }
     }

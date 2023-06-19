@@ -42,19 +42,44 @@ public class UserRestControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    public void testSignups() throws Exception {
+        String[] usernames = {"user1", "user2", "user3"};
+        String[] emails = {"user1@naver.com", "user2@naver.com", "user3@naver.com"};
+        String[] passwords = {"user1user1", "user2user2", "user3user3"};
+        String[] phoneNumbers = {"01011111111", "01022222222", "01033333333"};
+        String[] fullNames = {"유저일", "유저이", "유저삼"};
+
+        for (int i = 0; i < usernames.length; i++) {
+            UserCreateDto dto = new UserCreateDto();
+            dto.setUsername(usernames[i]);
+            dto.setEmail(emails[i]);
+            dto.setPassword1(passwords[i]);
+            dto.setPassword2(passwords[i]);
+            dto.setPhoneNumber(phoneNumbers[i]);
+            dto.setFullName(fullNames[i]);
+
+            mockMvc.perform(post("/api/user/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                    .andExpect(status().isCreated());
+        }
+    }
+
+
 
 
     @Test
     public void testLogin() throws Exception {
         UserLoginForm form = new UserLoginForm();
-        form.setEmail("user1@naver.com");
-        form.setPassword("user1user1");
+        form.setEmail("user4@naver.com");
+        form.setPassword("user4user4");
 
         MvcResult result = mockMvc.perform(post("/api/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(form)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("user1"))
+                .andExpect(jsonPath("$.username").value("user4"))
                 .andExpect(jsonPath("$.token").isString())
                 .andReturn();
 
