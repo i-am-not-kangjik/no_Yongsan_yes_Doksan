@@ -77,7 +77,7 @@ public class SellService {
 
                     // 이미지 정보를 Image 객체에 저장하고 Sell과 Image를 연결
                     Image image = new Image();
-                    image.setImgName(originalFilename);
+                    image.setImgName(objectKey);
                     image.setImgPath(imageURL);
                     image.setOriName(originalFilename);
                     image.setSell(sell);

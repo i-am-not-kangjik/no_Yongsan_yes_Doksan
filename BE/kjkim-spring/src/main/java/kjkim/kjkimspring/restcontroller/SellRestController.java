@@ -48,10 +48,10 @@ public class SellRestController {
         SellDTO sellDTO = sellService.convertToDTO(updatedSell);
 
         // Set the image URLs
-        List<String> imageUrls = updatedSell.getImages().stream()
-                .map(Image::getImgPath)
-                .collect(Collectors.toList());
-        sellDTO.setImageUrls(imageUrls);
+//        List<String> imageUrls = updatedSell.getImages().stream()
+//                .map(Image::getImgPath)
+//                .collect(Collectors.toList());
+//        sellDTO.setImageUrls(imageUrls);
 
         return ResponseEntity.ok(sellDTO);
     }

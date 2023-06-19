@@ -19,8 +19,6 @@ public class SellDTO {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String imgName;
-    private String imgPath;
     private Integer price;
     private String authorUsername; // Author's username
     private Integer viewCount;
@@ -30,5 +28,4 @@ public class SellDTO {
     private SellState sellState;
     private List<String> imgNames;
     private List<String> imgPaths;
-    private List<String> imageUrls;
 }
