@@ -58,19 +58,11 @@ const Myshop = ({ pg }) => {
                   backgroundColor: 'antiquewhite',
                 }}
               >
-                {item.imgPath == null ? (
-                  <img
-                    src='https://no-yongsan-yes-doksan.s3.ap-northeast-2.amazonaws.com/noimg.gif'
+                <img
+                    src={item.imgPaths[0]}
                     style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }}
                     alt="thumbnail"
                   />
-                ) : (
-                  <img
-                    src={item.imgPath}
-                    style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }}
-                    alt="thumbnail"
-                  />
-                )}
               </div>
             </div>
             <div style={{ paddingTop: '30px', paddingRight: '20px', textAlign: 'left' }}>

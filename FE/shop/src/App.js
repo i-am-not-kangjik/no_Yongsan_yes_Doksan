@@ -227,7 +227,7 @@ function Main(props) {
               props.recentList.map(function (id, i) {
                 return (
                   <Link onClick={() => { setd(true); props.setblur('blurOn'); setd(true); setid(id); }} key={i}>
-                    <Card.Img src={props.cd.content.find(item => item.id === id).imgPath} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
+                    <Card.Img src={props.cd.content.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
                   </Link>
                 )
               })
@@ -299,7 +299,7 @@ function MainCard(props) {
       style={{ margin: '20px auto' }}>
       {/* 사진영역 */}
       <div style={{ overflow: 'hidden', borderRadius: '10px', width: '250px', height: "180px", margin: 'auto' }}>
-        <Link className='Link'><img src={props.item.imgPath}
+        <Link className='Link'><img src={props.item.imgPaths[0]}
           className='main_img' /></Link>
       </div>
       {/* 컨텐츠영역 */}

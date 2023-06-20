@@ -109,7 +109,11 @@ const Post = () => {
     formData.append('price', price.replace(/,/g, ''));
     formData.append('region', selectedRegion + ' ' + selectedDistrict);
     formData.append('category', category);
-    formData.append('files', imageUploadRef.current.files[0]);
+
+    for (let i = 0; i < imageUploadRef.current.files.length; i++) {
+      formData.append('files', imageUploadRef.current.files[i]);
+    }
+    // formData.append('files', imageUploadRef.current.files[0]);
 
     const token = localStorage.getItem('token');
 
@@ -360,7 +364,7 @@ const Post = () => {
               <option value="">-- 선택하세요 --</option>
               <option value="노트북">노트북</option>
               <option value="핸드폰">핸드폰</option>
-              <option value="테블릿">태블릿</option>
+              <option value="태블릿">태블릿</option>
               <option value="스마트워치">스마트워치</option>
               <option value="블루투스이어폰">블루투스이어폰</option>
             </select>

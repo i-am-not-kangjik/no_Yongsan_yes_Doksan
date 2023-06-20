@@ -48,8 +48,8 @@ function Detail(props) {
     return (
         <div className='detail'>
             <Carousel variant="light" style={{ width: '65%' }} prevIcon={<FontAwesomeIcon icon={faCircleArrowLeft} size='2x' />} nextIcon={<FontAwesomeIcon icon={faCircleArrowLeft} rotation={180} size='2x' />}>
-                {/* {
-                    item.imgPath.map(function (item, i) {
+                {
+                    item.imgPaths.map(function (item, i) {
                         return (
                             <Carousel.Item key={i}>
                                 <img
@@ -60,12 +60,12 @@ function Detail(props) {
                             </Carousel.Item>
                         )
                     })
-                } */}
-                <img
+                }
+                {/* <img
                     className="d-block w-100 detail_img"
                     src={item.imgPath}
                     alt="First slide"
-                />
+                /> */}
             </Carousel>
             <div style={{ width: '35%', padding: '15px', textAlign: 'left' }}>
                 <div className='detail_margin'>
@@ -81,11 +81,10 @@ function Detail(props) {
                 </div>
 
                 <div className='detail_margin' style={{ padding: '30px 0', borderTop: '1px solid black', borderBottom: '1px solid black', lineHeight: '1.8' }}>
-                    <p className='detail_content'>{item.content} -2017년도
-                        구매한진 몇년된 제품이지만, 개인적으로 쓰는 별도 노트북이 2개나 있어서 이상품은 그대로 보관만 해둔 기능상태 좋은 제품이에요! 물론 가지고다니면서 생긴 생활기스들은 군데군데 있음 참고해주세오 (사진첨부)</p>
+                    <p className='detail_content'>{item.content}</p>
                 </div>
                 <div className='detail_margin grey' style={{ fontSize: '13px' }}>
-                    <p className='detail_price'>관심 {item.likeCount} ∙ 채팅 1 ∙ 조회 {item.viewCount}</p>
+                    <p className='detail_price'>관심 {item.likeCount} ∙ 조회 {item.viewCount}</p>
                 </div>
             </div>
         </div>
