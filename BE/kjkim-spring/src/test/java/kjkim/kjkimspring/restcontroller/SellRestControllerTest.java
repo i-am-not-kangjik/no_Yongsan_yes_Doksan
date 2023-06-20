@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -98,7 +100,7 @@ public class SellRestControllerTest {
         MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
 
         mockMvc.perform(
-                multipart("/api/sell/create")
+                multipart("/api/sell")
                         .file(file1)
                         .file(file2)
                         .param("title", "title")
@@ -141,7 +143,7 @@ public class SellRestControllerTest {
             MockMultipartFile file2 = new MockMultipartFile("files", "laptop" + (2 * i + 1) + ".jpg", "image/jpg", imageBytes2);
 
             mockMvc.perform(
-                    multipart("/api/sell/create")
+                    multipart("/api/sell")
                             .file(file1)
                             .file(file2)
                             .param("title", "Test Post " + i)
@@ -152,6 +154,46 @@ public class SellRestControllerTest {
                             .header("Authorization", "Bearer " + token)
             ).andExpect(status().isCreated());
         }
+    }
+    @Test
+    public void testModifySell() throws Exception {
+        // Step 1: Login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
+
+        MvcResult loginResult = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: Modify the sell post
+        byte[] imageBytes1 = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop5.jpg"));
+        MockMultipartFile file1 = new MockMultipartFile("files", "laptop5.jpg", "image/jpg", imageBytes1);
+
+        byte[] imageBytes2 = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop4.jpg"));
+        MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.multipart("/api/sell/{id}", 3)
+                        .file(file1)
+                        .file(file2)
+                        .param("title", "newTitle")
+                        .param("content", "newContent")
+                        .param("price", "2000")
+                        .param("region", "newRegion")
+                        .param("category", "newCategory")
+                        .header("Authorization", "Bearer " + token)
+                        .with(request -> {
+                            request.setMethod(HttpMethod.PUT.toString());
+                            return request;
+                        })
+        ).andExpect(status().isOk());
     }
 
 
