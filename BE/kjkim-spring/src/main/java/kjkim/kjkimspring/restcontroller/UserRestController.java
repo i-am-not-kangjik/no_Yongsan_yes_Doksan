@@ -1,7 +1,10 @@
 package kjkim.kjkimspring.restcontroller;
 
+import kjkim.kjkimspring.dto.SellDTO;
 import kjkim.kjkimspring.dto.UserCreateDto;
 import kjkim.kjkimspring.dto.UserDto;
+import kjkim.kjkimspring.sell.Sell;
+import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.jwt.JwtService;
@@ -13,15 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -31,6 +33,7 @@ public class UserRestController {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final SellService sellService;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserCreateDto userCreateDto) {
@@ -104,6 +107,12 @@ public class UserRestController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{userId}/liked-sells")
+    public ResponseEntity<List<SellDTO>> getLikedSellsByUser(@PathVariable("userId") Long userId) {
+        List<Sell> likedSells = sellService.getLikedSellsByUser(userId);
+        List<SellDTO> likedSellsDTO = likedSells.stream().map(sell -> sellService.convertToDTO(sell)).collect(Collectors.toList());
+        return ResponseEntity.ok(likedSellsDTO);
+    }
 
     // 추가적인 API 구현...
 }
