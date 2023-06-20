@@ -1,106 +1,106 @@
-import React, { useEffect, useState } from 'react';
+/*eslint-disable*/
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import bcrypt from 'bcryptjs'; // bcryptjs 라이브러리를 사용하여 비밀번호를 암호화합니다.
 
 const LoginPage = (props) => {
+let navigate = useNavigate();
 
-  let navigate = useNavigate();
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [error, setError] = useState(false);
+const [errorMessage, setErrorMessage] = useState('');
 
-  const [pg, setPg] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:5001/api/data');
-        setPg(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+const handleEmailChange = (e) => {
+setEmail(e.target.value);
+};
 
-    fetchData();
-  }, []);
+const handlePasswordChange = (e) => {
+setPassword(e.target.value);
+};
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  // 로그인 요청 보내기
+  axios
+    .post('http://localhost:8081/api/user/login', {
+      email: email, // "email" 필드를 사용합니다.
+      password: password,
+    })
+    .then((response) => {
+      // 로그인 성공 시 처리
+      const token = response.data.token;
+      const username = response.data.username;
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+      if (token) {
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+        // 토큰을 로컬 스토리지에 저장합니다.
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
 
-    // 입력한 이메일과 일치하는 사용자를 찾습니다.
-    const user = pg.userData.find((user) => user.email === email);
-
-    if (user) {
-      // 입력한 비밀번호와 저장된 암호화된 비밀번호를 비교합니다.
-      const isPasswordCorrect = bcrypt.compareSync(password, user.password);
-
-      if (isPasswordCorrect) {
-        // 비밀번호가 일치하는 경우, 로그인 로직을 수행합니다.
-        console.log('로그인 성공');
-        props.handleLogin(user.username)
-        navigate('/');
+        // 원하는 페이지로 리다이렉트
+        window.location.href = '/sell';
       } else {
-        // 비밀번호가 일치하지 않는 경우
-        console.log('비밀번호가 올바르지 않습니다');
+        // 토큰이 유효하지 않은 경우나 응답에 오류가 있는 경우 처리
+        setError(true);
+        setErrorMessage('에러: 유효하지 않은 토큰 또는 응답입니다.');
       }
-    } else {
-      // 사용자가 존재하지 않는 경우
-      console.log('사용자를 찾을 수 없습니다');
-    }
-  };
+    })
+    .catch((error) => {
+      // 로그인 에러 처리
+      console.log(error);
+      setError(true);
+      setErrorMessage('잘못된 이메일 또는 비밀번호입니다.');
+    });
+};
 
-  return (
-    <div className='login_box'>
-      <h1 style={{ marginBottom: '50px' }}>로그인</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor='email'></label>
-          <input
-            type='email'
-            id='email'
-            placeholder='이메일 주소 또는 아이디'
-            className='login_input idpw_id'
-            value={email}
-            onChange={handleEmailChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='password'></label>
-          <input
-            type='password'
-            id='password'
-            placeholder='비밀번호'
-            className='login_input idpw_pw'
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <Button type='submit' className='login_btn'>
-          로그인
-        </Button>
-      </form>
-      <div style={{ width: '60%', margin: 'auto' }}>
-        <Link to='/findid' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
-          아이디 찾기
-        </Link>
-        <Link to='/findpw' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
-          비밀번호 찾기
-        </Link>
-        <Link to='/signup' className='Link' style={{ color: 'gray', padding: '0 10px' }}>
-          회원가입
-        </Link>
-      </div>
-    </div>
-  );
+
+return (
+<div className='login_box'>
+<h1 style={{ marginBottom: '50px' }}>로그인</h1>
+<form onSubmit={handleSubmit}>
+<div>
+<label htmlFor='email'></label>
+<input
+         type='email'
+         id='email'
+         placeholder='이메일을 입력해주세요'
+         className='login_input'
+         value={email}
+         onChange={handleEmailChange}
+       />
+</div>
+<div>
+<label htmlFor='password'></label>
+<input
+         type='password'
+         id='password'
+         placeholder='비밀번호를 입력해주세요'
+         className='login_input'
+         value={password}
+         onChange={handlePasswordChange}
+       />
+</div>
+{error && <p style={{ color: 'orange' }}>{errorMessage}</p>}
+<Button type='submit' className='login_btn'>
+로그인
+</Button>
+</form>
+<div style={{ width: '60%', margin: 'auto' }}>
+<Link to='/findid' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
+이메일 찾기
+</Link>
+<Link to='/findpw' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
+비밀번호 찾기
+</Link>
+<Link to='/signup' className='Link' style={{ color: 'gray', padding: '0 10px' }}>
+회원 가입
+</Link>
+</div>
+</div>
+);
 };
 
 export default LoginPage;

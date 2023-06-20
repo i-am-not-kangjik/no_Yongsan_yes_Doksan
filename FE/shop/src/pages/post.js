@@ -1,9 +1,10 @@
+/*eslint-disable*/
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
-
+import axios from 'axios';
 
 const Post = () => {
   const imageUploadRef = useRef(null);
@@ -18,51 +19,131 @@ const Post = () => {
   const [category, setCategory] = useState(''); // 카테고리
   const [price, setPrice] = useState(''); // 가격
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
+  const token = localStorage.getItem('token');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
 
-    if (images.length < 1) {
-      alert("이미지를 업로드 해주세요.");
-      return;
-    }
-    else if (title.length < 1) {
-      alert("제목을 입력해주세요.");
-      return;
-    }
-    else if (category.trim() === '') {
-      alert("카테고리를 선택해주세요.");
-      return;
-    }
-    else if (price < 1000) {
-      alert("가격을 입력해주세요.");
-      return;
-    }
-    else if (selectedRegion.trim() === '') {
-      alert("지역을 선택해주세요.");
-      return;
-    }
-    else if (selectedDistrict.trim() === '') {
-      alert("구역을 선택해주세요.");
-      return;
-    }
-    else if (content.length < 10) {
-      alert("내용을 입력해주세요.");
-      return;
-    }
+  //   if (imageUploadRef.current.files.length < 1) {
+  //     alert('이미지를 업로드해주세요.');
+  //     return;
+  //   } else if (title.trim() === '') {
+  //     alert('제목을 입력해주세요.');
+  //     return;
+  //   } else if (category.trim() === '') {
+  //     alert('카테고리를 선택해주세요.');
+  //     return;
+  //   } else if (price.trim() === '' || price < 1000) {
+  //     alert('가격을 입력해주세요.');
+  //     return;
+  //   } else if (selectedRegion.trim() === '' || selectedDistrict.trim() === '') {
+  //     alert('지역을 선택해주세요.');
+  //     return;
+  //   } else if (content.trim() === '' || content.length < 10) {
+  //     alert('내용을 입력해주세요.');
+  //     return;
+  //   }
 
+  //  console.log(title)
+  //  console.log(content)
+  //  console.log(price.replace(/,/g, ''))
+  //  console.log(selectedRegion + ' ' + selectedDistrict)
+  //  console.log(category)
+  //  console.log(imageUploadRef.current.files[0])
 
-    alert("상품이 등록되었습니다.");
-    // 등록 후 입력값 초기화
-    setImages([]);
-    setImagePreviews([]);
-    setTitle('');
-    setCategory('');
-    setSelectedRegion('');
-    setSelectedDistrict('');
-    setPrice('');
-    setContent('');
+  //   const formData = new FormData();
+  //   formData.append('title', title);
+  //   formData.append('content', content);
+  //   formData.append('price', price.replace(/,/g, ''));
+  //   formData.append('region', selectedRegion + ' ' + selectedDistrict);
+  //   formData.append('category', category);
+  //   formData.append('file', imageUploadRef.current.files[0]);
+
+  //   const token = localStorage.getItem('token');
+
+  //   try {
+  //     const response = await axios.post(
+  //       'http://localhost:8081/api/sell/create',
+  //       formData,
+  //       {
+  //         headers: {
+  //           // 'Content-Type': 'multipart/form-data',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.data.success) {
+  //       alert('상품이 등록되었습니다.');
+
+  //       // Reset form values
+  //       setTitle('');
+  //       setContent('');
+  //       setSelectedRegion('');
+  //       setSelectedDistrict('');
+  //       setCategory('');
+  //       setPrice('');
+  //     } else {
+  //       console.error('Failed to create post');
+  //       alert('상품 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert('상품 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log(title)
+    console.log(content)
+    console.log(price.replace(/,/g, ''))
+    console.log(selectedRegion + ' ' + selectedDistrict)
+    console.log(category)
+    console.log(imageUploadRef.current.files[0])
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('price', price.replace(/,/g, ''));
+    formData.append('region', selectedRegion + ' ' + selectedDistrict);
+    formData.append('category', category);
+
+    for (let i = 0; i < imageUploadRef.current.files.length; i++) {
+      formData.append('files', imageUploadRef.current.files[i]);
+    }
+    // formData.append('files', imageUploadRef.current.files[0]);
+
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await fetch('http://localhost:8081/api/sell/create', {
+        method: 'POST',
+        headers: {
+          // 'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      // Handle the response as needed
+      if (response.ok) {
+        // Request successful
+        alert("상품이 등록되었습니다.");
+        console.log('상품이 등록되었습니다.');
+        location.reload();
+      } else {
+        // Request failed
+        alert("상품 등록 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      alert("상품 등록 중 오류가 발생했습니다.");
+      console.error('상품 등록 중 오류가 발생했습니다.', error);
+    }
   };
+
+
 
   const handleRegionChange = (event) => {
     setSelectedRegion(event.target.value);
@@ -72,22 +153,22 @@ const Post = () => {
     setSelectedDistrict(event.target.value);
   };
 
-  const gangwon = ["강릉시", "동해시", "삼척시", "속초시", "원주시", "춘천시", "태백시", "고성군", "양구군", "양양군", "영월군", "인제군", "정선군", "철원군", "평창군", "홍천군", "화천군", "횡성군"];
-  const gyeonggi = ["고양시", "과천시", "광명시", "광주시", "구리시", "군포시", "김포시", "남양주시", "동두천시", "부천시", "성남시", "수원시", "시흥시", "안산시", "안성시", "안양시", "양주시", "오산시", "용인시", "의왕시", "의정부시", "이천시", "파주시", "평택시", "포천시", "하남시", "화성시", "가평군", "양평군", "여주군", "연천군"];
-  const gyeongsangnam = ["거제시", "김해시", "마산시", "밀양시", "사천시", "양산시", "진주시", "진해시", "창원시", "통영시", "거창군", "고성군", "남해군", "산청군", "의령군", "창녕군", "하동군", "함안군", "함양군", "합천군"];
-  const gyeongsangbuk = ["경산시", "경주시", "구미시", "김천시", "문경시", "상주시", "안동시", "영주시", "영천시", "포항시", "고령군", "군위군", "봉화군", "성주군", "영덕군", "영양군", "예천군", "울릉군", "울진군", "의성군", "청도군", "청송군", "칠곡군"];
-  const gwangju = ["광산구", "남구", "동구", "북구", "서구"];
-  const daegu = ["남구", "달서구", "동구", "북구", "서구", "수성구", "중구", "달성군"];
-  const daejeon = ["대덕구", "동구", "서구", "유성구", "중구"];
-  const busan = ["강서구", "금정구", "남구", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "수영구", "연제구", "영도구", "중구", "해운대구", "기장군"];
-  const seoul = ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"];
-  const ulsan = ["남구", "동구", "북구", "중구", "울주군"];
-  const incheon = ["계양구", "남구", "남동구", "동구", "부평구", "서구", "연수구", "중구", "강화군", "옹진군"];
-  const jeonnam = ["광양시", "나주시", "목포시", "순천시", "여수시", "강진군", "고흥군", "곡성군", "구례군", "담양군", "무안군", "보성군", "신안군", "영광군", "영암군", "완도군", "장성군", "장흥군", "진도군", "함평군", "해남군", "화순군"];
-  const jeonbuk = ["군산시", "김제시", "남원시", "익산시", "전주시", "정읍시", "고창군", "무주군", "부안군", "순창군", "완주군", "임실군", "장수군", "진안군"];
-  const jeju = ["서귀포시", "제주시", "남제주군", "북제주군"];
-  const chungnam = ['공주시', '논산시', '보령시', '서산시', '아산시', '천안시', '금산군', '당진군', '부여군', '서천군', '연기군', '예산군', '청양군', '태안군', '홍성군'];
-  const chungbuk = ["제천시", "청주시", "충주시", "괴산군", "단양군", "보은군", "영동군", "옥천군", "음성군", "증평군", "진천군", "청원군"];
+  const 강원도 = ["강릉시", "동해시", "삼척시", "속초시", "원주시", "춘천시", "태백시", "고성군", "양구군", "양양군", "영월군", "인제군", "정선군", "철원군", "평창군", "홍천군", "화천군", "횡성군"];
+  const 경기도 = ["고양시", "과천시", "광명시", "광주시", "구리시", "군포시", "김포시", "남양주시", "동두천시", "부천시", "성남시", "수원시", "시흥시", "안산시", "안성시", "안양시", "양주시", "오산시", "용인시", "의왕시", "의정부시", "이천시", "파주시", "평택시", "포천시", "하남시", "화성시", "가평군", "양평군", "여주군", "연천군"];
+  const 경상남도 = ["거제시", "김해시", "마산시", "밀양시", "사천시", "양산시", "진주시", "진해시", "창원시", "통영시", "거창군", "고성군", "남해군", "산청군", "의령군", "창녕군", "하동군", "함안군", "함양군", "합천군"];
+  const 경상북도 = ["경산시", "경주시", "구미시", "김천시", "문경시", "상주시", "안동시", "영주시", "영천시", "포항시", "고령군", "군위군", "봉화군", "성주군", "영덕군", "영양군", "예천군", "울릉군", "울진군", "의성군", "청도군", "청송군", "칠곡군"];
+  const 광주광역시 = ["광산구", "남구", "동구", "북구", "서구"];
+  const 대구광역시 = ["남구", "달서구", "동구", "북구", "서구", "수성구", "중구", "달성군"];
+  const 대전광역시 = ["대덕구", "동구", "서구", "유성구", "중구"];
+  const 부산광역시 = ["강서구", "금정구", "남구", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "수영구", "연제구", "영도구", "중구", "해운대구", "기장군"];
+  const 서울특별시 = ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"];
+  const 울산광역시 = ["남구", "동구", "북구", "중구", "울주군"];
+  const 인천광역시 = ["계양구", "남구", "남동구", "동구", "부평구", "서구", "연수구", "중구", "강화군", "옹진군"];
+  const 전라남도 = ["광양시", "나주시", "목포시", "순천시", "여수시", "강진군", "고흥군", "곡성군", "구례군", "담양군", "무안군", "보성군", "신안군", "영광군", "영암군", "완도군", "장성군", "장흥군", "진도군", "함평군", "해남군", "화순군"];
+  const 전라북도 = ["군산시", "김제시", "남원시", "익산시", "전주시", "정읍시", "고창군", "무주군", "부안군", "순창군", "완주군", "임실군", "장수군", "진안군"];
+  const 제주특별자치도 = ["서귀포시", "제주시", "남제주군", "북제주군"];
+  const 충청남도 = ['공주시', '논산시', '보령시', '서산시', '아산시', '천안시', '금산군', '당진군', '부여군', '서천군', '연기군', '예산군', '청양군', '태안군', '홍성군'];
+  const 충청북도 = ["제천시", "청주시", "충주시", "괴산군", "단양군", "보은군", "영동군", "옥천군", "음성군", "증평군", "진천군", "청원군"];
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
@@ -186,7 +267,7 @@ const Post = () => {
 
         <div className='post_box' style={{ paddingBottom: '20px' }}>
           <div className='post_box_left'>
-            <label htmlFor="image" style={{ marginBottom: '10px' }}>상품이미지 <span style={{ fontSize : '15px', color : 'gray' }}>({images.length}/11개)</span></label>
+            <label htmlFor="image" style={{ marginBottom: '10px' }}>상품이미지 <span style={{ fontSize: '15px', color: 'gray' }}>({images.length}/11개)</span></label>
             <input
               type="file"
               id="image"
@@ -214,7 +295,7 @@ const Post = () => {
                 onClick={() => imageUploadRef.current.click()}
               >
                 <FontAwesomeIcon icon={faCamera} size='2x' />
-                <p style={{ marginTop : '5px' }}>사진 선택</p>
+                <p style={{ marginTop: '5px' }}>사진 선택</p>
               </div>
               {imagePreviews.length > 0 && (
                 imagePreviews.map((preview, index) => (
@@ -277,15 +358,15 @@ const Post = () => {
             <select
               id="category"
               value={category}
-              style={{ height : '25px' }}
+              style={{ height: '25px' }}
               onChange={(event) => setCategory(event.target.value)}
             >
               <option value="">-- 선택하세요 --</option>
-              <option value="clothing">노트북</option>
-              <option value="appliances">핸드폰</option>
-              <option value="books">태블릿</option>
-              <option value="furniture">스마트워치</option>
-              <option value="miscellaneous">블루투스이어폰</option>
+              <option value="노트북">노트북</option>
+              <option value="핸드폰">핸드폰</option>
+              <option value="태블릿">태블릿</option>
+              <option value="스마트워치">스마트워치</option>
+              <option value="블루투스이어폰">블루투스이어폰</option>
             </select>
           </div>
 
@@ -316,25 +397,25 @@ const Post = () => {
               id="region"
               value={selectedRegion}
               onChange={handleRegionChange}
-              style={{ marginLeft : '10px', height : '25px' }}
+              style={{ marginLeft: '10px', height: '25px' }}
             >
               <option value="">시/도 선택</option>
-              <option value="gangwon">강원</option>
-              <option value="gyeonggi">경기</option>
-              <option value="gyeongsangnam">경남</option>
-              <option value="gyeongsangbuk">경북</option>
-              <option value="gwangju">광주</option>
-              <option value="daegu">대구</option>
-              <option value="daejeon">대전</option>
-              <option value="busan">부산</option>
-              <option value="seoul">서울</option>
-              <option value="ulsan">울산</option>
-              <option value="incheon">인천</option>
-              <option value="jeonnam">전남</option>
-              <option value="jeonbuk">전북</option>
-              <option value="jeju">제주</option>
-              <option value="chungnam">충남</option>
-              <option value="chungbuk">충북</option>
+              <option value="강원도">강원</option>
+              <option value="경기도">경기</option>
+              <option value="경상남도">경남</option>
+              <option value="경상북도">경북</option>
+              <option value="광주광역시">광주</option>
+              <option value="대구광역시">대구</option>
+              <option value="대전광역시">대전</option>
+              <option value="부산광역시">부산</option>
+              <option value="서울특별시">서울</option>
+              <option value="울산광역시">울산</option>
+              <option value="인천광역시">인천</option>
+              <option value="전라남도">전남</option>
+              <option value="전라북도">전북</option>
+              <option value="제주특별자치도">제주</option>
+              <option value="충청남도">충남</option>
+              <option value="충청북도">충북</option>
             </select>
           </div>
 
@@ -344,101 +425,101 @@ const Post = () => {
               id="district"
               value={selectedDistrict}
               onChange={handleDistrictChange}
-              style={{ marginLeft : '10px', height : '25px' }}
+              style={{ marginLeft: '10px', height: '25px' }}
             >
               <option value="">시/군/구 선택</option>
-              {selectedRegion === 'gangwon' &&
-                gangwon.map((district) => (
+              {selectedRegion === '강원도' &&
+                강원도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'gyeonggi' &&
-                gyeonggi.map((district) => (
+              {selectedRegion === '경기도' &&
+                경기도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'gyeongsangnam' &&
-                gyeongsangnam.map((district) => (
+              {selectedRegion === '경상남도' &&
+                경상남도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'gyeongsangbuk' &&
-                gyeongsangbuk.map((district) => (
+              {selectedRegion === '경상북도' &&
+                경상북도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'gwangju' &&
-                gwangju.map((district) => (
+              {selectedRegion === '광주광역시' &&
+                광주광역시.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'daegu' &&
-                daegu.map((district) => (
+              {selectedRegion === '대구광역시' &&
+                대구광역시.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'daejeon' &&
-                daejeon.map((district) => (
+              {selectedRegion === '대전광역시' &&
+                대전광역시.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'busan' &&
-                busan.map((district) => (
+              {selectedRegion === '부산광역시' &&
+                부산광역시.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'seoul' &&
-                seoul.map((district) => (
+              {selectedRegion === '서울특별시' &&
+                서울특별시.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'ulsan' &&
-                ulsan.map((district) => (
+              {selectedRegion === '울산광역시' &&
+                울산광역시.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'incheon' &&
-                incheon.map((district) => (
+              {selectedRegion === '인천광역시' &&
+                인천광역시.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'jeonnam' &&
-                jeonnam.map((district) => (
+              {selectedRegion === '전라남도' &&
+                전라남도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'jeonbuk' &&
-                jeonbuk.map((district) => (
+              {selectedRegion === '전라북도' &&
+                전라북도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'jeju' &&
-                jeju.map((district) => (
+              {selectedRegion === '제주특별자치도' &&
+                제주특별자치도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'chungnam' &&
-                chungnam.map((district) => (
+              {selectedRegion === '충청남도' &&
+                충청남도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>
                 ))}
-              {selectedRegion === 'chungbuk' &&
-                chungbuk.map((district) => (
+              {selectedRegion === '충청북도' &&
+                충청북도.map((district) => (
                   <option key={district} value={district}>
                     {district}
                   </option>

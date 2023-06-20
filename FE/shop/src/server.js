@@ -6,7 +6,7 @@ const port = 5001;
 
 // PostgreSQL 연결 풀 생성
 const pool = new Pool({
-  connectionString: 'postgresql://bhbh:ghkdlxld1!@database-1.csps6yjojtzn.ap-northeast-2.rds.amazonaws.com:5432/playdata',
+  connectionString: 'postgresql://아이디:비밀번호@database-1.csps6yjojtzn.ap-northeast-2.rds.amazonaws.com:5432/playdata',
 });
 
 const cors = require('cors');
