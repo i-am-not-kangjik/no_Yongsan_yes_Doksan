@@ -21,78 +21,6 @@ const Post = () => {
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
   const token = localStorage.getItem('token');
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-
-  //   if (imageUploadRef.current.files.length < 1) {
-  //     alert('이미지를 업로드해주세요.');
-  //     return;
-  //   } else if (title.trim() === '') {
-  //     alert('제목을 입력해주세요.');
-  //     return;
-  //   } else if (category.trim() === '') {
-  //     alert('카테고리를 선택해주세요.');
-  //     return;
-  //   } else if (price.trim() === '' || price < 1000) {
-  //     alert('가격을 입력해주세요.');
-  //     return;
-  //   } else if (selectedRegion.trim() === '' || selectedDistrict.trim() === '') {
-  //     alert('지역을 선택해주세요.');
-  //     return;
-  //   } else if (content.trim() === '' || content.length < 10) {
-  //     alert('내용을 입력해주세요.');
-  //     return;
-  //   }
-
-  //  console.log(title)
-  //  console.log(content)
-  //  console.log(price.replace(/,/g, ''))
-  //  console.log(selectedRegion + ' ' + selectedDistrict)
-  //  console.log(category)
-  //  console.log(imageUploadRef.current.files[0])
-
-  //   const formData = new FormData();
-  //   formData.append('title', title);
-  //   formData.append('content', content);
-  //   formData.append('price', price.replace(/,/g, ''));
-  //   formData.append('region', selectedRegion + ' ' + selectedDistrict);
-  //   formData.append('category', category);
-  //   formData.append('file', imageUploadRef.current.files[0]);
-
-  //   const token = localStorage.getItem('token');
-
-  //   try {
-  //     const response = await axios.post(
-  //       'http://localhost:8081/api/sell/create',
-  //       formData,
-  //       {
-  //         headers: {
-  //           // 'Content-Type': 'multipart/form-data',
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.data.success) {
-  //       alert('상품이 등록되었습니다.');
-
-  //       // Reset form values
-  //       setTitle('');
-  //       setContent('');
-  //       setSelectedRegion('');
-  //       setSelectedDistrict('');
-  //       setCategory('');
-  //       setPrice('');
-  //     } else {
-  //       console.error('Failed to create post');
-  //       alert('상품 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert('상품 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -110,8 +38,8 @@ const Post = () => {
     formData.append('region', selectedRegion + ' ' + selectedDistrict);
     formData.append('category', category);
 
-    for (let i = 0; i < imageUploadRef.current.files.length; i++) {
-      formData.append('files', imageUploadRef.current.files[i]);
+    for (let i = 0; i < images.length; i++) {
+      formData.append('files', images[i]);
     }
     // formData.append('files', imageUploadRef.current.files[0]);
 

@@ -73,7 +73,7 @@ function Detail(props) {
                 </div>
 
                 <div className='detail_margin grey'>
-                    <p className='detail_ct'>노트북 ∙ {nowDate}</p>
+                    <p className='detail_ct'>{item.category} ∙ {nowDate}</p>
                 </div>
 
                 <div className='detail_margin'>
