@@ -79,7 +79,7 @@ public class SellService {
                     Image image = new Image();
                     image.setImgName(objectKey);
                     image.setImgPath(imageURL);
-                    image.setOriName(originalFilename);
+                    image.setOriName(objectKey);
                     image.setSell(sell);
                     images.add(image);
 
