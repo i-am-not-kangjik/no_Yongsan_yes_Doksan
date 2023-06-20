@@ -112,18 +112,15 @@ public class SellRestControllerTest {
 
 
     @Test
-    public void testCreateMultipleSells() throws Exception {
-        // 사용자 정보와 게시글 정보를 리스트로 생성합니다.
-        List<String> emails = Arrays.asList("user1@naver.com", "user2@naver.com", "user3@naver.com");
-        List<String> passwords = Arrays.asList("user1user1", "user2user2", "user3user3");
-        List<String> titles = Arrays.asList("테스트 게시글1", "테스트 게시글2", "테스트 게시글3");
-        List<Integer> prices = Arrays.asList(1000, 2000, 3000);
+    public void testCreateSells() throws Exception {
+        String[] emails = {"user1@naver.com", "user2@naver.com", "user3@naver.com"};
+        String[] passwords = {"user1user1", "user2user2", "user3user3"};
 
-        for (int i = 0; i < 3; i++) {
-            // Step 1: 로그인하고 토큰을 받아옵니다.
+        for (int i = 0; i < emails.length; i++) {
+            // Step 1: login and get the token
             UserLoginForm userLoginForm = new UserLoginForm();
-            userLoginForm.setEmail(emails.get(i));
-            userLoginForm.setPassword(passwords.get(i));
+            userLoginForm.setEmail(emails[i]);
+            userLoginForm.setPassword(passwords[i]);
 
             MvcResult loginResult = mockMvc.perform(
                     MockMvcRequestBuilders.post("/api/user/login")
@@ -132,25 +129,31 @@ public class SellRestControllerTest {
             ).andReturn();
 
             String loginResponse = loginResult.getResponse().getContentAsString();
-            Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+            Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {
+            });
             String token = loginResponseMap.get("token");
 
-            // Step 2: 게시글 작성
-            byte[] imageBytes = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop4.jpg"));
-            MockMultipartFile file = new MockMultipartFile("file", "laptop4.jpg", "image/jpg", imageBytes);
+            // Step 2: create a sell post
+            byte[] imageBytes1 = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop" + (2 * i) + ".jpg"));
+            MockMultipartFile file1 = new MockMultipartFile("files", "laptop" + (2 * i) + ".jpg", "image/jpg", imageBytes1);
+
+            byte[] imageBytes2 = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop" + (2 * i + 1) + ".jpg"));
+            MockMultipartFile file2 = new MockMultipartFile("files", "laptop" + (2 * i + 1) + ".jpg", "image/jpg", imageBytes2);
 
             mockMvc.perform(
                     multipart("/api/sell/create")
-                            .file(file)
-                            .param("title", titles.get(i))
-                            .param("content", "content")
-                            .param("price", String.valueOf(prices.get(i)))
+                            .file(file1)
+                            .file(file2)
+                            .param("title", "Test Post " + i)
+                            .param("content", "Test Content " + i)
+                            .param("price", "1000")
                             .param("region", "Seoul")
                             .param("category", "category")
                             .header("Authorization", "Bearer " + token)
             ).andExpect(status().isCreated());
         }
     }
+
 
 
 }
