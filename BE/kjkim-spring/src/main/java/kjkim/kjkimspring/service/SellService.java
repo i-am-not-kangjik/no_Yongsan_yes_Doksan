@@ -130,18 +130,27 @@ public class SellService {
                     Image image = new Image();
                     image.setImgName(imgName);
                     image.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
+                    image.setOriName(imgName); // Set the original file name
                     image.setSell(sell); // link image with the Sell
                     images.add(image);
                 }
             }
 
-            sell.setImageList(images);
+            if (!images.isEmpty()) {
+                for (Image image : images) {
+                    sell.addImage(image);
+                }
+            } else {
+                sell.getImageList().clear();
+            }
 
             this.sellRepository.save(sell);
         } else {
             this.sellRepository.save(sell);
         }
     }
+
+
 
 
 
