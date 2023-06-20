@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const BulletinBoardPage = () => {
+const PostForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState(0);
   const [region, setRegion] = useState('');
   const [category, setCategory] = useState('');
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
+  const token = localStorage.getItem('token');
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
+  const handleFileChange = (event) => {
+    setFiles([...files, ...event.target.files]);
+  };
 
-    console.log(title)
-    console.log(content)
-    console.log(price)
-    console.log(region)
-    console.log(category)
-    console.log(file)
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     const formData = new FormData();
     formData.append('title', title);
@@ -24,72 +23,32 @@ const BulletinBoardPage = () => {
     formData.append('price', price);
     formData.append('region', region);
     formData.append('category', category);
-    formData.append('file', file);
 
-    const token = localStorage.getItem('token');
+    files.forEach((file) => {
+      formData.append('files', file);
+    });
 
-    try {
-      const response = await fetch('http://localhost:8081/api/sell/create', {
-        method: 'POST',
-        headers: {
-          // 'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
+    const response = await axios.post('http://localhost:8081/api/sell/create', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
 
-      // Handle the response as needed
-      if (response.ok) {
-        // Request successful
-        console.log('Post created successfully');
-      } else {
-        // Request failed
-        console.error('Failed to create post');
-      }
-    } catch (error) {
-      console.error('An error occurred', error);
-    }
+    console.log(response.data);
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Price"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Region"
-        value={region}
-        onChange={(e) => setRegion(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      />
-      <input
-        type="file"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
-      <button type="submit">Submit</button>
+    <form onSubmit={handleSubmit}>
+      <input type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
+      <textarea placeholder="Content" onChange={(e) => setContent(e.target.value)} />
+      <input type="number" placeholder="Price" onChange={(e) => setPrice(e.target.value)} />
+      <input type="text" placeholder="Region" onChange={(e) => setRegion(e.target.value)} />
+      <input type="text" placeholder="Category" onChange={(e) => setCategory(e.target.value)} />
+      <input type="file" multiple onChange={handleFileChange} />
+      <button type="submit">Post</button>
     </form>
   );
 };
 
-export default BulletinBoardPage;
+export default PostForm;

@@ -93,8 +93,10 @@ function App() {
   const [searchText, setSearchText] = useState('');
 
   function handleSearch() {
-    const filteredContent = cd.content.filter(item => item.title.includes(searchText));
-    const updatedCd = { ...cd, content: filteredContent };
+    navigate('/sell');
+    console.log(searchText)
+    const filteredContent = pg.content.filter(item => item.title.includes(searchText));
+    const updatedCd = { ...pg, content: filteredContent };
     setCd(updatedCd);
     // 검색어에 대한 추가 작업을 수행할 수 있습니다.
   }
@@ -107,8 +109,9 @@ function App() {
 
   //카테고리 기능
   function handleCategorySelect(category) {
-    const filteredContent = cd.content.filter(item => item.category === category);
-    const updatedCd = { ...cd, content: filteredContent };
+    navigate('/sell');
+    const filteredContent = pg.content.filter(item => item.category === category);
+    const updatedCd = { ...pg, content: filteredContent };
     setCd(updatedCd);
   }  
 
@@ -116,7 +119,7 @@ function App() {
     <div className={'App '}>
       <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
         <Container fluid style={{ width: '80%', padding: '10px' }}>
-          <Navbar.Brand onClick={() => { navigate('/sell') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
+          <Navbar.Brand onClick={() => { navigate('/sell'); setCd(pg) }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
@@ -143,11 +146,11 @@ function App() {
               }}>내상점</Nav.Link>
               <Nav.Link href="#action3">채팅</Nav.Link>
               <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item onClick={() => handleCategorySelect('노트북')}>노트북</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleCategorySelect('핸드폰')}>핸드폰</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleCategorySelect('태블릿')}>태블릿</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleCategorySelect('스마트워치')}>스마트워치</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => handleCategorySelect('블루투스이어폰')}>블루투스이어폰</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => {handleCategorySelect('노트북')}}>노트북</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => {handleCategorySelect('핸드폰')}}>핸드폰</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => {handleCategorySelect('태블릿')}}>태블릿</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => {handleCategorySelect('스마트워치')}}>스마트워치</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => {handleCategorySelect('블루투스이어폰')}}>블루투스이어폰</NavDropdown.Item>
               </NavDropdown>
               <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link>
             </Nav>

@@ -109,7 +109,7 @@ const Post = () => {
     formData.append('price', price.replace(/,/g, ''));
     formData.append('region', selectedRegion + ' ' + selectedDistrict);
     formData.append('category', category);
-    formData.append('file', imageUploadRef.current.files[0]);
+    formData.append('files', imageUploadRef.current.files[0]);
 
     const token = localStorage.getItem('token');
 
@@ -132,7 +132,6 @@ const Post = () => {
       } else {
         // Request failed
         alert("상품 등록 중 오류가 발생했습니다.");
-        console.error('상품 등록 중 오류가 발생했습니다.');
       }
     } catch (error) {
       alert("상품 등록 중 오류가 발생했습니다.");

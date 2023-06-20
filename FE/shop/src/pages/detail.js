@@ -85,7 +85,7 @@ function Detail(props) {
                         구매한진 몇년된 제품이지만, 개인적으로 쓰는 별도 노트북이 2개나 있어서 이상품은 그대로 보관만 해둔 기능상태 좋은 제품이에요! 물론 가지고다니면서 생긴 생활기스들은 군데군데 있음 참고해주세오 (사진첨부)</p>
                 </div>
                 <div className='detail_margin grey' style={{ fontSize: '13px' }}>
-                    <p className='detail_price'>관심 {item.likeCount} ∙ 채팅 1 ∙ 조회 {props.data[props.id].viewCount}</p>
+                    <p className='detail_price'>관심 {item.likeCount} ∙ 채팅 1 ∙ 조회 {item.viewCount}</p>
                 </div>
             </div>
         </div>
