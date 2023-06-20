@@ -1,50 +1,30 @@
 package kjkim.kjkimspring.restcontroller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kjkim.kjkimspring.sell.SellForm;
-import kjkim.kjkimspring.service.SellService;
-import kjkim.kjkimspring.service.UserService;
-import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.user.UserLoginForm;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -196,6 +176,53 @@ public class SellRestControllerTest {
         ).andExpect(status().isOk());
     }
 
+    @Test
+    public void testDeleteSell() throws Exception {
+        // Step 1: login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user1@naver.com");
+        userLoginForm.setPassword("user1user1");
+
+        MvcResult loginResult = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: delete a sell post
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/sell/{id}", 1)
+                        .header("Authorization", "Bearer " + token)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void testLikeSell() throws Exception {
+        // Step 1: login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
+
+        MvcResult loginResult = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: Send a POST request to like a sell post
+        mockMvc.perform(
+                post("/api/sell/7/like")
+                        .header("Authorization", "Bearer " + token)
+        ).andExpect(status().isOk());
+    }
 
 
 }
