@@ -75,11 +75,11 @@ public class SellRestController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id}")
+    @PutMapping("/modify/{id}")
     public ResponseEntity<Void> updateSell(@Valid SellForm sellForm,
                                            @PathVariable("id") Integer id,
                                            Principal principal,
-                                           @RequestParam("file") List<MultipartFile> uploads) throws IOException {
+                                           @RequestParam("files") List<MultipartFile> uploads) throws IOException {
         Sell sell = sellService.getSell(id);
         if (!sell.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
@@ -89,6 +89,8 @@ public class SellRestController {
             return ResponseEntity.ok().build();
         }
     }
+
+
 
 //    @PreAuthorize("isAuthenticated()")
 //    @DeleteMapping("/{id}")
