@@ -1,8 +1,8 @@
 package kjkim.kjkimspring.restcontroller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kjkim.kjkimspring.dto.UserCreateDto;
-import kjkim.kjkimspring.user.UserCreateForm;
 import kjkim.kjkimspring.user.UserLoginForm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -86,6 +91,37 @@ public class UserRestControllerTest {
         // Print the response body
         System.out.println(result.getResponse().getContentAsString());
     }
+
+
+
+
+    @Test
+    public void testGetLikedSells() throws Exception {
+        // Step 1: login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
+
+        MvcResult loginResult = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: Send a GET request to get liked sells
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/user/3/liked-sells")
+                                .header("Authorization", "Bearer " + token)
+                ).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()); // Print the response body
+    }
+
+
 
 
 
