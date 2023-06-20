@@ -157,8 +157,16 @@ public class SellService {
 
 
     public void delete(Sell sell) {
-        this.sellRepository.delete(sell);
+        // 해당 Sell 객체와 연결된 이미지들을 S3에서 먼저 삭제합니다.
+        if (sell.getImageList() != null && !sell.getImageList().isEmpty()) {
+            for (Image image : sell.getImageList()) {
+                String deleteKey = image.getImgName();
+                s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucketName).key(deleteKey).build());
+            }
+        }
+        this.sellRepository.delete(sell);  // 마지막으로 Sell 객체를 삭제합니다.
     }
+
 
     public Sell saveSell(Sell sell) {
         return sellRepository.save(sell);

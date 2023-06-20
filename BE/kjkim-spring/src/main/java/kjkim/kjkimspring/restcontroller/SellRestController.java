@@ -59,7 +59,7 @@ public class SellRestController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<Void> createSell(@RequestParam("title") String title,
                                            @RequestParam("content") String content,
                                            @RequestParam("price") Integer price,
@@ -72,17 +72,15 @@ public class SellRestController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
-
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/modify/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> updateSell(@Valid SellForm sellForm,
                                            @PathVariable("id") Integer id,
                                            Principal principal,
                                            @RequestParam("files") List<MultipartFile> uploads) throws IOException {
         Sell sell = sellService.getSell(id);
         if (!sell.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없는 사용자입니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정 권한이 없는 사용자입니다.");
         } else {
             sellService.modify(sell, sellForm.getTitle(), sellForm.getContent(), sellForm.getPrice(),
                     sellForm.getRegion(), sellForm.getCategory(), uploads);
@@ -92,17 +90,18 @@ public class SellRestController {
 
 
 
-//    @PreAuthorize("isAuthenticated()")
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteSell(@PathVariable("id") Integer id, Principal principal) {
-//        Sell sell = sellService.getSell(id);
-//        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없는 사용자입니다.");
-//        } else {
-//            sellService.delete(sell);
-//            return ResponseEntity.ok().build();
-//        }
-//    }
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSell(@PathVariable("id") Integer id, Principal principal) {
+        Sell sell = sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "삭제 권한이 없는 사용자입니다.");
+        } else {
+            sellService.delete(sell);
+            return ResponseEntity.ok().build();
+        }
+    }
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/like")

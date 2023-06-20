@@ -100,7 +100,7 @@ public class SellRestControllerTest {
         MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
 
         mockMvc.perform(
-                multipart("/api/sell/create")
+                multipart("/api/sell")
                         .file(file1)
                         .file(file2)
                         .param("title", "title")
@@ -143,7 +143,7 @@ public class SellRestControllerTest {
             MockMultipartFile file2 = new MockMultipartFile("files", "laptop" + (2 * i + 1) + ".jpg", "image/jpg", imageBytes2);
 
             mockMvc.perform(
-                    multipart("/api/sell/create")
+                    multipart("/api/sell")
                             .file(file1)
                             .file(file2)
                             .param("title", "Test Post " + i)
@@ -180,7 +180,7 @@ public class SellRestControllerTest {
         MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/api/sell/modify/{id}", 3)
+                MockMvcRequestBuilders.multipart("/api/sell/{id}", 3)
                         .file(file1)
                         .file(file2)
                         .param("title", "newTitle")
