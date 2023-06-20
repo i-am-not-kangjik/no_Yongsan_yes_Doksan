@@ -91,12 +91,16 @@ public class SellRestControllerTest {
         String token = loginResponseMap.get("token");
 
         // Step 2: create a sell post
-        byte[] imageBytes = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop4.jpg"));  // read the file into a byte array
-        MockMultipartFile file = new MockMultipartFile("file", "laptop4.jpg", "image/jpg", imageBytes);
+        byte[] imageBytes1 = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop5.jpg"));
+        MockMultipartFile file1 = new MockMultipartFile("files", "laptop5.jpg", "image/jpg", imageBytes1);
+
+        byte[] imageBytes2 = Files.readAllBytes(Paths.get("/Users/kangjik/Desktop/laptop4.jpg"));
+        MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
 
         mockMvc.perform(
                 multipart("/api/sell/create")
-                        .file(file)
+                        .file(file1)
+                        .file(file2)
                         .param("title", "title")
                         .param("content", "content")
                         .param("price", "1000")
@@ -105,6 +109,7 @@ public class SellRestControllerTest {
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isCreated());
     }
+
 
     @Test
     public void testCreateMultipleSells() throws Exception {
