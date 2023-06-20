@@ -196,6 +196,30 @@ public class SellRestControllerTest {
         ).andExpect(status().isOk());
     }
 
+    @Test
+    public void testDeleteSell() throws Exception {
+        // Step 1: login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user1@naver.com");
+        userLoginForm.setPassword("user1user1");
+
+        MvcResult loginResult = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: delete a sell post
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/sell/{id}", 1)
+                        .header("Authorization", "Bearer " + token)
+        ).andExpect(status().isOk());
+    }
+
 
 
 }
