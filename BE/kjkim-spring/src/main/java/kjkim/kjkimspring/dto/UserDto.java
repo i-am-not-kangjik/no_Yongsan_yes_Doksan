@@ -1,24 +1,18 @@
 package kjkim.kjkimspring.dto;
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import kjkim.kjkimspring.user.User;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+import javax.validation.constraints.Email;
+
+@Data
 public class UserDto {
-//    private String username;
+    @NotNull
+    @Email
     private String email;
-    private String password;
 
     public UserDto(User user) {
-//        this.username = user.getUsername();
-//        this.email = user.getEmail();
         this.email = user.getEmail();
-        this.password = user.getPassword();
-
     }
-
-    // getter, setter, etc...
-
 }

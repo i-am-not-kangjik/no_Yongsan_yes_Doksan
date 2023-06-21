@@ -1,7 +1,5 @@
 package kjkim.kjkimspring.dto;
 
-import kjkim.kjkimspring.sell.Sell;
-import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.sell.SellState;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +7,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
