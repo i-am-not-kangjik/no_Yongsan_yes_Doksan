@@ -62,7 +62,12 @@ public class SellRestController {
         return userService.getUser(principal.getName());
     }
 
-    // 모든 판매 목록을 가져오는 API
+
+    /**
+     * HTTP GET 요청을 처리하여 판매 항목 리스트를 반환합니다.
+     *
+     * @return 판매 항목 리스트를 담은 응답 엔티티입니다.
+     */
     @GetMapping("")
     public ResponseEntity<List<SellDTO>> getSellList() {
         // 판매 목록을 가져와서 DTO로 변환한 후 리스트로 만듭니다.

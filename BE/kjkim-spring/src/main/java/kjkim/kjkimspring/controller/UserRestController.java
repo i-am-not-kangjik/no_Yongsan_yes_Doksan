@@ -67,6 +67,13 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
     }
+
+    /**
+     * HTTP POST 요청을 처리하여 새로운 사용자를 생성(회원가입)합니다.
+     *
+     * @param userCreateDto 사용자 생성 정보가 담긴 DTO입니다.
+     * @return 생성된 사용자 정보를 담은 응답 엔티티입니다.
+     */
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserCreateDto userCreateDto) {
         // Extracting the validation logic to a separate method
@@ -77,6 +84,12 @@ public class UserRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new UserDto(user).toString());
     }
 
+    /**
+     * HTTP POST 요청을 처리하여 사용자 로그인을 합니다.
+     *
+     * @param userLoginForm 사용자 로그인 폼 정보입니다.
+     * @return 로그인 성공 시 생성된 토큰을 포함한 응답 엔티티입니다.
+     */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserLoginForm userLoginForm) {
         User user;
@@ -102,6 +115,12 @@ public class UserRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * HTTP GET 요청을 처리하여 특정 사용자가 좋아하는 판매 상품 목록을 가져옵니다.
+     *
+     * @param userId 사용자의 ID입니다.
+     * @return 해당 사용자가 좋아하는 판매 상품 리스트를 담은 응답 엔티티입니다.
+     */
     @GetMapping("/{userId}/liked-sells")
     public ResponseEntity<List<SellDTO>> getLikedSellsByUser(@PathVariable("userId") Long userId) {
         List<Sell> likedSells = sellService.getLikedSellsByUser(userId);
