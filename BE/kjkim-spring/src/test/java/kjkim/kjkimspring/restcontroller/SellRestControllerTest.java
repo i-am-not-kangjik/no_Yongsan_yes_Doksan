@@ -160,7 +160,7 @@ public class SellRestControllerTest {
         MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/api/sell/{id}", 3)
+                MockMvcRequestBuilders.multipart("/api/sell/{id}", 21)
                         .file(file1)
                         .file(file2)
                         .param("title", "newTitle")
@@ -195,7 +195,7 @@ public class SellRestControllerTest {
 
         // Step 2: delete a sell post
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/sell/{id}", 1)
+                MockMvcRequestBuilders.delete("/api/sell/{id}", 19)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -219,7 +219,7 @@ public class SellRestControllerTest {
 
         // Step 2: Send a POST request to like a sell post
         mockMvc.perform(
-                post("/api/sell/7/like")
+                post("/api/sell/21/like")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }

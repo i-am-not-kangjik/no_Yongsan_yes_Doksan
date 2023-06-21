@@ -1,4 +1,4 @@
-package kjkim.kjkimspring.restcontroller;
+package kjkim.kjkimspring.controller;
 
 import kjkim.kjkimspring.comment.CommentForm;
 import kjkim.kjkimspring.dto.SellDTO;

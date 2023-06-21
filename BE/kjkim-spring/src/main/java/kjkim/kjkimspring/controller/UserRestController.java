@@ -1,4 +1,4 @@
-package kjkim.kjkimspring.restcontroller;
+package kjkim.kjkimspring.controller;
 
 import kjkim.kjkimspring.dto.SellDTO;
 import kjkim.kjkimspring.dto.UserCreateDto;
