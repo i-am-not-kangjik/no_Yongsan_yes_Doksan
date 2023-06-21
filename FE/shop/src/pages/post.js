@@ -19,7 +19,6 @@ const Post = () => {
   const [category, setCategory] = useState(''); // 카테고리
   const [price, setPrice] = useState(''); // 가격
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
-  const token = localStorage.getItem('token');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +45,7 @@ const Post = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch('http://localhost:8081/api/sell/create', {
+      const response = await fetch('http://localhost:8081/api/sell/', {
         method: 'POST',
         headers: {
           // 'Content-Type': 'multipart/form-data',
