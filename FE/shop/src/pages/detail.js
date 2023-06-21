@@ -8,7 +8,7 @@ import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function Detail(props) {
 
-    const item = props.cd.content.find(item => item.id === props.id);
+    const item = props.cd.find(item => item.id === props.id);
 
     // 최근 본 상품 3개까지만 나오고 중복 안되게
     useEffect(() => {

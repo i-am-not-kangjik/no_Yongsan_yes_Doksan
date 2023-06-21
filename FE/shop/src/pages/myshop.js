@@ -7,7 +7,7 @@ const Myshop = ({ pg, setPostId, postId }) => {
   const username = localStorage.getItem('username');
 
   // 사용자 이름과 일치하는 authorUsername을 기준으로 내용을 필터링합니다.
-  const filteredContent = pg.content ? pg.content.filter(
+  const filteredContent = pg ? pg.filter(
     (item) => item.authorUsername === username
   ) : [];
 
