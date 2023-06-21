@@ -108,6 +108,4 @@ public class UserRestController {
         List<SellDTO> likedSellsDTO = likedSells.stream().map(sell -> sellService.convertToDTO(sell)).collect(Collectors.toList());
         return ResponseEntity.ok(likedSellsDTO);
     }
-
-    // 추가적인 API 구현...
 }

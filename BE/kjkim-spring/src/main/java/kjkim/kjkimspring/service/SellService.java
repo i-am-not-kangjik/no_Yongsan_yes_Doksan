@@ -225,7 +225,6 @@ public class SellService {
         this.sellRepository.save(sell);
     }
 
-
     public SellDTO convertToDTO(Sell sell) {
         SellDTO sellDTO = new SellDTO();
 
