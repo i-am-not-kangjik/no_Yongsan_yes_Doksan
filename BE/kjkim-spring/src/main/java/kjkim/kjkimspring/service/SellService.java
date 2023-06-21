@@ -32,7 +32,7 @@ public class SellService {
     private final S3Client s3Client;
     private final String bucketName = "no-yongsan-yes-doksan";
     private final ImageRepository imageRepository;
-    
+
     public List<Sell> getList() {
         Sort sort = Sort.by("createdAt").descending();
         return this.sellRepository.findAll(sort);
