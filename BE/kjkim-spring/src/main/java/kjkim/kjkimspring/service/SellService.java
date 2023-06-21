@@ -32,15 +32,7 @@ public class SellService {
     private final S3Client s3Client;
     private final String bucketName = "no-yongsan-yes-doksan";
     private final ImageRepository imageRepository;
-
-
-//    public Page<Sell> getList(int page) {
-//        Sort sort = Sort.by("updatedAt").descending();
-//        Pageable pageable = PageRequest.of(page, 9, sort);
-//        return this.sellRepository.findAll(pageable);
-//    }
-
-    // 전체로 바꾸는거
+    
     public List<Sell> getList() {
         Sort sort = Sort.by("createdAt").descending();
         return this.sellRepository.findAll(sort);

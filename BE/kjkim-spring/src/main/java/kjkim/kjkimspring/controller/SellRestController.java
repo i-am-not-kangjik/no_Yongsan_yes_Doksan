@@ -61,14 +61,6 @@ public class SellRestController {
         return userService.getUser(principal.getName());
     }
 
-
-//    @GetMapping("")
-//    public ResponseEntity<Page<SellDTO>> getSellList(@RequestParam(value = "page", defaultValue = "0") int page) {
-//        Page<SellDTO> sellList = sellService.getList(page).map(sell -> sellService.convertToDTO(sell));
-//        return ResponseEntity.ok(sellList);
-//    }
-
-    // 전체로 바꾸는거
     @GetMapping("")
     public ResponseEntity<List<SellDTO>> getSellList() {
         List<SellDTO> sellList = sellService.getList().stream()
