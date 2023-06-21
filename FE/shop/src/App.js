@@ -96,9 +96,8 @@ function App() {
   function handleSearch() {
     navigate('/sell');
     console.log(searchText)
-    const filteredContent = pg.content.filter(item => item.title.includes(searchText));
-    const updatedCd = { ...pg, content: filteredContent };
-    setCd(updatedCd);
+    const filteredContent = pg.filter(item => item.title.includes(searchText));
+    setCd(filteredContent);
     // 검색어에 대한 추가 작업을 수행할 수 있습니다.
   }
 
@@ -111,10 +110,9 @@ function App() {
   //카테고리 기능
   function handleCategorySelect(category) {
     navigate('/sell');
-    const filteredContent = pg.content.filter(item => item.category === category);
-    const updatedCd = { ...pg, content: filteredContent };
-    setCd(updatedCd);
-  }  
+    const filteredContent = pg.filter(item => item.category === category);
+    setCd(filteredContent);
+  }
 
   const [postId, setPostId] = useState('');
 
@@ -231,7 +229,7 @@ function Main(props) {
               props.recentList.map(function (id, i) {
                 return (
                   <Link onClick={() => { setd(true); props.setblur('blurOn'); setd(true); setid(id); }} key={i}>
-                    <Card.Img src={props.cd.content.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
+                    <Card.Img src={props.cd.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
                   </Link>
                 )
               })
@@ -244,23 +242,16 @@ function Main(props) {
             <h4 style={{ padding: '20px' }}>중고거래</h4>
             {/* 메인컨텐츠영역 */}
             {
-              props.cd.content ? props.cd.content.slice(0, datapage).map(function (item, i) {
+              props.cd ? props.cd.slice(0, datapage).map(function (item, i) {
                 return (
                   <MainCard item={item} cd={props.cd} key={i} data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
                 )
               }) : []
             }
-            {/* {
-              props.data.slice(0, datapage).map(function (a, i) {
-                return (
-                  <MainCard cd={props.cd} key={i} data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
-                )
-              })
-            } */}
 
             {/* 추가 페이지 (더보기 눌렀을 때) */}
             {
-              props.cd.content && props.cd.content.length > datapage && (
+              props.cd && props.cd.length > datapage && (
                 <Link
                   onClick={() => {
                     setLoad(true);
