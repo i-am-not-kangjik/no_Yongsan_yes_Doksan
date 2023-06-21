@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+
+// HTTP 요청이 들어올 때마다 실행되며, JWT 토큰을 검증하고 인증 정보를 설정합니다.
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
@@ -30,14 +32,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
+            // JWT 토큰을 추출하고 검증합니다.
             String token = jwtService.resolveToken(request);
             if (token != null && jwtService.validateToken(token)) {
+                // 토큰이 유효하다면 인증 정보를 설정합니다.
                 Authentication auth = getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
-            // this is very important, since it guarantees the user is not authenticated at all
+            // 예외가 발생했다면 인증 정보를 초기화합니다.
             SecurityContextHolder.clearContext();
         }
         filterChain.doFilter(request, response);
