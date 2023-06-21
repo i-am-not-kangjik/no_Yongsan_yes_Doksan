@@ -39,8 +39,8 @@ public class SellController {
     private final UserService userService;
 
     @GetMapping("/sell")
-    public String sell(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<Sell> sellList = this.sellService.getList(page);
+    public String sell(Model model) {
+        List<Sell> sellList = this.sellService.getList();
         model.addAttribute("sellList", sellList);
         return "sell_list";
     }

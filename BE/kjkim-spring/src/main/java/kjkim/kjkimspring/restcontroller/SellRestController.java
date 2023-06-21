@@ -32,10 +32,13 @@ public class SellRestController {
     private final UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<Page<SellDTO>> getSellList(@RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<SellDTO> sellList = sellService.getList(page).map(sell -> sellService.convertToDTO(sell));
+    public ResponseEntity<List<SellDTO>> getSellList() {
+        List<SellDTO> sellList = sellService.getList().stream()
+                .map(sell -> sellService.convertToDTO(sell))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(sellList);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<SellDTO> getSellDetail(@PathVariable("id") Integer id, CommentForm commentForm) {
