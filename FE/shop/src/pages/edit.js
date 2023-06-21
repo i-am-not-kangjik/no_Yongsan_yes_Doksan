@@ -1,12 +1,11 @@
 /*eslint-disable*/
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
 
-const Post = () => {
+const Edit = ({ postId }) => {
   const imageUploadRef = useRef(null);
   const [title, setTitle] = useState(''); // 제목
   const [showWarningT, setShowWarningT] = useState(false); // 제목 경고 state
@@ -20,15 +19,45 @@ const Post = () => {
   const [price, setPrice] = useState(''); // 가격
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
 
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    const fetchPostData = async () => {
+
+      try {
+        const response = await fetch(`http://localhost:8081/api/sell/${postId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const { title, content, price, region, category, imgPaths } = data;
+
+          setTitle(title);
+          setContent(content);
+          setPrice(String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+          const [regionName, districtName] = (region || 'No Region').split(' ');
+          setSelectedRegion(regionName);
+          setSelectedDistrict(districtName);
+          setCategory(category);
+
+        } else {
+          console.error('Failed to fetch post data');
+        }
+      } catch (error) {
+        console.error('Error fetching post data', error);
+      }
+    };
+
+    fetchPostData();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(title)
-    console.log(content)
-    console.log(price.replace(/,/g, ''))
-    console.log(selectedRegion + ' ' + selectedDistrict)
-    console.log(category)
-    console.log(imageUploadRef.current.files[0])
 
     const formData = new FormData();
     formData.append('title', title);
@@ -40,13 +69,12 @@ const Post = () => {
     for (let i = 0; i < images.length; i++) {
       formData.append('files', images[i]);
     }
-    // formData.append('files', imageUploadRef.current.files[0]);
 
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch('http://localhost:8081/api/sell/', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:8081/api/sell/${postId}`, {
+        method: 'PUT',
         headers: {
           // 'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`,
@@ -58,8 +86,8 @@ const Post = () => {
       if (response.ok) {
         // Request successful
         alert("상품이 등록되었습니다.");
-        console.log('상품이 등록되었습니다.');
-        location.reload();
+        console.log('상품이 등록수정되었습니다.');
+        window.location.href = '/myshop';
       } else {
         // Request failed
         alert("상품 등록 중 오류가 발생했습니다.");
@@ -69,6 +97,8 @@ const Post = () => {
       console.error('상품 등록 중 오류가 발생했습니다.', error);
     }
   };
+
+
 
   const handleRegionChange = (event) => {
     setSelectedRegion(event.target.value);
@@ -267,7 +297,7 @@ const Post = () => {
             <input
               type="text"
               id="title"
-              value={title}
+              defaultValue={title}
               placeholder='상품 제목을 입력해주세요.'
               onChange={((event) => setTitle(event.target.value), handleTitleChange)}
             />
@@ -282,7 +312,7 @@ const Post = () => {
           <div className='post_box_right'>
             <select
               id="category"
-              value={category}
+              defaultValue={category}
               style={{ height: '25px' }}
               onChange={(event) => setCategory(event.target.value)}
             >
@@ -306,7 +336,7 @@ const Post = () => {
             <input
               type="text"
               id="price"
-              value={price}
+              defaultValue={price}
               style={{ width: '25%', }}
               placeholder='숫자만 입력해주세요.'
               onChange={handlePriceChange}
@@ -320,7 +350,7 @@ const Post = () => {
             <label htmlFor="region">지역 선택</label>
             <select
               id="region"
-              value={selectedRegion}
+              defaultValue={selectedRegion}
               onChange={handleRegionChange}
               style={{ marginLeft: '10px', height: '25px' }}
             >
@@ -348,7 +378,7 @@ const Post = () => {
             <label htmlFor="district">구역 선택</label>
             <select
               id="district"
-              value={selectedDistrict}
+              defaultValue={selectedDistrict}
               onChange={handleDistrictChange}
               style={{ marginLeft: '10px', height: '25px' }}
             >
@@ -460,7 +490,7 @@ const Post = () => {
           <div className='post_box_right'>
             <textarea
               id="content"
-              value={content}
+              defaultValue={content}
               rows={6}
               placeholder='상품에 대한 설명을 적어주세요.'
               style={{ width: '80%', padding: '5px', overflow: 'auto' }}
@@ -477,4 +507,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default Edit;
