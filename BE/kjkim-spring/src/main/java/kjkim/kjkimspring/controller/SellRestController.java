@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sell")
@@ -61,20 +62,20 @@ public class SellRestController {
     }
 
 
-    @GetMapping("")
-    public ResponseEntity<Page<SellDTO>> getSellList(@RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<SellDTO> sellList = sellService.getList(page).map(sell -> sellService.convertToDTO(sell));
-        return ResponseEntity.ok(sellList);
-    }
-
-    // 전체로 바꾸는거
 //    @GetMapping("")
-//    public ResponseEntity<List<SellDTO>> getSellList() {
-//        List<SellDTO> sellList = sellService.getList().stream()
-//                .map(sell -> sellService.convertToDTO(sell))
-//                .collect(Collectors.toList());
+//    public ResponseEntity<Page<SellDTO>> getSellList(@RequestParam(value = "page", defaultValue = "0") int page) {
+//        Page<SellDTO> sellList = sellService.getList(page).map(sell -> sellService.convertToDTO(sell));
 //        return ResponseEntity.ok(sellList);
 //    }
+
+    // 전체로 바꾸는거
+    @GetMapping("")
+    public ResponseEntity<List<SellDTO>> getSellList() {
+        List<SellDTO> sellList = sellService.getList().stream()
+                .map(sell -> sellService.convertToDTO(sell))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(sellList);
+    }
 
 
     @GetMapping("/{id}")
