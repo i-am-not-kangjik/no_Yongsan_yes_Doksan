@@ -103,6 +103,47 @@ const Myshop = ({ pg, setPostId, postId }) => {
                 <h3>{item.title}</h3>
               </Link>
 
+              <p style={{ color: 'gray' }}>{item.region} ∙ {nowDate}</p>
+              <div style={{ display: 'flex', marginTop: '15px' }}>
+                {item.sellState === 'RESERVED' && (
+                  <div
+                    style={{
+                      width: '80px',
+                      height: '30px',
+                      backgroundColor: '#65D35D',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      border: '1px solid #eee',
+                      borderRadius: '7px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    <span style={{ color: 'white' }}>예약중</span>
+                  </div>
+                )}
+                {item.sellState === 'COMPLETED' && (
+                  <div
+                    style={{
+                      width: '80px',
+                      height: '30px',
+                      backgroundColor: '#ddd',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      border: '1px solid #eee',
+                      borderRadius: '7px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    <span style={{ color: 'black' }}>거래완료</span>
+                  </div>
+                )}
+                <h4 className='' style={{ fontSize: '25px', fontWeight: 'bold' }}>
+                  {item.price.toLocaleString()}원
+                </h4>
+              </div>
+
               <span
                 className="Link"
                 style={{ color: 'black', cursor: 'pointer' }}
@@ -124,47 +165,6 @@ const Myshop = ({ pg, setPostId, postId }) => {
                 삭제하기
               </span>
 
-
-              <p style={{ color: 'gray' }}>{item.region} ∙ {nowDate}</p>
-              <div style={{ display: 'flex', marginTop: '15px' }}>
-                {item.sellState === 'RESERVED' && (
-                  <div
-                    style={{
-                      width: '80px',
-                      height: '30px',
-                      backgroundColor: '#65D35D',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      border: '1px solid #eee',
-                      borderRadius: '7px',
-                      marginRight: '10px',
-                    }}
-                  >
-                    <span style={{ color: 'white' }}>예약중</span>
-                  </div>
-                )}
-                {item.sellState === 'SOLD_OUT' && (
-                  <div
-                    style={{
-                      width: '80px',
-                      height: '30px',
-                      backgroundColor: '#ddd',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      border: '1px solid #eee',
-                      borderRadius: '7px',
-                      marginRight: '10px',
-                    }}
-                  >
-                    <span style={{ color: 'black' }}>거래완료</span>
-                  </div>
-                )}
-                <h4 className='' style={{ fontSize: '25px', fontWeight: 'bold' }}>
-                  {item.price.toLocaleString()}원
-                </h4>
-              </div>
             </div>
           </div>
         );

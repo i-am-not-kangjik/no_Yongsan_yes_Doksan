@@ -85,8 +85,8 @@ const Edit = ({ postId }) => {
       // Handle the response as needed
       if (response.ok) {
         // Request successful
-        alert("상품이 등록되었습니다.");
-        console.log('상품이 등록수정되었습니다.');
+        alert("상품이 수정되었습니다.");
+        console.log('상품이 수정되었습니다.');
         window.location.href = '/myshop';
       } else {
         // Request failed
