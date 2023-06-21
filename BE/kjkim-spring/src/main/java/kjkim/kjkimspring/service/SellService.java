@@ -7,11 +7,9 @@ import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import kjkim.kjkimspring.userlikessell.UserLikesSellRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -27,17 +25,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SellService {
 
+    // 필요한 레포지토리와 S3 클라이언트를 주입받습니다.
     private final SellRepository sellRepository;
     private final UserLikesSellRepository userLikesSellRepository;
     private final S3Client s3Client;
     private final String bucketName = "no-yongsan-yes-doksan";
     private final ImageRepository imageRepository;
 
+    // 모든 판매 목록을 'createdAt' 기준 내림차순으로 가져옵니다.
     public List<Sell> getList() {
         Sort sort = Sort.by("createdAt").descending();
         return this.sellRepository.findAll(sort);
     }
 
+    // 특정 판매 아이템을 ID로 가져옵니다. 없다면 예외를 발생시킵니다.
     public Sell getSell(Integer id) {
         Optional<Sell> sell = this.sellRepository.findById(id);
         if (sell.isPresent()) {
@@ -47,6 +48,8 @@ public class SellService {
         }
     }
 
+    // 새 판매 아이템을 생성합니다. 이 과정에서 S3에 이미지를 업로드합니다.
+    @Transactional
     public void create(String title, String content, Integer price, String region, String category, User user, List<MultipartFile> uploads) throws IOException {
         Sell sell = new Sell();
         sell.setTitle(title);
@@ -58,11 +61,42 @@ public class SellService {
         sell.setViewCount(0);
         sell.setSellState(SellState.SELLING);
 
+        List<Image> images = uploadImages(uploads, sell);
+        sell.setImageList(images);
+
+        sellRepository.save(sell);
+    }
+
+    @Transactional
+    public void modify(Sell sell, String title, String content, Integer price, String region, String category, List<MultipartFile> uploads) throws IOException {
+        sell.setTitle(title);
+        sell.setContent(content);
+        sell.setPrice(price);
+        sell.setRegion(region);
+        sell.setCategory(category);
+
+        deleteImages(sell);
+        List<Image> images = uploadImages(uploads, sell);
+        sell.getImageList().addAll(images);
+
+        this.sellRepository.save(sell);
+    }
+
+
+
+    // 특정 판매 아이템을 삭제합니다. 이 과정에서 연결된 이미지도 S3에서 삭제합니다.
+    @Transactional
+    public void delete(Sell sell) {
+        deleteImages(sell);
+        this.sellRepository.delete(sell);
+    }
+
+    // 이미지를 업로드합니다. 게시글 등록, 수정에 사용됩니다.
+    private List<Image> uploadImages(List<MultipartFile> uploads, Sell sell) throws IOException {
         List<Image> images = new ArrayList<>();
         if (uploads != null && !uploads.isEmpty()) {
             for (MultipartFile upload : uploads) {
                 if (!upload.isEmpty()) {
-                    // 이미지를 S3에 업로드하는 코드
                     String originalFilename = upload.getOriginalFilename();
                     String objectKey = "sell-image/" + UUID.randomUUID() + "_" + originalFilename;
                     String imageURL = "https://" + bucketName + ".s3.amazonaws.com/" + objectKey;
@@ -73,103 +107,40 @@ public class SellService {
                                     .build(),
                             RequestBody.fromBytes(upload.getBytes()));
 
-                    // 이미지 정보를 Image 객체에 저장하고 Sell과 Image를 연결
                     Image image = new Image();
                     image.setImgName(objectKey);
                     image.setImgPath(imageURL);
                     image.setOriName(objectKey);
                     image.setSell(sell);
-                    images.add(image);
 
-                    // Sell과 Image 연결
-                    sell.addImage(image);
-                }
-            }
-        }
+                    // Image 객체를 저장합니다.
+                    imageRepository.save(image);
 
-        sell.setImageList(images);
-        sellRepository.save(sell); // 모든 이미지가 리스트에 추가된 후에 Sell 객체를 저장합니다.
-    }
-
-
-
-
-    public void modify(Sell sell, String title, String content, Integer price, String region, String category, List<MultipartFile> uploads) throws IOException {
-        sell.setTitle(title);
-        sell.setContent(content);
-        sell.setPrice(price);
-        sell.setRegion(region);
-        sell.setCategory(category);
-
-        if (uploads != null && !uploads.isEmpty()) {
-            // 이전 이미지 삭제
-            if (sell.getImageList() != null && !sell.getImageList().isEmpty()) {
-                for (Image oldImage : sell.getImageList()) {
-                    String deleteKey = oldImage.getImgName();
-                    s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucketName).key(deleteKey).build());
-                }
-                sell.getImageList().clear(); // clear the old images
-            }
-
-            List<Image> images = new ArrayList<>();
-            for (MultipartFile upload : uploads) {
-                if (!upload.isEmpty()) {
-                    String originalImgName = upload.getOriginalFilename();
-                    UUID uuid = UUID.randomUUID();
-                    String imgName = "sell-image/" + uuid + "_" + originalImgName;
-
-                    // 새 이미지 S3에 업로드
-                    s3Client.putObject(PutObjectRequest.builder()
-                                    .bucket(bucketName)
-                                    .key(imgName)
-                                    .build(),
-                            RequestBody.fromBytes(upload.getBytes()));
-
-                    Image image = new Image();
-                    image.setImgName(imgName);
-                    image.setImgPath("https://" + bucketName + ".s3.amazonaws.com/" + imgName); // S3 URL
-                    image.setOriName(imgName); // Set the original file name
-                    image.setSell(sell); // link image with the Sell
                     images.add(image);
                 }
             }
-
-            if (!images.isEmpty()) {
-                for (Image image : images) {
-                    sell.addImage(image);
-                }
-            } else {
-                sell.getImageList().clear();
-            }
-
-            this.sellRepository.save(sell);
-        } else {
-            this.sellRepository.save(sell);
         }
+        return images;
     }
 
-
-
-
-
-
-
-    public void delete(Sell sell) {
-        // 해당 Sell 객체와 연결된 이미지들을 S3에서 먼저 삭제합니다.
+    // 이미지를 삭제합니다. 게시글 수정, 삭제에 사용됩니다.
+    private void deleteImages(Sell sell) {
         if (sell.getImageList() != null && !sell.getImageList().isEmpty()) {
-            for (Image image : sell.getImageList()) {
-                String deleteKey = image.getImgName();
+            for (Image oldImage : sell.getImageList()) {
+                String deleteKey = oldImage.getImgName();
                 s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucketName).key(deleteKey).build());
             }
+            sell.getImageList().clear();
         }
-        this.sellRepository.delete(sell);  // 마지막으로 Sell 객체를 삭제합니다.
     }
 
-
+    // 판매 아이템을 저장하고 저장된 객체를 반환합니다.
     public Sell saveSell(Sell sell) {
         return sellRepository.save(sell);
     }
 
+    // 특정 판매 아이템에 대해 좋아요/좋아요 취소를 수행합니다.
+    @Transactional
     public void toggleLike(Sell sell, User user) {
         Optional<UserLikesSell> userLikesSell = this.userLikesSellRepository.findBySellAndUser(sell, user);
         if (userLikesSell.isPresent()) {
@@ -185,11 +156,12 @@ public class SellService {
     }
 
 
-
+    // UserLikesSell 객체를 저장합니다.
     public void saveUserLikesSell(UserLikesSell userLikesSell) {
         this.userLikesSellRepository.save(userLikesSell);
     }
 
+    // 특정 판매 아이템에 좋아요를 누른 모든 사용자를 반환합니다.
     public List<User> getLikedUsers(Integer id) {
         // 판매 아이템의 ID로 해당 아이템에 좋아요를 누른 UserLikesSell 객체들을 모두 가져옵니다.
         List<UserLikesSell> userLikesSells = this.userLikesSellRepository.findAllBySell_Id(id);
@@ -202,7 +174,7 @@ public class SellService {
         return likedUsers;
     }
 
-
+    // 특정 사용자가 좋아요를 누른 모든 판매 아이템을 반환합니다.
     public List<Sell> getLikedSellsByUser(Long userId) {
         List<UserLikesSell> userLikes = userLikesSellRepository.findAllByUser_Id(userId);
         return userLikes.stream()
@@ -210,13 +182,14 @@ public class SellService {
                 .collect(Collectors.toList());
     }
 
-
+    // 판매 상태를 변경하고 변경된 판매 아이템을 저장합니다.
     public void changeSellStatus(Sell sell, String status) {
         SellState state = SellState.fromString(status);
         sell.setSellState(state);
         this.sellRepository.save(sell);
     }
 
+    // Sell 객체를 SellDTO로 변환하여 반환합니다.
     public SellDTO convertToDTO(Sell sell) {
         SellDTO sellDTO = new SellDTO();
 
