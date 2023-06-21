@@ -45,6 +45,8 @@ function Detail(props) {
 
     const nowDate = detailDate(new Date(item.createdAt));
 
+    const price = String(item.price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
     return (
         <div className='detail'>
             <Carousel variant="light" style={{ width: '65%' }} prevIcon={<FontAwesomeIcon icon={faCircleArrowLeft} size='2x' />} nextIcon={<FontAwesomeIcon icon={faCircleArrowLeft} rotation={180} size='2x' />}>
@@ -77,7 +79,7 @@ function Detail(props) {
                 </div>
 
                 <div className='detail_margin'>
-                    <h4 className='detail_price'>{item.price}원</h4>
+                    <h4 className='detail_price'>{price}원</h4>
                 </div>
 
                 <div className='detail_margin' style={{ padding: '30px 0', borderTop: '1px solid black', borderBottom: '1px solid black', lineHeight: '1.8' }}>

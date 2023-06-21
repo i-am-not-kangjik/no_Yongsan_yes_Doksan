@@ -14,6 +14,7 @@ import FindPw from './pages/findpw'
 import Temporarydata from './Temporarydata'
 import Myshop from './pages/myshop'
 import axios from 'axios';
+import Edit from './pages/edit'
 
 import OutsideAlerter from './pages/detailEffect';
 
@@ -115,6 +116,8 @@ function App() {
     setCd(updatedCd);
   }  
 
+  const [postId, setPostId] = useState('');
+
   return (
     <div className={'App '}>
       <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
@@ -194,7 +197,8 @@ function App() {
         <Route path='/signup' element={<SignUp></SignUp>} />
         <Route path='/findid' element={<FindId></FindId>} />
         <Route path='/findpw' element={<FindPw></FindPw>} />
-        <Route path='/myshop' element={<Myshop data={data} setdata={setdata} pg={pg}></Myshop>} />
+        <Route path='/edit' element={<Edit postId={postId}></Edit>} />
+        <Route path='/myshop' element={<Myshop postId={postId} setPostId={setPostId} data={data} setdata={setdata} pg={pg}></Myshop>} />
         <Route path='/test' element={<Test />} />
         <Route path='*' element={<div>없는페이지입니다</div>} />
       </Routes>

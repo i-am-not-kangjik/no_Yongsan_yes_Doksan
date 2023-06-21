@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
@@ -19,15 +19,52 @@ const Post = () => {
   const [price, setPrice] = useState(''); // 가격
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
 
+  const postId = 27;
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    const fetchPostData = async () => {
+
+      try {
+        const response = await fetch(`http://localhost:8081/api/sell/${postId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const { title, content, price, region, category, imgPaths } = data;
+
+          setTitle(title);
+          setContent(content);
+          setPrice(String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+          const [regionName, districtName] = region.split(' ');
+          setSelectedRegion(regionName);
+          setSelectedDistrict(districtName);
+          setCategory(category);
+
+        } else {
+          console.error('Failed to fetch post data');
+        }
+      } catch (error) {
+        console.error('Error fetching post data', error);
+      }
+    };
+
+    fetchPostData();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(title)
-    console.log(content)
-    console.log(price.replace(/,/g, ''))
-    console.log(selectedRegion + ' ' + selectedDistrict)
-    console.log(category)
-    console.log(imageUploadRef.current.files[0])
+    // console.log(title)
+    // console.log(content)
+    // console.log(price.replace(/,/g, ''))
+    // console.log(selectedRegion + ' ' + selectedDistrict)
+    // console.log(category)
+    // console.log(images)
 
     const formData = new FormData();
     formData.append('title', title);
@@ -39,16 +76,15 @@ const Post = () => {
     for (let i = 0; i < images.length; i++) {
       formData.append('files', images[i]);
     }
-    // formData.append('files', imageUploadRef.current.files[0]);
 
     const token = localStorage.getItem('token');
-    const postId = 16; 
 
     try {
       const response = await fetch(`http://localhost:8081/api/sell/${postId}`, {
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${token}`,
+          // 'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
         },
         body: formData,
       });
