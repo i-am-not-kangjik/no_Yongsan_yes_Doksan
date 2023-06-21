@@ -224,5 +224,78 @@ public class SellRestControllerTest {
         ).andExpect(status().isOk());
     }
 
+    @Test
+    public void testChangeStatusToSelling() throws Exception {
+        // Step 1: Login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
+
+        MvcResult loginResult = mockMvc.perform(
+                post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: Change the status to 'selling'
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/sell/16/status/selling")
+                        .header("Authorization", "Bearer " + token)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void testChangeStatusToCompleted() throws Exception {
+        // Step 1: Login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
+
+        MvcResult loginResult = mockMvc.perform(
+                post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: Change the status to 'completed'
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/sell/16/status/completed")
+                        .header("Authorization", "Bearer " + token)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void testChangeStatusToReserved() throws Exception {
+        // Step 1: Login and get the token
+        UserLoginForm userLoginForm = new UserLoginForm();
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
+
+        MvcResult loginResult = mockMvc.perform(
+                post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userLoginForm))
+        ).andReturn();
+
+        String loginResponse = loginResult.getResponse().getContentAsString();
+        Map<String, String> loginResponseMap = objectMapper.readValue(loginResponse, new TypeReference<Map<String, String>>() {});
+        String token = loginResponseMap.get("token");
+
+        // Step 2: Change the status to 'reserved'
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/sell/16/status/reserved")
+                        .header("Authorization", "Bearer " + token)
+        ).andExpect(status().isOk());
+    }
+
+
 
 }

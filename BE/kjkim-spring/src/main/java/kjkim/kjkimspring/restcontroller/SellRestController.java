@@ -115,6 +115,41 @@ public class SellRestController {
         return ResponseEntity.ok().build();
     }
 
-    // 기타 엔드포인트 구현...
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}/status/selling")
+    public ResponseEntity<Void> changeSellStateToSelling(@PathVariable("id") Integer id, Principal principal) {
+        Sell sell = sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정 권한이 없는 사용자입니다.");
+        } else {
+            sellService.changeSellStateToSelling(sell);
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}/status/reserved")
+    public ResponseEntity<Void> changeSellStateToReserved(@PathVariable("id") Integer id, Principal principal) {
+        Sell sell = sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정 권한이 없는 사용자입니다.");
+        } else {
+            sellService.changeSellStateToReserved(sell);
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}/status/completed")
+    public ResponseEntity<Void> changeSellStateToCompleted(@PathVariable("id") Integer id, Principal principal) {
+        Sell sell = sellService.getSell(id);
+        if (!sell.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정 권한이 없는 사용자입니다.");
+        } else {
+            sellService.changeSellStateToCompleted(sell);
+            return ResponseEntity.ok().build();
+        }
+    }
+
 
 }
