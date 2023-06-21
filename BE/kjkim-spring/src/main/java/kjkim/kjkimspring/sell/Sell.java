@@ -3,7 +3,7 @@ package kjkim.kjkimspring.sell;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import kjkim.kjkimspring.comment.Comment;
+//import kjkim.kjkimspring.comment.Comment;
 import kjkim.kjkimspring.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,8 +40,8 @@ public class Sell {
     @Column
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "sell", cascade = CascadeType.REMOVE)
-    private List<Comment> commentList;
+//    @OneToMany(mappedBy = "sell", cascade = CascadeType.REMOVE)
+//    private List<Comment> commentList;
 
     @NotNull
     private Integer price;

@@ -40,6 +40,12 @@ public class SellService {
         return this.sellRepository.findAll(pageable);
     }
 
+    // 전체로 바꾸는거
+//    public List<Sell> getList() {
+//        Sort sort = Sort.by("createdAt").descending();
+//        return this.sellRepository.findAll(sort);
+//    }
+
     public Sell getSell(Integer id) {
         Optional<Sell> sell = this.sellRepository.findById(id);
         if (sell.isPresent()) {
