@@ -1,613 +1,477 @@
-변경 내용
-
 /*eslint-disable*/
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from 'react';
-import { Button, Navbar, Container, Nav, Spinner, Card, NavDropdown, Form } from 'react-bootstrap';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-
-import './App.css';
-import Detail from './pages/detail'
-import Post from './pages/post'
-import SignIn from './pages/signin'
-import SignUp from './pages/signup'
-import FindId from './pages/findid'
-import FindPw from './pages/findpw'
-import Temporarydata from './Temporarydata'
-import Myshop from './pages/myshop'
+import React, { useState, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleXmark, faCamera } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 
-import OutsideAlerter from './pages/detailEffect';
+const Post = () => {
+  const imageUploadRef = useRef(null);
+  const [title, setTitle] = useState(''); // 제목
+  const [showWarningT, setShowWarningT] = useState(false); // 제목 경고 state
+  const [content, setContent] = useState(''); // 내용
+  const [showWarningC, setShowWarningC] = useState(false); // 내용 경고 state
+  const [images, setImages] = useState([]); // 이미지
+  const [imagePreviews, setImagePreviews] = useState([]); // 이미지 미리보기
+  const [selectedRegion, setSelectedRegion] = useState(''); // 선택된 지역
+  const [selectedDistrict, setSelectedDistrict] = useState(''); // 선택된 구역
+  const [category, setCategory] = useState(''); // 카테고리
+  const [price, setPrice] = useState(''); // 가격
+  const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
 
-import DetailEffect from './pages/detailEffect'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-import Test from './test'
+    console.log(title)
+    console.log(content)
+    console.log(price.replace(/,/g, ''))
+    console.log(selectedRegion + ' ' + selectedDistrict)
+    console.log(category)
+    console.log(imageUploadRef.current.files[0])
 
-function App() {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('price', price.replace(/,/g, ''));
+    formData.append('region', selectedRegion + ' ' + selectedDistrict);
+    formData.append('category', category);
 
-  const [loggedInUser, setLoggedInUser] = useState(null); // 로그인한 사용자
-
-  useEffect(() => {
-    checkLoggedInUser(); // 사용자가 이미 로그인되어 있는지 확인
-  }, []);
-
-  const checkLoggedInUser = () => {
     const token = localStorage.getItem('token');
 
-    if (token) {
-      // 사용자가 로그인되어 있는 경우
-      const username = localStorage.getItem('username'); // 로컬 스토리지 또는 서버에서 사용자 ID 가져오기
-      setLoggedInUser({ username: username }); // 사용자 ID를 loggedInUser 상태에 설정
-    } else {
-      // 사용자가 로그인되어 있지 않은 경우
-      setLoggedInUser(null);
+    try {
+      const response = await fetch('http://localhost:8081/api/sell/', {
+        method: 'POST',
+        headers: {
+          // 'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      // Handle the response as needed
+      if (response.ok) {
+        // Request successful
+        alert("상품이 등록되었습니다.");
+        console.log('상품이 등록되었습니다.');
+        location.reload();
+      } else {
+        // Request failed
+        alert("상품 등록 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      alert("상품 등록 중 오류가 발생했습니다.");
+      console.error('상품 등록 중 오류가 발생했습니다.', error);
     }
   };
 
-  const handleLogout = () => {
-    // 로그인된 사용자 데이터 지우기
-    setLoggedInUser(null);
 
-    // 로컬 스토리지에서 토큰 제거
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
 
-    // 원하는 페이지로 이동
-    window.location.href = '/sell';
+  const handleRegionChange = (event) => {
+    setSelectedRegion(event.target.value);
   };
 
-  const [pg, setPg] = useState([]);
-  const [cd, setCd] = useState([]);
+  const handleDistrictChange = (event) => {
+    setSelectedDistrict(event.target.value);
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8081/api/sell/');
-        setPg(response.data);
-        setCd(response.data);
-      } catch (error) {
-        console.error(error);
+  const 강원도 = ["강릉시", "동해시", "삼척시", "속초시", "원주시", "춘천시", "태백시", "고성군", "양구군", "양양군", "영월군", "인제군", "정선군", "철원군", "평창군", "홍천군", "화천군", "횡성군"];
+  const 경기도 = ["고양시", "과천시", "광명시", "광주시", "구리시", "군포시", "김포시", "남양주시", "동두천시", "부천시", "성남시", "수원시", "시흥시", "안산시", "안성시", "안양시", "양주시", "오산시", "용인시", "의왕시", "의정부시", "이천시", "파주시", "평택시", "포천시", "하남시", "화성시", "가평군", "양평군", "여주군", "연천군"];
+  const 경상남도 = ["거제시", "김해시", "마산시", "밀양시", "사천시", "양산시", "진주시", "진해시", "창원시", "통영시", "거창군", "고성군", "남해군", "산청군", "의령군", "창녕군", "하동군", "함안군", "함양군", "합천군"];
+  const 경상북도 = ["경산시", "경주시", "구미시", "김천시", "문경시", "상주시", "안동시", "영주시", "영천시", "포항시", "고령군", "군위군", "봉화군", "성주군", "영덕군", "영양군", "예천군", "울릉군", "울진군", "의성군", "청도군", "청송군", "칠곡군"];
+  const 광주광역시 = ["광산구", "남구", "동구", "북구", "서구"];
+  const 대구광역시 = ["남구", "달서구", "동구", "북구", "서구", "수성구", "중구", "달성군"];
+  const 대전광역시 = ["대덕구", "동구", "서구", "유성구", "중구"];
+  const 부산광역시 = ["강서구", "금정구", "남구", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "수영구", "연제구", "영도구", "중구", "해운대구", "기장군"];
+  const 서울특별시 = ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"];
+  const 울산광역시 = ["남구", "동구", "북구", "중구", "울주군"];
+  const 인천광역시 = ["계양구", "남구", "남동구", "동구", "부평구", "서구", "연수구", "중구", "강화군", "옹진군"];
+  const 전라남도 = ["광양시", "나주시", "목포시", "순천시", "여수시", "강진군", "고흥군", "곡성군", "구례군", "담양군", "무안군", "보성군", "신안군", "영광군", "영암군", "완도군", "장성군", "장흥군", "진도군", "함평군", "해남군", "화순군"];
+  const 전라북도 = ["군산시", "김제시", "남원시", "익산시", "전주시", "정읍시", "고창군", "무주군", "부안군", "순창군", "완주군", "임실군", "장수군", "진안군"];
+  const 제주특별자치도 = ["서귀포시", "제주시", "남제주군", "북제주군"];
+  const 충청남도 = ['공주시', '논산시', '보령시', '서산시', '아산시', '천안시', '금산군', '당진군', '부여군', '서천군', '연기군', '예산군', '청양군', '태안군', '홍성군'];
+  const 충청북도 = ["제천시", "청주시", "충주시", "괴산군", "단양군", "보은군", "영동군", "옥천군", "음성군", "증평군", "진천군", "청원군"];
+
+  const handleImageChange = (event) => {
+    const selectedImages = Array.from(event.target.files);
+
+    if (selectedImages.length > 0) {
+      const totalImages = images.length + selectedImages.length;
+      if (totalImages > 11) {
+        alert("사진 첨부는 최대 11장까지 가능합니다.");
+        return;
       }
-    };
-
-    fetchData();
-  }, []);
-
-  // 임시데이터
-  let [data, setdata] = useState(Temporarydata)
-
-  // blur 이펙트
-  let [blur, setblur] = useState('blurOff')
-
-  // 최근본상품리스트
-  let [recentList, setRecentList] = useState([])
-
-  useEffect(() => {
-    localStorage.setItem('watched', JSON.stringify(recentList))
-  }, [])
-
-  // 네이게이트
-  let navigate = useNavigate();
-
-  return (
-    <div className={'App '}>
-      <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
-        <Container fluid style={{ width: '80%', padding: '10px' }}>
-          <Navbar.Brand onClick={() => { navigate('/sell') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
-            <Nav
-              className="me-auto my-2 my-lg-0"
-              style={{ maxHeight: '100px' }}
-              navbarScroll>
-              <Nav.Link onClick={() => {
-                if (loggedInUser == null) {
-                  navigate('/signin');
-                  return;
-                } else {
-                  navigate('/post')
-                  return;
-                }
-              }}>판매하기</Nav.Link>
-              <Nav.Link onClick={() => {
-                if (loggedInUser == null) {
-                  navigate('/signin');
-                  return;
-                } else {
-                  navigate('/myshop')
-                  return;
-                }
-              }}>내상점</Nav.Link>
-              <Nav.Link href="#action3">채팅</Nav.Link>
-              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action4">노트북</NavDropdown.Item>
-                <NavDropdown.Item href="#action5">핸드폰</NavDropdown.Item>
-                <NavDropdown.Item href="#action6">태블릿</NavDropdown.Item>
-                <NavDropdown.Item href="#action7">스마트워치</NavDropdown.Item>
-                <NavDropdown.Item href="#action8">블루투스이어폰</NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link>
-            </Nav>
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="물품을 검색해주세요"
-                className="me-2"
-                aria-label="Search"
-                style={{ width: '300px' }}
-              />
-              <Button variant="outline-secondary">검색하기</Button>{' '}
-            </Form>
-            {loggedInUser ? (
-              // 로그인된 사용자인 경우
-              <div>
-                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px' }}>
-                  {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
-                </Nav.Link>
-              </div>
-            ) : (
-              // 로그인되지 않은 사용자인 경우
-              <Nav.Link onClick={() => navigate('/signin')} style={{ fontSize: '15px', marginLeft: '30px' }}>
-                로그인/회원가입
-              </Nav.Link>
-            )}
-
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
-      <Routes>
-        <Route path='/sell' element={<Main setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
-        <Route path='/detail/:id' element={<Detail></Detail>} />
-        <Route path='/post' element={<Post></Post>} />
-        <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
-        <Route path='/signin' element={<SignIn></SignIn>} />
-        <Route path='/signup' element={<SignUp></SignUp>} />
-        <Route path='/findid' element={<FindId></FindId>} />
-        <Route path='/findpw' element={<FindPw></FindPw>} />
-        <Route path='/myshop' element={<Myshop cd={cd} data={data} setdata={setdata} pg={pg}></Myshop>} />
-        <Route path='/test' element={<Test />} />
-        <Route path='*' element={<div>없는페이지입니다</div>} />
-      </Routes>
-    </div>
-  );
-}
-
-function Main(props) {
-
-  // id state
-  let [id, setid] = useState(0)
-
-  // detail 페이지 상태 state
-  const [d, setd] = useState(false)
-
-  // 페이지추가 state
-  let [datapage, setDatapage] = useState(3)
-
-  // 로딩이펙트 상태 state
-  let [load, setLoad] = useState(false)
-
-  return (
-    <div>
-      <div>
-        {/* 최근본 상품 */}
-        <div style={{ position: 'fixed', top: '100px', right: '1.75%' }}>
-          <Card style={{ width: '180px' }}>
-            <Card.Title style={{ borderBottom: '1px solid gray', padding: '10px' }}>최근본상품</Card.Title>
-            {
-              props.recentList.map(function (img, i) {
-                return (
-                  <Link onClick={() => { setd(true); props.setblur('blurOn'); }} key={i}>
-                    <Card.Img src={img} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
-                  </Link>
-                )
-              })
-            }
-          </Card>
-        </div>
-
-        <div className="container" style={{ marginTop: '30px' }}>
-          <div className="row" style={{ backgroundColor: '#fff', borderRadius: '10px', width: '85%', margin: 'auto' }}>
-            <h4 style={{ padding: '20px' }}>중고거래</h4>
-
-            {/* 메인컨텐츠영역 */}
-            {
-              props.cd.content.slice(0, datapage).map(function (a, i) {
-                return (
-                  <MainCard cd={props.cd} key={i} data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
-                )
-              })
-            }
-
-            {/* 추가 페이지 (더보기 눌렀을 때) */}
-            {
-              props.cd.content.length > datapage && (
-                <Link
-                  onClick={() => {
-                    setLoad(true);
-                    setDatapage(datapage+3)
-                    setLoad(false);
-                  }}
-                  style={{ textDecoration: 'None', color: 'gray', fontSize: '18px', padding: '20px', borderTop: '1px solid gray' }}
-                >
-                  더보기
-                </Link>
-              )
-            }
-
-          </div>
-
-          {/* 로딩중 이펙트 */}
-          {
-            load == true ? <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner> : null
-          }
-        </div>
-      </div>
-      {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
-      {d && <OutsideAlerter recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} cd={props.cd} />}
-    </div>
-  )
-}
-
-// 메인컨텐츠영역
-function MainCard(props) {
-
-  return (
-    <div className="col-md-4" onClick={() => { props.setd(true); props.setblur('blurOn'); props.setid(props.i) }}
-      style={{ margin: '20px auto' }}>
-      {/* 사진영역 */}
-      <div style={{ overflow: 'hidden', borderRadius: '10px', width: '250px', height: "180px", margin: 'auto' }}>
-        <Link className='Link'><img src={props.cd.content[props.i].img_path[0]}
-          className='main_img' /></Link>
-      </div>
-      {/* 컨텐츠영역 */}
-      <div style={{ textAlign: "left", width: '70%', margin: 'auto' }}>
-        <Link className='Link'><h5 className='main_title text_overflow'>{props.cd.content[props.i].title}</h5></Link>
-        <Link className='Link'><p className='main_area'>{props.cd.content[props.i].region}</p></Link>
-        <Link className='Link'>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p className='main_price maincolor'>{props.cd.content[props.i].price.toLocaleString()}원</p>
-            {props.cd.content[props.i].viewCount > 0 && (
-              <>
-                <span style={{ marginRight: '3px', fontSize: '18px' }}>
-                  <FontAwesomeIcon icon={faHeart} />
-                </span>
-                <span style={{ color: 'black', fontSize: '18px' }}>{props.cd.content[props.i].likeCount}</span>
-              </>
-            )}
-          </div>
-        </Link>
-
-      </div>
-    </div>
-  )
-}
-
-
-
-
-
-export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-변경 전 백업본
-
-/*eslint-disable*/
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from 'react';
-import { Button, Navbar, Container, Nav, Spinner, Card, NavDropdown, Form } from 'react-bootstrap';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-
-import './App.css';
-import Detail from './pages/detail'
-import Post from './pages/post'
-import SignIn from './pages/signin'
-import SignUp from './pages/signup'
-import FindId from './pages/findid'
-import FindPw from './pages/findpw'
-import Temporarydata from './Temporarydata'
-import Myshop from './pages/myshop'
-import axios from 'axios';
-
-import OutsideAlerter from './pages/detailEffect';
-
-import DetailEffect from './pages/detailEffect'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
-
-import Test from './test'
-
-function App() {
-
-  const [loggedInUser, setLoggedInUser] = useState(null); // 로그인한 사용자
-
-  useEffect(() => {
-    checkLoggedInUser(); // 사용자가 이미 로그인되어 있는지 확인
-  }, []);
-
-  const checkLoggedInUser = () => {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-      // 사용자가 로그인되어 있는 경우
-      const username = localStorage.getItem('username'); // 로컬 스토리지 또는 서버에서 사용자 ID 가져오기
-      setLoggedInUser({ username: username }); // 사용자 ID를 loggedInUser 상태에 설정
+    }
+
+    const allImages = [...images, ...selectedImages];
+    setImages(allImages);
+
+    const readerPromises = allImages.map((image) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(image);
+      });
+    });
+
+    Promise.all(readerPromises)
+      .then((results) => {
+        setImagePreviews(results);
+      })
+      .catch((error) => {
+        console.error('이미지 파일을 읽는 중 오류가 발생했습니다:', error);
+      });
+  };
+
+  const handleImageDelete = (event, index) => {
+    event.preventDefault();
+
+    // 선택한 인덱스의 이미지와 미리보기를 삭제합니다.
+    const updatedImages = [...images];
+    updatedImages.splice(index, 1);
+    setImages(updatedImages);
+
+    const updatedPreviews = [...imagePreviews];
+    updatedPreviews.splice(index, 1);
+    setImagePreviews(updatedPreviews);
+  };
+
+  const handlePriceChange = (event) => {
+    const inputPrice = event.target.value;
+    const numericPrice = inputPrice.replace(/,/g, '').replace(/[^0-9]/g, '');
+    const formattedPrice = numericPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    if (inputPrice.replaceAll(',', '') !== numericPrice) {
+      alert("숫자만 입력해주세요.");
+    }
+
+    if (numericPrice < 1000) {
+      setShowWarningP(true);
     } else {
-      // 사용자가 로그인되어 있지 않은 경우
-      setLoggedInUser(null);
+      setShowWarningP(false);
+    }
+
+    setPrice(formattedPrice);
+  };
+
+  const handleContentChange = (event) => {
+    const inputContent = event.target.value;
+    setContent(inputContent);
+
+    // content의 길이가 10자 미만인 경우 경고 표시
+    if (inputContent.length < 10) {
+      setShowWarningC(true);
+    } else {
+      setShowWarningC(false);
     }
   };
 
-  const handleLogout = () => {
-    // 로그인된 사용자 데이터 지우기
-    setLoggedInUser(null);
+  const handleTitleChange = (event) => {
+    const inputTitle = event.target.value;
+    setTitle(inputTitle);
 
-    // 로컬 스토리지에서 토큰 제거
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-
-    // 원하는 페이지로 이동
-    window.location.href = '/sell';
+    // content의 길이가 10자 미만인 경우 경고 표시
+    if (inputTitle.length < 2) {
+      setShowWarningT(true);
+    } else {
+      setShowWarningT(false);
+    }
   };
 
-  const [pg, setPg] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8081/api/sell/');
-        setPg(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // 임시데이터
-  let [data, setdata] = useState(Temporarydata)
-
-  // blur 이펙트
-  let [blur, setblur] = useState('blurOff')
-
-  // 최근본상품리스트
-  let [recentList, setRecentList] = useState([])
-
-  useEffect(() => {
-    localStorage.setItem('watched', JSON.stringify(recentList))
-  }, [])
-
-  // 네이게이트
-  let navigate = useNavigate();
-
   return (
-    <div className={'App '}>
-      <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
-        <Container fluid style={{ width: '80%', padding: '10px' }}>
-          <Navbar.Brand onClick={() => { navigate('/sell') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
-            <Nav
-              className="me-auto my-2 my-lg-0"
-              style={{ maxHeight: '100px' }}
-              navbarScroll>
-              <Nav.Link onClick={() => {
-                if (loggedInUser == null) {
-                  navigate('/signin');
-                  return;
-                } else {
-                  navigate('/post')
-                  return;
-                }
-              }}>판매하기</Nav.Link>
-              <Nav.Link onClick={() => {
-                if (loggedInUser == null) {
-                  navigate('/signin');
-                  return;
-                } else {
-                  navigate('/myshop')
-                  return;
-                }
-              }}>내상점</Nav.Link>
-              <Nav.Link href="#action3">채팅</Nav.Link>
-              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action4">노트북</NavDropdown.Item>
-                <NavDropdown.Item href="#action5">핸드폰</NavDropdown.Item>
-                <NavDropdown.Item href="#action6">태블릿</NavDropdown.Item>
-                <NavDropdown.Item href="#action7">스마트워치</NavDropdown.Item>
-                <NavDropdown.Item href="#action8">블루투스이어폰</NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link>
-            </Nav>
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="물품을 검색해주세요"
-                className="me-2"
-                aria-label="Search"
-                style={{ width: '300px' }}
-              />
-              <Button variant="outline-secondary">검색하기</Button>{' '}
-            </Form>
-            {loggedInUser ? (
-              // 로그인된 사용자인 경우
-              <div>
-                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px' }}>
-                  {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
-                </Nav.Link>
+    // <div style={{ width: '72%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px' }}>
+    <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}>
+      <h2 style={{ borderBottom: '3px solid', padding: '30px 0' }}>상품 등록</h2>
+      <form onSubmit={handleSubmit}>
+
+        <div className='post_box' style={{ paddingBottom: '20px' }}>
+          <div className='post_box_left'>
+            <label htmlFor="image" style={{ marginBottom: '10px' }}>상품이미지 <span style={{ fontSize: '15px', color: 'gray' }}>({images.length}/11개)</span></label>
+            <input
+              type="file"
+              id="image"
+              onChange={handleImageChange}
+              multiple
+              ref={imageUploadRef}
+              style={{ display: 'none' }}
+            />
+          </div>
+
+          <div className='post_box_right'>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              <div
+                className='post_img_box'
+                style={{
+                  width: '200px',
+                  height: '200px',
+                  backgroundColor: '#eee',
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                }}
+                onClick={() => imageUploadRef.current.click()}
+              >
+                <FontAwesomeIcon icon={faCamera} size='2x' />
+                <p style={{ marginTop: '5px' }}>사진 선택</p>
               </div>
-            ) : (
-              // 로그인되지 않은 사용자인 경우
-              <Nav.Link onClick={() => navigate('/signin')} style={{ fontSize: '15px', marginLeft: '30px' }}>
-                로그인/회원가입
-              </Nav.Link>
-            )}
+              {imagePreviews.length > 0 && (
+                imagePreviews.map((preview, index) => (
+                  <div
+                    className='post_img_box'
+                    key={index}
+                    style={{
+                      position: 'relative',
+                      width: '200px',
+                      height: '200px',
+                    }}
+                  >
+                    <img
+                      src={preview}
+                      alt={`미리보기 ${index + 1}`}
+                      style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+                    />
+                    <Link
+                      onClick={(event) => handleImageDelete(event, index)}
+                      style={{
+                        position: 'absolute',
+                        top: '5px',
+                        right: '5px',
+                        padding: '5px',
+                        color: '#eee'
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faCircleXmark} />
+                    </Link>
+                  </div>
+                ))
+              )}
+            </div>
 
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+          </div>
+        </div>
 
-      <Routes>
-        <Route path='/sell' element={<Main setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
-        <Route path='/detail/:id' element={<Detail></Detail>} />
-        <Route path='/post' element={<Post></Post>} />
-        <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
-        <Route path='/signin' element={<SignIn></SignIn>} />
-        <Route path='/signup' element={<SignUp></SignUp>} />
-        <Route path='/findid' element={<FindId></FindId>} />
-        <Route path='/findpw' element={<FindPw></FindPw>} />
-        <Route path='/myshop' element={<Myshop data={data} setdata={setdata} pg={pg}></Myshop>} />
-        <Route path='/test' element={<Test />} />
-        <Route path='*' element={<div>없는페이지입니다</div>} />
-      </Routes>
+
+        <div className='post_box'>
+          <div className='post_box_left text_center'>
+            <label htmlFor="title">제목</label>
+          </div>
+          <div className='post_box_right'>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              placeholder='상품 제목을 입력해주세요.'
+              onChange={((event) => setTitle(event.target.value), handleTitleChange)}
+            />
+            {showWarningT && <p style={{ color: 'orange' }}>2글자 이상 입력해주세요.</p>}
+          </div>
+        </div>
+
+        <div className='post_box'>
+          <div className='post_box_left'>
+            <label htmlFor="category">카테고리 선택</label>
+          </div>
+          <div className='post_box_right'>
+            <select
+              id="category"
+              value={category}
+              style={{ height: '25px' }}
+              onChange={(event) => setCategory(event.target.value)}
+            >
+              <option value="">-- 선택하세요 --</option>
+              <option value="노트북">노트북</option>
+              <option value="핸드폰">핸드폰</option>
+              <option value="태블릿">태블릿</option>
+              <option value="스마트워치">스마트워치</option>
+              <option value="블루투스이어폰">블루투스이어폰</option>
+            </select>
+          </div>
+
+
+        </div>
+
+        <div className='post_box'>
+          <div className='post_box_left text_center'>
+            <label htmlFor="price">가격</label>
+          </div>
+          <div className='post_box_right'>
+            <input
+              type="text"
+              id="price"
+              value={price}
+              style={{ width: '25%', }}
+              placeholder='숫자만 입력해주세요.'
+              onChange={handlePriceChange}
+            /> 원
+            {showWarningP && <p style={{ color: 'orange' }}>1000원 이상 입력해주세요.</p>}
+          </div>
+        </div>
+
+        <div className='post_box'>
+          <div style={{ width: '20%' }}>
+            <label htmlFor="region">지역 선택</label>
+            <select
+              id="region"
+              value={selectedRegion}
+              onChange={handleRegionChange}
+              style={{ marginLeft: '10px', height: '25px' }}
+            >
+              <option value="">시/도 선택</option>
+              <option value="강원도">강원</option>
+              <option value="경기도">경기</option>
+              <option value="경상남도">경남</option>
+              <option value="경상북도">경북</option>
+              <option value="광주광역시">광주</option>
+              <option value="대구광역시">대구</option>
+              <option value="대전광역시">대전</option>
+              <option value="부산광역시">부산</option>
+              <option value="서울특별시">서울</option>
+              <option value="울산광역시">울산</option>
+              <option value="인천광역시">인천</option>
+              <option value="전라남도">전남</option>
+              <option value="전라북도">전북</option>
+              <option value="제주특별자치도">제주</option>
+              <option value="충청남도">충남</option>
+              <option value="충청북도">충북</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="district">구역 선택</label>
+            <select
+              id="district"
+              value={selectedDistrict}
+              onChange={handleDistrictChange}
+              style={{ marginLeft: '10px', height: '25px' }}
+            >
+              <option value="">시/군/구 선택</option>
+              {selectedRegion === '강원도' &&
+                강원도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '경기도' &&
+                경기도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '경상남도' &&
+                경상남도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '경상북도' &&
+                경상북도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '광주광역시' &&
+                광주광역시.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '대구광역시' &&
+                대구광역시.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '대전광역시' &&
+                대전광역시.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '부산광역시' &&
+                부산광역시.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '서울특별시' &&
+                서울특별시.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '울산광역시' &&
+                울산광역시.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '인천광역시' &&
+                인천광역시.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '전라남도' &&
+                전라남도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '전라북도' &&
+                전라북도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '제주특별자치도' &&
+                제주특별자치도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '충청남도' &&
+                충청남도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              {selectedRegion === '충청북도' &&
+                충청북도.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
+
+        <div className='post_box'>
+          <div className='post_box_left'>
+            <label htmlFor="content">설명</label>
+          </div>
+          <div className='post_box_right'>
+            <textarea
+              id="content"
+              value={content}
+              rows={6}
+              placeholder='상품에 대한 설명을 적어주세요.'
+              style={{ width: '80%', padding: '5px', overflow: 'auto' }}
+              onChange={((event) => setContent(event.target.value), handleContentChange)}
+            />
+            {showWarningC && <p style={{ color: 'orange' }}>내용은 최소 10자 이상이어야 합니다.</p>}
+          </div>
+        </div>
+        <div style={{ padding: '30px', borderTop: '3px solid', textAlign: 'right' }}>
+          <Button type="submit" style={{ width: '150px', height: '50px', backgroundColor: '#0052A4' }}>등록하기</Button>
+        </div>
+      </form>
     </div>
   );
-}
+};
 
-function Main(props) {
-
-  // id state
-  let [id, setid] = useState(0)
-
-  // detail 페이지 상태 state
-  const [d, setd] = useState(false)
-
-  // 페이지추가 state
-  let [datapage, setDatapage] = useState(3)
-
-  // 로딩이펙트 상태 state
-  let [load, setLoad] = useState(false)
-
-  return (
-    <div>
-      <div>
-        {/* 최근본 상품 */}
-        <div style={{ position: 'fixed', top: '100px', right: '1.75%' }}>
-          <Card style={{ width: '180px' }}>
-            <Card.Title style={{ borderBottom: '1px solid gray', padding: '10px' }}>최근본상품</Card.Title>
-            {
-              props.recentList.map(function (img, i) {
-                return (
-                  <Link onClick={() => { setd(true); props.setblur('blurOn'); }} key={i}>
-                    <Card.Img src={img} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
-                  </Link>
-                )
-              })
-            }
-          </Card>
-        </div>
-
-        <div className="container" style={{ marginTop: '30px' }}>
-          <div className="row" style={{ backgroundColor: '#fff', borderRadius: '10px', width: '85%', margin: 'auto' }}>
-            <h4 style={{ padding: '20px' }}>중고거래</h4>
-
-            {/* 메인컨텐츠영역 */}
-            {
-              props.data.slice(0, datapage).map(function (a, i) {
-                return (
-                  <MainCard key={i} data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
-                )
-              })
-            }
-
-            {/* 추가 페이지 (더보기 눌렀을 때) */}
-            {
-              props.data.length > datapage && (
-                <Link
-                  onClick={() => {
-                    setLoad(true);
-                    setDatapage(datapage+3)
-                    setLoad(false);
-                  }}
-                  style={{ textDecoration: 'None', color: 'gray', fontSize: '18px', padding: '20px', borderTop: '1px solid gray' }}
-                >
-                  더보기
-                </Link>
-              )
-            }
-
-          </div>
-
-          {/* 로딩중 이펙트 */}
-          {
-            load == true ? <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner> : null
-          }
-        </div>
-      </div>
-      {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
-      {d && <OutsideAlerter recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} />}
-    </div>
-  )
-}
-
-// 메인컨텐츠영역
-function MainCard(props) {
-
-  return (
-    <div className="col-md-4" onClick={() => { props.setd(true); props.setblur('blurOn'); props.setid(props.i) }}
-      style={{ margin: '20px auto' }}>
-      {/* 사진영역 */}
-      <div style={{ overflow: 'hidden', borderRadius: '10px', width: '250px', height: "180px", margin: 'auto' }}>
-        <Link className='Link'><img src={props.data[props.i].img_path[0]}
-          className='main_img' /></Link>
-      </div>
-      {/* 컨텐츠영역 */}
-      <div style={{ textAlign: "left", width: '70%', margin: 'auto' }}>
-        <Link className='Link'><h5 className='main_title text_overflow'>{props.data[props.i].title}</h5></Link>
-        <Link className='Link'><p className='main_area'>{props.data[props.i].region}</p></Link>
-        <Link className='Link'>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p className='main_price maincolor'>{props.data[props.i].price.toLocaleString()}원</p>
-            {props.data[props.i].viewCount > 0 && (
-              <>
-                <span style={{ marginRight: '3px', fontSize: '18px' }}>
-                  <FontAwesomeIcon icon={faHeart} />
-                </span>
-                <span style={{ color: 'black', fontSize: '18px' }}>{props.data[props.i].likeCount}</span>
-              </>
-            )}
-          </div>
-        </Link>
-
-      </div>
-    </div>
-  )
-}
-
-
-
-
-
-export default App;
-
+export default Post;

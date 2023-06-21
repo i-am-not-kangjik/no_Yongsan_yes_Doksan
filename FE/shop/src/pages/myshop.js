@@ -1,14 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+/*eslint-disable*/
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
 
-const Myshop = ({ pg }) => {
+const Myshop = ({ pg, setPostId, postId }) => {
   // 로컬 스토리지에서 사용자 이름을 가져옵니다.
   const username = localStorage.getItem('username');
 
   // 사용자 이름과 일치하는 authorUsername을 기준으로 내용을 필터링합니다.
   const filteredContent = pg.content ? pg.content.filter(
     (item) => item.authorUsername === username
-  ) : [];  
+  ) : [];
+
+  let navigate = useNavigate();
+
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const url = `http://localhost:8081/api/sell/${postId}`;
+  
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (response.ok) {
+        alert('게시글이 삭제되었습니다.');
+        window.location.reload();
+      } else {
+        console.error('요청을 처리하는 중에 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error('요청을 보내는 중에 오류가 발생했습니다.', error);
+    }
+  };
+  
+  useEffect(() => {
+    if (postId) { // postId가 설정되면 handleDelete 호출
+      handleDelete();
+    }
+  }, [postId]); // postId가 변경될 때마다 이 effect를 실행
 
   return (
     <div
@@ -22,6 +54,7 @@ const Myshop = ({ pg }) => {
         padding: '40px 0',
       }}
     >
+
       <h3 style={{ paddingBottom: '50px', borderBottom: '1px solid gray', margin: '0' }}>나의 판매내역</h3>
       {filteredContent.map((item, i) => {
         // 날짜 계산 로직
@@ -43,9 +76,9 @@ const Myshop = ({ pg }) => {
           const years = days / 365;
           return `${Math.floor(years)}년 전`;
         };
-        
+
         const nowDate = detailDate(item.createdAt);
-        
+
         return (
           <div style={{ borderBottom: '1px solid gray', display: 'flex' }} key={i}>
             <div style={{ padding: '20px' }}>
@@ -59,16 +92,39 @@ const Myshop = ({ pg }) => {
                 }}
               >
                 <img
-                    src={item.imgPaths[0]}
-                    style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }}
-                    alt="thumbnail"
-                  />
+                  src={item.imgPaths[0]}
+                  style={{ width: '100%', minHeight: '200px', objectFit: 'cover' }}
+                  alt="thumbnail"
+                />
               </div>
             </div>
             <div style={{ paddingTop: '30px', paddingRight: '20px', textAlign: 'left' }}>
               <Link className='Link' style={{ color: 'black' }}>
                 <h3>{item.title}</h3>
               </Link>
+
+              <span
+                className="Link"
+                style={{ color: 'black', cursor: 'pointer' }}
+                onClick={() => {
+                  setPostId(item.id);
+                  navigate('/edit');
+                }}>수정하기</span>
+
+              <span
+                className="Link"
+                style={{ color: 'black', cursor: 'pointer' }}
+                onClick={() => {
+                  const confirmation = window.confirm('삭제하시겠습니까?');
+                  if (confirmation) {
+                    setPostId(item.id);
+                  }
+                }}
+              >
+                삭제하기
+              </span>
+
+
               <p style={{ color: 'gray' }}>{item.region} ∙ {nowDate}</p>
               <div style={{ display: 'flex', marginTop: '15px' }}>
                 {item.sellState === 'RESERVED' && (
