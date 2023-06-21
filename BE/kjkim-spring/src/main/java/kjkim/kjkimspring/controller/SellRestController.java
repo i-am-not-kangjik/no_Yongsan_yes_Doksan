@@ -1,6 +1,6 @@
 package kjkim.kjkimspring.controller;
 
-import kjkim.kjkimspring.comment.CommentForm;
+//import kjkim.kjkimspring.comment.CommentForm;
 import kjkim.kjkimspring.dto.SellDTO;
 import kjkim.kjkimspring.sell.Sell;
 import kjkim.kjkimspring.sell.SellForm;
@@ -32,16 +32,23 @@ public class SellRestController {
     private final UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<List<SellDTO>> getSellList() {
-        List<SellDTO> sellList = sellService.getList().stream()
-                .map(sell -> sellService.convertToDTO(sell))
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<SellDTO>> getSellList(@RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<SellDTO> sellList = sellService.getList(page).map(sell -> sellService.convertToDTO(sell));
         return ResponseEntity.ok(sellList);
     }
 
+    // 전체로 바꾸는거
+//    @GetMapping("")
+//    public ResponseEntity<List<SellDTO>> getSellList() {
+//        List<SellDTO> sellList = sellService.getList().stream()
+//                .map(sell -> sellService.convertToDTO(sell))
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(sellList);
+//    }
+
 
     @GetMapping("/{id}")
-    public ResponseEntity<SellDTO> getSellDetail(@PathVariable("id") Integer id, CommentForm commentForm) {
+    public ResponseEntity<SellDTO> getSellDetail(@PathVariable("id") Integer id) {
         Sell sell = sellService.getSell(id);
         sell.increaseViewCount(); // Increase view count
         sellService.saveSell(sell); // Save the updated Sell object
