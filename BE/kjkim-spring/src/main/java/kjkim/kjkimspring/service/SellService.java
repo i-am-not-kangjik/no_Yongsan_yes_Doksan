@@ -219,20 +219,12 @@ public class SellService {
     }
 
 
-    public void changeSellStateToSelling(Sell sell) {
-        sell.setSellState(SellState.SELLING);
+    public void changeSellStatus(Sell sell, String status) {
+        SellState state = SellState.fromString(status);
+        sell.setSellState(state);
         this.sellRepository.save(sell);
     }
 
-    public void changeSellStateToReserved(Sell sell) {
-        sell.setSellState(SellState.RESERVED);
-        this.sellRepository.save(sell);
-    }
-
-    public void changeSellStateToCompleted(Sell sell) {
-        sell.setSellState(SellState.SOLD_OUT);
-        this.sellRepository.save(sell);
-    }
 
     public SellDTO convertToDTO(Sell sell) {
         SellDTO sellDTO = new SellDTO();

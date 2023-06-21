@@ -160,7 +160,7 @@ public class SellRestControllerTest {
         MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/api/sell/{id}", 21)
+                MockMvcRequestBuilders.multipart("/api/sell/{id}", 26)
                         .file(file1)
                         .file(file2)
                         .param("title", "newTitle")
@@ -195,7 +195,7 @@ public class SellRestControllerTest {
 
         // Step 2: delete a sell post
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/sell/{id}", 19)
+                MockMvcRequestBuilders.delete("/api/sell/{id}", 5)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -219,7 +219,7 @@ public class SellRestControllerTest {
 
         // Step 2: Send a POST request to like a sell post
         mockMvc.perform(
-                post("/api/sell/21/like")
+                post("/api/sell/25/like")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -243,7 +243,7 @@ public class SellRestControllerTest {
 
         // Step 2: Change the status to 'selling'
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/sell/16/status/selling")
+                MockMvcRequestBuilders.put("/api/sell/26/status/selling")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -267,7 +267,7 @@ public class SellRestControllerTest {
 
         // Step 2: Change the status to 'completed'
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/sell/16/status/completed")
+                MockMvcRequestBuilders.put("/api/sell/26/status/completed")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -291,7 +291,7 @@ public class SellRestControllerTest {
 
         // Step 2: Change the status to 'reserved'
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/sell/16/status/reserved")
+                MockMvcRequestBuilders.put("/api/sell/26/status/reserved")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
