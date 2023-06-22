@@ -1,6 +1,7 @@
 /*eslint-disable*/
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
 
 const Myshop = ({ pg, setPostId, postId }) => {
   // 로컬 스토리지에서 사용자 이름을 가져옵니다.
@@ -17,14 +18,14 @@ const Myshop = ({ pg, setPostId, postId }) => {
     try {
       const token = localStorage.getItem('token');
       const url = `http://localhost:8081/api/sell/${postId}`;
-  
+
       const response = await fetch(url, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
+
       if (response.ok) {
         alert('게시글이 삭제되었습니다.');
         window.location.reload();
@@ -35,12 +36,46 @@ const Myshop = ({ pg, setPostId, postId }) => {
       console.error('요청을 보내는 중에 오류가 발생했습니다.', error);
     }
   };
-  
-  useEffect(() => {
-    if (postId) { // postId가 설정되면 handleDelete 호출
-      handleDelete();
+
+  const handleStatusChange = async (status) => {
+    try {
+      const token = localStorage.getItem('token');
+      const url = `http://localhost:8081/api/sell/${postId}/status/${status}`;
+
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        alert('거래 상태가 변경되었습니다.');
+        window.location.reload();
+      } else {
+        console.error('요청을 처리하는 중에 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error('요청을 보내는 중에 오류가 발생했습니다.', error);
     }
-  }, [postId]); // postId가 변경될 때마다 이 effect를 실행
+  };
+
+  let [state, setState] = useState("")
+
+  useEffect(() => {
+    if (postId) {
+      if (state == "DELETE") {
+        handleDelete();
+      } else if (state == "SELLING") {
+        handleStatusChange('SELLING');
+      } else if (state == "RESERVED") {
+        handleStatusChange('RESERVED');
+      } else if (state == "COMPLETED") {
+        handleStatusChange('COMPLETED');
+      }
+    }
+  }, [postId]);
+
 
   return (
     <div
@@ -98,7 +133,7 @@ const Myshop = ({ pg, setPostId, postId }) => {
                 />
               </div>
             </div>
-            <div style={{ paddingTop: '30px', paddingRight: '20px', textAlign: 'left' }}>
+            <div style={{ paddingTop: '30px', paddingRight: '20px', textAlign: 'left', width: 'calc(100% - 300px)' }}>
               <Link className='Link' style={{ color: 'black' }}>
                 <h3>{item.title}</h3>
               </Link>
@@ -143,28 +178,34 @@ const Myshop = ({ pg, setPostId, postId }) => {
                   {item.price.toLocaleString()}원
                 </h4>
               </div>
+            </div>
 
-              <span
-                className="Link"
-                style={{ color: 'black', cursor: 'pointer' }}
-                onClick={() => {
+            <div style={{ width: '100px', padding: '10px', textAlign: 'right' }}>
+              <DropdownButton title="" id="bg-nested-dropdown" size="sm" align="end" variant="secondary">
+                <Dropdown.Item onClick={() => {
                   setPostId(item.id);
                   navigate('/edit');
-                }}>수정하기</span>
-
-              <span
-                className="Link"
-                style={{ color: 'black', cursor: 'pointer' }}
-                onClick={() => {
+                }}>수정하기</Dropdown.Item>
+                <Dropdown.Item onClick={() => {
                   const confirmation = window.confirm('삭제하시겠습니까?');
                   if (confirmation) {
                     setPostId(item.id);
+                    setState("DELETE")
                   }
-                }}
-              >
-                삭제하기
-              </span>
-
+                }}>삭제하기</Dropdown.Item>
+                <Dropdown.Item onClick={() => {
+                  setPostId(item.id);
+                  setState("SELLING")
+                }}>판매중</Dropdown.Item>
+                <Dropdown.Item onClick={() => {
+                  setPostId(item.id);
+                  setState("RESERVED")
+                }}>예약중</Dropdown.Item>
+                <Dropdown.Item onClick={() => {
+                  setPostId(item.id);
+                  setState("COMPLETED")
+                }}>판매완료</Dropdown.Item>
+              </DropdownButton>
             </div>
           </div>
         );
