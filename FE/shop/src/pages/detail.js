@@ -10,6 +10,28 @@ function Detail(props) {
 
     const item = props.cd.find(item => item.id === props.id);
 
+    const handleLike = () => {
+        const token = localStorage.getItem('token');
+        const url = `http://localhost:8081/api/sell/${item.id}/like`;
+    
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log('Post liked successfully!');
+            } else {
+              console.error('Error liking the post.');
+            }
+          })
+          .catch((error) => {
+            console.error('Error liking the post:', error);
+          });
+      };
+
     // 최근 본 상품 3개까지만 나오고 중복 안되게
     useEffect(() => {
         let copy = [...props.recentList];
@@ -63,11 +85,6 @@ function Detail(props) {
                         )
                     })
                 }
-                {/* <img
-                    className="d-block w-100 detail_img"
-                    src={item.imgPath}
-                    alt="First slide"
-                /> */}
             </Carousel>
             <div style={{ width: '35%', padding: '15px', textAlign: 'left' }}>
                 <div className='detail_margin'>
@@ -88,6 +105,7 @@ function Detail(props) {
                 <div className='detail_margin grey' style={{ fontSize: '13px' }}>
                     <p className='detail_price'>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
                 </div>
+                <span onClick={handleLike}>좋아요</span>
             </div>
         </div>
     );

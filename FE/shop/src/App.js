@@ -43,6 +43,10 @@ function App() {
     fetchData();
   }, []);
 
+  const updateCd = (newCd) => {
+    setCd(newCd);
+  };
+
   const [loggedInUser, setLoggedInUser] = useState(null); // 로그인한 사용자
 
   useEffect(() => {
@@ -187,7 +191,7 @@ function App() {
       </Navbar>
 
       <Routes>
-        <Route path='/sell' element={<Main cd={cd} setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
+        <Route path='/sell' element={<Main updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
@@ -281,7 +285,7 @@ function Main(props) {
         </div>
       </div>
       {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
-      {d && <OutsideAlerter cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} />}
+      {d && <OutsideAlerter updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} />}
     </div>
   )
 }
