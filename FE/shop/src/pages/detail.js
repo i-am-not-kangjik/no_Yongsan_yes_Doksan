@@ -86,7 +86,7 @@ function Detail(props) {
                     <p className='detail_content'>{item.content}</p>
                 </div>
                 <div className='detail_margin grey' style={{ fontSize: '13px' }}>
-                    <p className='detail_price'>관심 {item.likeCount} ∙ 조회 {item.viewCount}</p>
+                    <p className='detail_price'>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
                 </div>
             </div>
         </div>
