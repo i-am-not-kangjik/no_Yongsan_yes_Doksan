@@ -197,7 +197,6 @@ public class SellService {
         sellDTO.setTitle(sell.getTitle());
         sellDTO.setContent(sell.getContent());
         sellDTO.setCreatedAt(sell.getCreatedAt());
-        sellDTO.setUpdatedAt(sell.getUpdatedAt());
         // convert list of Image objects to list of image names and paths
         sellDTO.setImgNames(sell.getImageList().stream().map(Image::getImgName).collect(Collectors.toList()));
         sellDTO.setImgPaths(sell.getImageList().stream().map(Image::getImgPath).collect(Collectors.toList()));

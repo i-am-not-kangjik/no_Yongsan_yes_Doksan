@@ -15,7 +15,6 @@ public class SellDTO {
     private String title;
     private String content;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private Integer price;
     private String authorUsername; // Author's username
     private Integer viewCount;
