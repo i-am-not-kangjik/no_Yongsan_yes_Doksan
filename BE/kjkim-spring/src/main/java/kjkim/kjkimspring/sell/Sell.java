@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+// 판매 정보를 나타내는 Entity 클래스입니다.
 @Getter
 @Setter
 @Entity
@@ -78,17 +79,19 @@ public class Sell {
         return imageList;
     }
 
+    // 이미지를 추가하는 메소드입니다.
     public void addImage(Image image) {
         imageList.add(image);
         image.setSell(this);
     }
 
+    // 이미지를 제거하는 메소드입니다.
     public void removeImage(Image image) {
         imageList.remove(image);
         image.setSell(null);
     }
 
-
+    // 조회수를 증가시키는 메소드입니다.
     public void increaseViewCount() {
         viewCount = viewCount == null ? 1 : viewCount + 1;
     }

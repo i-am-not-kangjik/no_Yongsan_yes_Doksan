@@ -31,6 +31,7 @@ public class SellRestController {
     private final SellService sellService;
     private final UserService userService;
 
+    // 인증되지 않은 사용자에게 반환할 메시지
     private static final String UNAUTHORIZED_USER_MESSAGE = "수정 권한이 없는 사용자입니다.";
 
     /**
@@ -62,15 +63,14 @@ public class SellRestController {
     }
 
 
-//    @GetMapping("")
-//    public ResponseEntity<Page<SellDTO>> getSellList(@RequestParam(value = "page", defaultValue = "0") int page) {
-//        Page<SellDTO> sellList = sellService.getList(page).map(sell -> sellService.convertToDTO(sell));
-//        return ResponseEntity.ok(sellList);
-//    }
-
-    // 전체로 바꾸는거
+    /**
+     * HTTP GET 요청을 처리하여 판매 항목 리스트를 반환합니다.
+     *
+     * @return 판매 항목 리스트를 담은 응답 엔티티입니다.
+     */
     @GetMapping("")
     public ResponseEntity<List<SellDTO>> getSellList() {
+        // 판매 목록을 가져와서 DTO로 변환한 후 리스트로 만듭니다.
         List<SellDTO> sellList = sellService.getList().stream()
                 .map(sell -> sellService.convertToDTO(sell))
                 .collect(Collectors.toList());
@@ -148,6 +148,7 @@ public class SellRestController {
     }
 
 
+    // 판매 항목에 좋아요를 토글하는 API
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/like")
     public ResponseEntity<Void> likeSell(@PathVariable("id") Integer id, Principal principal) {

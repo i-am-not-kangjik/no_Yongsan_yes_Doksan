@@ -22,12 +22,10 @@ public class UserSecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> _user = this.userRepository.findByUsername(username);
-        if (_user.isEmpty()) {
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
-        }
-        User user = _user.get();
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        // 바로 User를 추출하고, 없을 경우 예외 발생
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        List<GrantedAuthority> authorities = new ArrayList<>(1);
         if ("admin".equals(username)) {
             authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
         } else {
@@ -36,3 +34,4 @@ public class UserSecurityService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 }
+
