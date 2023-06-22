@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8081/api/sell/');
+        const response = await axios.get('http://13.209.183.88:8081/api/sell');
         setPg(response.data);
         setCd(response.data);
       } catch (error) {
@@ -99,10 +99,8 @@ function App() {
 
   function handleSearch() {
     navigate('/sell');
-    console.log(searchText)
     const filteredContent = pg.filter(item => item.title.includes(searchText));
     setCd(filteredContent);
-    // 검색어에 대한 추가 작업을 수행할 수 있습니다.
   }
 
   function handleKeyPress(event) {
@@ -115,6 +113,13 @@ function App() {
   function handleCategorySelect(category) {
     navigate('/sell');
     const filteredContent = pg.filter(item => item.category === category);
+    setCd(filteredContent);
+  }
+
+  // 찜목록
+  function handleLikedPosts() {
+    navigate('/sell');
+    const filteredContent = pg.filter(item => item.likedUsernames.includes(loggedInUser.username));
     setCd(filteredContent);
   }
 
@@ -151,12 +156,21 @@ function App() {
               }}>내상점</Nav.Link>
               <Nav.Link href="#action3">채팅</Nav.Link>
               <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item onClick={() => {handleCategorySelect('노트북')}}>노트북</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => {handleCategorySelect('핸드폰')}}>핸드폰</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => {handleCategorySelect('태블릿')}}>태블릿</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => {handleCategorySelect('스마트워치')}}>스마트워치</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => {handleCategorySelect('블루투스이어폰')}}>블루투스이어폰</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('노트북') }}>노트북</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('핸드폰') }}>핸드폰</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('태블릿') }}>태블릿</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('스마트워치') }}>스마트워치</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('블루투스이어폰') }}>블루투스이어폰</NavDropdown.Item>
               </NavDropdown>
+              <Nav.Link onClick={() => {
+                if (loggedInUser == null) {
+                  navigate('/signin');
+                  return;
+                } else {
+                  handleLikedPosts();
+                  return;
+                }
+              }}>찜목록</Nav.Link>
               <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link>
             </Nav>
             <Form className="d-flex">
@@ -318,7 +332,6 @@ function MainCard(props) {
             )}
           </div>
         </Link>
-
       </div>
     </div>
   )

@@ -17,7 +17,7 @@ const Myshop = ({ pg, setPostId, postId }) => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      const url = `http://localhost:8081/api/sell/${postId}`;
+      const url = `http://13.209.183.88:8081/api/sell/${postId}`;
 
       const response = await fetch(url, {
         method: 'DELETE',
@@ -40,7 +40,7 @@ const Myshop = ({ pg, setPostId, postId }) => {
   const handleStatusChange = async (status) => {
     try {
       const token = localStorage.getItem('token');
-      const url = `http://localhost:8081/api/sell/${postId}/status/${status}`;
+      const url = `http://13.209.183.88:8081/api/sell/${postId}/status/${status}`;
 
       const response = await fetch(url, {
         method: 'PUT',

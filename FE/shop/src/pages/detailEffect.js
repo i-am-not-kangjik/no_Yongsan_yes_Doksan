@@ -2,11 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Detail from "./detail";
 
-/**
- * Hook that alerts clicks outside of the passed ref
- */
-// Test.js
-
 function useOutsideAlerter(ref, setd, setblur) {
   function handleClickOutside(event) {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -46,7 +41,6 @@ export default function OutsideAlerter(props) {
       style={{ width: '75%' }}
     >
       <Detail updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} data={props.data} id={props.id} setRecentList={props.setRecentList} recentList={props.recentList}/>
-      {/* <Link style={{ position: 'fixed', top: '5px', right: '5px', color : 'black' }}><FontAwesomeIcon icon={faXmark} className='Link'size='2x'/></Link> */}
     </div>
   );
 }

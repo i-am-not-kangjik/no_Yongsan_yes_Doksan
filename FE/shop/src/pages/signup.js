@@ -57,7 +57,7 @@ const SignupPage = () => {
     const cleanedPhoneNumber = phoneNumber.replace(/-/g, '');
     
     axios
-      .post('http://localhost:8081/api/user/signup', {
+      .post('http://13.209.183.88:8081/api/user/signup', {
         'username': username,
         'email': email,
         'password1': password,

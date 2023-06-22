@@ -13,35 +13,35 @@ function Detail(props) {
 
     const handleLike = () => {
         const token = localStorage.getItem('token');
-        const url = `http://localhost:8081/api/sell/${item.id}/like`;
-      
+        const url = `http://13.209.183.88:8081/api/sell/${item.id}/like`;
+
         fetch(url, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
         })
-          .then((response) => {
-            if (response.ok) {
-              console.log('Post liked successfully!');
-              const fetchData = async () => {
-                try {
-                  const response = await axios.get('http://localhost:8081/api/sell/');
-                  props.setCd(response.data);
-                } catch (error) {
-                  console.error(error);
+            .then((response) => {
+                if (response.ok) {
+                    console.log('Post liked successfully!');
+                    const fetchData = async () => {
+                        try {
+                            const response = await axios.get('http://13.209.183.88:8081/api/sell/');
+                            props.setCd(response.data);
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    };
+
+                    fetchData();
+                } else {
+                    console.error('Error liking the post.');
                 }
-              };
-      
-              fetchData();
-            } else {
-              console.error('Error liking the post.');
-            }
-          })
-          .catch((error) => {
-            console.error('Error liking the post:', error);
-          });
-      };
+            })
+            .catch((error) => {
+                console.error('Error liking the post:', error);
+            });
+    };
 
     // 최근 본 상품 3개까지만 나오고 중복 안되게
     useEffect(() => {
