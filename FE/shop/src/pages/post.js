@@ -44,7 +44,7 @@ const Post = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch('http://localhost:8081/api/sell/', {
+      const response = await fetch('http://13.209.183.88:8081/api/sell/', {
         method: 'POST',
         headers: {
           // 'Content-Type': 'multipart/form-data',

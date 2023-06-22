@@ -27,7 +27,7 @@ const Edit = ({ postId }) => {
     const fetchPostData = async () => {
 
       try {
-        const response = await fetch(`http://localhost:8081/api/sell/${postId}`, {
+        const response = await fetch(`http://13.209.183.88:8081/api/sell/${postId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -73,7 +73,7 @@ const Edit = ({ postId }) => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch(`http://localhost:8081/api/sell/${postId}`, {
+      const response = await fetch(`http://13.209.183.88:8081/api/sell/${postId}`, {
         method: 'PUT',
         headers: {
           // 'Content-Type': 'multipart/form-data',
