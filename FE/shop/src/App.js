@@ -304,12 +304,12 @@ function MainCard(props) {
         <Link className='Link'>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <p className='main_price maincolor'>{props.item.price.toLocaleString()}원</p>
-            {props.item.likeCount > 0 && (
+            {props.item.likedUsernames.length > 0 && (
               <>
                 <span style={{ marginRight: '3px', fontSize: '18px' }}>
                   <FontAwesomeIcon icon={faHeart} />
                 </span>
-                <span style={{ color: 'black', fontSize: '18px' }}>{props.item.likeCount}</span>
+                <span style={{ color: 'black', fontSize: '18px' }}>{props.item.likedUsernames.length}</span>
               </>
             )}
           </div>
