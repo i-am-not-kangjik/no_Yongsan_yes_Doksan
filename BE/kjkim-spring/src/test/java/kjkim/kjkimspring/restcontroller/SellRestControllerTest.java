@@ -160,7 +160,7 @@ public class SellRestControllerTest {
         MockMultipartFile file2 = new MockMultipartFile("files", "laptop4.jpg", "image/jpg", imageBytes2);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/api/sell/{id}", 50)
+                MockMvcRequestBuilders.multipart("/api/sell/{id}", 77)
                         .file(file1)
                         .file(file2)
                         .param("title", "newTitle")
@@ -195,7 +195,7 @@ public class SellRestControllerTest {
 
         // Step 2: delete a sell post
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/sell/{id}", 23)
+                MockMvcRequestBuilders.delete("/api/sell/{id}", 74)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -219,7 +219,7 @@ public class SellRestControllerTest {
 
         // Step 2: Send a POST request to like a sell post
         mockMvc.perform(
-                post("/api/sell/25/like")
+                post("/api/sell/75/like")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -243,7 +243,7 @@ public class SellRestControllerTest {
 
         // Step 2: Change the status to 'selling'
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/sell/46/status/selling")
+                MockMvcRequestBuilders.put("/api/sell/77/status/selling")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -252,8 +252,8 @@ public class SellRestControllerTest {
     public void testChangeStatusToCompleted() throws Exception {
         // Step 1: Login and get the token
         UserLoginForm userLoginForm = new UserLoginForm();
-        userLoginForm.setEmail("user2@naver.com");
-        userLoginForm.setPassword("user2user2");
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
 
         MvcResult loginResult = mockMvc.perform(
                 post("/api/user/login")
@@ -267,7 +267,7 @@ public class SellRestControllerTest {
 
         // Step 2: Change the status to 'completed'
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/sell/20/status/completed")
+                MockMvcRequestBuilders.put("/api/sell/77/status/completed")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }
@@ -276,8 +276,8 @@ public class SellRestControllerTest {
     public void testChangeStatusToReserved() throws Exception {
         // Step 1: Login and get the token
         UserLoginForm userLoginForm = new UserLoginForm();
-        userLoginForm.setEmail("user2@naver.com");
-        userLoginForm.setPassword("user2user2");
+        userLoginForm.setEmail("user3@naver.com");
+        userLoginForm.setPassword("user3user3");
 
         MvcResult loginResult = mockMvc.perform(
                 post("/api/user/login")
@@ -291,7 +291,7 @@ public class SellRestControllerTest {
 
         // Step 2: Change the status to 'reserved'
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/sell/20/status/reserved")
+                MockMvcRequestBuilders.put("/api/sell/77/status/reserved")
                         .header("Authorization", "Bearer " + token)
         ).andExpect(status().isOk());
     }

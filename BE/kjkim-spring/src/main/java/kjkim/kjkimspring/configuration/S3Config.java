@@ -10,16 +10,19 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class S3Config {
-
+    // AWS 접근 키
     @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
 
+    // AWS 비밀 키
     @Value("${cloud.aws.credentials.secretKey}")
     private String secretKey;
 
+    // AWS 지역
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    // AWS S3 클라이언트 설정을 위한 빈 생성
     @Bean
     public S3Client s3Client() {
         return S3Client.builder()
