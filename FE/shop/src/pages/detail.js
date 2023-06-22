@@ -13,7 +13,7 @@ function Detail(props) {
     const handleLike = () => {
         const token = localStorage.getItem('token');
         const url = `http://localhost:8081/api/sell/${item.id}/like`;
-    
+      
         fetch(url, {
           method: 'POST',
           headers: {
@@ -23,6 +23,16 @@ function Detail(props) {
           .then((response) => {
             if (response.ok) {
               console.log('Post liked successfully!');
+              const fetchData = async () => {
+                try {
+                  const response = await axios.get('http://localhost:8081/api/sell/');
+                  props.setCd(response.data);
+                } catch (error) {
+                  console.error(error);
+                }
+              };
+      
+              fetchData();
             } else {
               console.error('Error liking the post.');
             }
