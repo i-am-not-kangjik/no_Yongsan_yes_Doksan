@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import Carousel from 'react-bootstrap/Carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios';
 
 function Detail(props) {
 
