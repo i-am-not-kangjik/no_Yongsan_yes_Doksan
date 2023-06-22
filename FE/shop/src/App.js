@@ -43,6 +43,10 @@ function App() {
     fetchData();
   }, []);
 
+  const updateCd = (newCd) => {
+    setCd(newCd);
+  };
+
   const [loggedInUser, setLoggedInUser] = useState(null); // 로그인한 사용자
 
   useEffect(() => {
@@ -187,7 +191,7 @@ function App() {
       </Navbar>
 
       <Routes>
-        <Route path='/sell' element={<Main cd={cd} setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
+        <Route path='/sell' element={<Main updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
@@ -281,7 +285,7 @@ function Main(props) {
         </div>
       </div>
       {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
-      {d && <OutsideAlerter cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} />}
+      {d && <OutsideAlerter updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} />}
     </div>
   )
 }
@@ -304,12 +308,12 @@ function MainCard(props) {
         <Link className='Link'>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <p className='main_price maincolor'>{props.item.price.toLocaleString()}원</p>
-            {props.item.likeCount > 0 && (
+            {props.item.likedUsernames.length > 0 && (
               <>
                 <span style={{ marginRight: '3px', fontSize: '18px' }}>
                   <FontAwesomeIcon icon={faHeart} />
                 </span>
-                <span style={{ color: 'black', fontSize: '18px' }}>{props.item.likeCount}</span>
+                <span style={{ color: 'black', fontSize: '18px' }}>{props.item.likedUsernames.length}</span>
               </>
             )}
           </div>
