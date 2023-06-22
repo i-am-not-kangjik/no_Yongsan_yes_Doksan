@@ -34,12 +34,12 @@ public class UserRestControllerTest {
     @Test
     public void testSignup() throws Exception {
         UserCreateDto dto = new UserCreateDto();
-        dto.setUsername("user8");
-        dto.setEmail("user8@naver.com");
-        dto.setPassword1("user8user8");
-        dto.setPassword2("user8user8");
-        dto.setPhoneNumber("01088888888");
-        dto.setFullName("유저팔");
+        dto.setUsername("user4");
+        dto.setEmail("user4@naver.com");
+        dto.setPassword1("user4user4");
+        dto.setPassword2("user4user4");
+        dto.setPhoneNumber("01044444444");
+        dto.setFullName("유저사");
 
         mockMvc.perform(post("/api/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
