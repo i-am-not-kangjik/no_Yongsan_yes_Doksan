@@ -93,7 +93,7 @@ const LoginPage = (props) => {
           이메일 찾기
         </Link>
         <Link to='/findpw' className='Link' style={{ color: 'gray', borderRight: '1px solid gray', padding: '0 10px' }}>
-          비밀번호 찾기f
+          비밀번호 찾기
         </Link>
         <Link to='/signup' className='Link' style={{ color: 'gray', padding: '0 10px' }}>
           회원 가입
