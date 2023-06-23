@@ -1,5 +1,6 @@
 package kjkim.kjkimspring.user;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import kjkim.kjkimspring.message.Message;
 import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,4 +52,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<UserLikesSell> likedSells;
+
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMessages;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receivedMessages;
 }
