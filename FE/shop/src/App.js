@@ -48,14 +48,14 @@ function App() {
 
   const [loggedInUser, setLoggedInUser] = useState(null); // 로그인한 사용자
   const [logoutTimer, setLogoutTimer] = useState(null); // 로그아웃 타이머
-  
+
   useEffect(() => {
     checkLoggedInUser(); // 사용자가 이미 로그인되어 있는지 확인
   }, []);
-  
+
   const checkLoggedInUser = () => {
     const token = localStorage.getItem('token');
-  
+
     if (token) {
       // 사용자가 로그인되어 있는 경우
       const username = localStorage.getItem('username'); // 로컬 스토리지 또는 서버에서 사용자 ID 가져오기
@@ -67,7 +67,7 @@ function App() {
       stopLogoutTimer(); // 로그아웃 타이머 중지
     }
   };
-  
+
   const startLogoutTimer = () => {
     // 1시간 후에 로그아웃 실행
     const timer = setTimeout(() => {
@@ -75,24 +75,24 @@ function App() {
     }, 60 * 60 * 1000); // 1시간 (밀리초 단위)
     setLogoutTimer(timer); // 로그아웃 타이머 설정
   };
-  
+
   const stopLogoutTimer = () => {
     // 로그아웃 타이머 중지
     clearTimeout(logoutTimer);
   };
-  
+
   const handleLogout = () => {
     // 로그인된 사용자 데이터 지우기
     setLoggedInUser(null);
-  
+
     // 로컬 스토리지에서 토큰 제거
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-  
+
     // 원하는 페이지로 이동
     window.location.href = '/sell';
   };
-  
+
 
   // blur 이펙트
   let [blur, setblur] = useState('blurOff')
@@ -111,27 +111,29 @@ function App() {
   const [searchText, setSearchText] = useState('');
 
   function handleSearch() {
-    navigate('/sell');
-    const filteredContent = pg.filter(item => item.title.includes(searchText));
-    setCd(filteredContent);
-  }
-
-  function handleKeyPress(event) {
-    if (event.key === 'Enter') {
-      handleSearch();
+    if (window.location.pathname !== '/sell') {
+      window.location.href = '/sell';
     }
+    const filteredContent = pg.filter(item =>
+      item.title.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setCd(filteredContent);
   }
 
   //카테고리 기능
   function handleCategorySelect(category) {
-    navigate('/sell');
+    if (window.location.pathname !== '/sell') {
+      window.location.href = '/sell';
+    }
     const filteredContent = pg.filter(item => item.category === category);
     setCd(filteredContent);
   }
 
   // 찜목록
   function handleLikedPosts() {
-    navigate('/sell');
+    if (window.location.pathname !== '/sell') {
+      window.location.href = '/sell';
+    }
     const filteredContent = pg.filter(item => item.likedUsernames.includes(loggedInUser.username));
     setCd(filteredContent);
   }
@@ -186,7 +188,7 @@ function App() {
               }}>찜목록</Nav.Link>
               <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link>
             </Nav>
-            <Form className="d-flex">
+            <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
               <Form.Control
                 type="search"
                 placeholder="물품을 검색해주세요"
@@ -195,10 +197,13 @@ function App() {
                 style={{ width: '300px' }}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                onKeyPress={handleKeyPress}
               />
-              <Button onClick={handleSearch} variant="outline-secondary">검색하기</Button>{' '}
+              <Button type="submit" onClick={handleSearch} variant="outline-secondary">
+                검색하기
+              </Button>{' '}
             </Form>
+
+
             {loggedInUser ? (
               // 로그인된 사용자인 경우
               <div>
@@ -252,23 +257,23 @@ function Main(props) {
           // 여기서 응답 데이터를 처리합니다.
           const fetchData = async () => {
             try {
-                const response = await axios.get('http://13.209.183.88:8081/api/sell/');
-                props.setCd(response.data);
+              const response = await axios.get('http://13.209.183.88:8081/api/sell/');
+              props.setCd(response.data);
             } catch (error) {
-                console.error(error);
+              console.error(error);
             }
-        };
+          };
 
-        fetchData();
+          fetchData();
         } catch (error) {
           console.error(error);
         }
       };
-  
+
       fetchData();
     }
   }, [d]);
-  
+
 
   // 페이지추가 state
   let [datapage, setDatapage] = useState(9)
