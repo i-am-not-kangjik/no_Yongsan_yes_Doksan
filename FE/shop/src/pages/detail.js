@@ -25,7 +25,15 @@ function Detail(props) {
                     const fetchData = async () => {
                         try {
                             const response = await axios.get('http://13.209.183.88:8081/api/sell/');
-                            props.setCd(response.data);
+                            if (props.scl == 's') {
+                                props.setCd(response.data.filter(item =>
+                                    item.title.toLowerCase().includes(props.search.toLowerCase())
+                                  ));
+                            } else if (props.scl == 'c') {
+                                props.setCd(response.data.filter(item => item.category === props.search));
+                            } else if (props.scl == 'l') {
+                                props.setCd(response.data.filter(item => item.likedUsernames.includes(props.search)));
+                            }
                         } catch (error) {
                             console.error(error);
                         }
@@ -82,12 +90,12 @@ function Detail(props) {
         <div className='detail'>
             <Carousel variant="light" style={{ width: '65%' }} prevIcon={<FontAwesomeIcon icon={faCircleArrowLeft} size='2x' />} nextIcon={<FontAwesomeIcon icon={faCircleArrowLeft} rotation={180} size='2x' />}>
                 {
-                    item.imgPaths.map(function (item, i) {
+                    item.imgPaths.map(function (url, i) {
                         return (
                             <Carousel.Item key={i}>
                                 <img
                                     className="d-block w-100 detail_img"
-                                    src={item}
+                                    src={url}
                                     alt="First slide"
                                 />
                             </Carousel.Item>

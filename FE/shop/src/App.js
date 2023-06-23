@@ -107,6 +107,10 @@ function App() {
   // 네이게이트
   let navigate = useNavigate();
 
+  // 검색과 카테고리와 찜목록 state
+  let [scl, setScl] = useState('')
+  let [search, setSearch] = useState('')
+
   // 검색기능
   const [searchText, setSearchText] = useState('');
 
@@ -117,6 +121,8 @@ function App() {
     const filteredContent = pg.filter(item =>
       item.title.toLowerCase().includes(searchText.toLowerCase())
     );
+    setScl("s");
+    setSearch(setSearch);
     setCd(filteredContent);
   }
 
@@ -126,6 +132,8 @@ function App() {
       window.location.href = '/sell';
     }
     const filteredContent = pg.filter(item => item.category === category);
+    setScl("c");
+    setSearch(category);
     setCd(filteredContent);
   }
 
@@ -135,6 +143,8 @@ function App() {
       window.location.href = '/sell';
     }
     const filteredContent = pg.filter(item => item.likedUsernames.includes(loggedInUser.username));
+    setScl("l");
+    setSearch(loggedInUser.username);
     setCd(filteredContent);
   }
 
@@ -223,7 +233,7 @@ function App() {
       </Navbar>
 
       <Routes>
-        <Route path='/sell' element={<Main updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
+        <Route path='/sell' element={<Main scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
@@ -258,7 +268,17 @@ function Main(props) {
           const fetchData = async () => {
             try {
               const response = await axios.get('http://13.209.183.88:8081/api/sell/');
-              props.setCd(response.data);
+              if (props.scl == 's') {
+                props.setCd(response.data.filter(item =>
+                  item.title.toLowerCase().includes(props.search.toLowerCase())
+                ));
+              } else if (props.scl == 'c') {
+                props.setCd(response.data.filter(item => item.category === props.search));
+              } else if (props.scl == 'l') {
+                props.setCd(response.data.filter(item => item.likedUsernames.includes(props.search)));
+              } else {
+                props.setCd(response.data);
+              }
             } catch (error) {
               console.error(error);
             }
@@ -344,7 +364,7 @@ function Main(props) {
         </div>
       </div>
       {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
-      {d && <OutsideAlerter updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} id={id} />}
+      {d && <OutsideAlerter scl={props.scl} search={props.search} updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} id={id} />}
     </div>
   )
 }
