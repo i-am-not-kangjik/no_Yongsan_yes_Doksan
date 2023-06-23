@@ -9,7 +9,6 @@ import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,7 +58,7 @@ public class SellRestController {
      * @return 인증된 사용자 객체입니다.
      */
     private User getAuthenticatedUser(Principal principal) {
-        return userService.getUser(principal.getName());
+        return userService.getUserByUsername(principal.getName());
     }
 
 
