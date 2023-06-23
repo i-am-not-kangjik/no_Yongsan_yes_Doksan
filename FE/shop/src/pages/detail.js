@@ -1,7 +1,5 @@
 /*eslint-disable*/
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom'
 import Carousel from 'react-bootstrap/Carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'

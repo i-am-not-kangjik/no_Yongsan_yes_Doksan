@@ -51,7 +51,6 @@ const FindPasswordPage = () => {
       // ...
     } else if (searchByNameIdEmail) {
       // 이름, 아이디, 이메일로 검색
-      // ...
     }
     // 결과에 따라 찾은 비밀번호 업데이트
     setFoundPassword('찾은 비밀번호');

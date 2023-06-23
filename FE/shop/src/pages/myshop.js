@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-import { Button, DropdownButton, Dropdown } from 'react-bootstrap';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const Myshop = ({ pg, setPostId, postId }) => {
   // 로컬 스토리지에서 사용자 이름을 가져옵니다.
