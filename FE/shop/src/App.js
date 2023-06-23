@@ -230,6 +230,33 @@ function Main(props) {
   // detail 페이지 상태 state
   const [d, setd] = useState(false)
 
+  useEffect(() => {
+    let fetchData;
+    if (d) {
+      fetchData = async () => {
+        try {
+          const response = await axios.get(`http://13.209.183.88:8081/api/sell/${id}`);
+          // 여기서 응답 데이터를 처리합니다.
+          const fetchData = async () => {
+            try {
+                const response = await axios.get('http://13.209.183.88:8081/api/sell/');
+                props.setCd(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  
+      fetchData();
+    }
+  }, [d]);
+  
+
   // 페이지추가 state
   let [datapage, setDatapage] = useState(3)
 
