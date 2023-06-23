@@ -49,7 +49,6 @@ const FindIdPage = () => {
             // ...
         } else if (searchByNameAndEmail) {
             // 이름과 이메일로 검색
-            // ...
         }
         // 결과에 따라 찾은 아이디 업데이트
         setFoundId('찾은 아이디');
