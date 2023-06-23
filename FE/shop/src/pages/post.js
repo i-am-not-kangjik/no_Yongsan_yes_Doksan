@@ -57,8 +57,7 @@ const Post = () => {
       if (response.ok) {
         // Request successful
         alert("상품이 등록되었습니다.");
-        console.log('상품이 등록되었습니다.');
-        location.reload();
+        window.location.href = '/myshop';
       } else {
         // Request failed
         alert("상품 등록 중 오류가 발생했습니다.");
