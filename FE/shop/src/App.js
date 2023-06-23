@@ -247,7 +247,7 @@ function Main(props) {
               props.recentList.map(function (id, i) {
                 return (
                   <Link onClick={() => { setd(true); props.setblur('blurOn'); setd(true); setid(id); }} key={i}>
-                    <Card.Img src={props.cd.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
+                    <Card.Img src={props.pg.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
                   </Link>
                 )
               })
