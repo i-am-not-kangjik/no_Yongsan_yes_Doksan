@@ -92,7 +92,7 @@ const SignupPage = () => {
           type="text"
           id="username"
           className="login_input"
-          placeholder="이름"
+          placeholder="아이디"
           value={username}
           onChange={handleUsernameChange}
         />
@@ -103,7 +103,7 @@ const SignupPage = () => {
           type="text"
           id="fullName"
           className="login_input"
-          placeholder="실명"
+          placeholder="이름"
           value={fullName}
           onChange={handleFullNameChange}
         />
