@@ -22,6 +22,26 @@ const Post = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (imageUploadRef.current.files.length < 1) {
+      alert('이미지를 업로드해주세요.');
+      return;
+    } else if (title.trim() === '') {
+      alert('제목을 입력해주세요.');
+      return;
+    } else if (category.trim() === '') {
+      alert('카테고리를 선택해주세요.');
+      return;
+    } else if (price.trim() === '' || price < 1000) {
+      alert('가격을 입력해주세요.');
+      return;
+    } else if (selectedRegion.trim() === '' || selectedDistrict.trim() === '') {
+      alert('지역을 선택해주세요.');
+      return;
+    } else if (content.trim() === '' || content.length < 10) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
@@ -178,8 +198,8 @@ const Post = () => {
   };
 
   return (
-    // <div style={{ width: '72%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px' }}>
-    <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}>
+    <div style={{ width: '70%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px 30px' }}>
+    {/* <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}> */}
       <h2 style={{ borderBottom: '3px solid', padding: '30px 0' }}>상품 등록</h2>
       <form onSubmit={handleSubmit}>
 
@@ -309,7 +329,7 @@ const Post = () => {
         </div>
 
         <div className='post_box'>
-          <div style={{ width: '35%' }}>
+          <div style={{ width: '20%' }}>
             <label htmlFor="region">지역 선택</label>
             <select
               id="region"

@@ -394,6 +394,40 @@ function MainCard(props) {
         <Link className='Link'>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <p className='main_price maincolor'>{props.item.price.toLocaleString()}원</p>
+            {props.item.sellState === 'RESERVED' && (
+              <div
+                style={{
+                  width: '130px',
+                  height: '30px',
+                  backgroundColor: '#65D35D',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: '1px solid #eee',
+                  borderRadius: '7px',
+                  marginRight: '20px',
+                }}
+              >
+                <span style={{ color: 'white' }}>예약중</span>
+              </div>
+            )}
+            {props.item.sellState === 'COMPLETED' && (
+              <div
+                style={{
+                  width: '130px',
+                  height: '30px',
+                  backgroundColor: '#ddd',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: '1px solid #eee',
+                  borderRadius: '7px',
+                  marginRight: '20px',
+                }}
+              >
+                <span style={{ color: 'black' }}>거래완료</span>
+              </div>
+            )}
             {props.item.likedUsernames.length > 0 && (
               <>
                 <span style={{ marginRight: '3px', fontSize: '18px' }}>
