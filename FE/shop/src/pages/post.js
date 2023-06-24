@@ -22,13 +22,6 @@ const Post = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(title)
-    console.log(content)
-    console.log(price.replace(/,/g, ''))
-    console.log(selectedRegion + ' ' + selectedDistrict)
-    console.log(category)
-    console.log(imageUploadRef.current.files[0])
-
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
@@ -95,6 +88,8 @@ const Post = () => {
 
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
+
+    console.log(images)
 
     if (selectedImages.length > 0) {
       const totalImages = images.length + selectedImages.length;
@@ -314,7 +309,7 @@ const Post = () => {
         </div>
 
         <div className='post_box'>
-          <div style={{ width: '20%' }}>
+          <div style={{ width: '35%' }}>
             <label htmlFor="region">지역 선택</label>
             <select
               id="region"
@@ -323,22 +318,22 @@ const Post = () => {
               style={{ marginLeft: '10px', height: '25px' }}
             >
               <option value="">시/도 선택</option>
-              <option value="강원도">강원</option>
-              <option value="경기도">경기</option>
-              <option value="경상남도">경남</option>
-              <option value="경상북도">경북</option>
-              <option value="광주광역시">광주</option>
-              <option value="대구광역시">대구</option>
-              <option value="대전광역시">대전</option>
-              <option value="부산광역시">부산</option>
-              <option value="서울특별시">서울</option>
-              <option value="울산광역시">울산</option>
-              <option value="인천광역시">인천</option>
-              <option value="전라남도">전남</option>
-              <option value="전라북도">전북</option>
-              <option value="제주특별자치도">제주</option>
-              <option value="충청남도">충남</option>
-              <option value="충청북도">충북</option>
+              <option value="강원도">강원도</option>
+              <option value="경기도">경기도</option>
+              <option value="경상남도">경상남도</option>
+              <option value="경상북도">경상북도</option>
+              <option value="광주광역시">광주광역시</option>
+              <option value="대구광역시">대구광역시</option>
+              <option value="대전광역시">대전광역시</option>
+              <option value="부산광역시">부산광역시</option>
+              <option value="서울특별시">서울특별시</option>
+              <option value="울산광역시">울산광역시</option>
+              <option value="인천광역시">인천광역시</option>
+              <option value="전라남도">전라남도</option>
+              <option value="전라북도">전라북도</option>
+              <option value="충청남도">충청남도</option>
+              <option value="충청북도">충청북도</option>
+              <option value="제주특별자치도">제주특별자치도</option>
             </select>
           </div>
 

@@ -32,7 +32,9 @@ function Detail(props) {
                             } else if (props.scl == 'c') {
                                 props.setCd(response.data.filter(item => item.category === props.search));
                             } else if (props.scl == 'l') {
-                                props.setCd(response.data.filter(item => item.likedUsernames.includes(props.search)));
+                                // props.setCd(response.data.filter(item => item.likedUsernames.includes(props.search)));
+                            } else {
+                                props.setCd(response.data)
                             }
                         } catch (error) {
                             console.error(error);

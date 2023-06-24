@@ -116,7 +116,8 @@ function App() {
 
   function handleSearch() {
     if (window.location.pathname !== '/sell') {
-      window.location.href = '/sell';
+      // window.location.href = '/sell';
+      navigate('/sell')
     }
     const filteredContent = pg.filter(item =>
       item.title.toLowerCase().includes(searchText.toLowerCase())
@@ -129,7 +130,8 @@ function App() {
   //카테고리 기능
   function handleCategorySelect(category) {
     if (window.location.pathname !== '/sell') {
-      window.location.href = '/sell';
+      // window.location.href = '/sell';
+      navigate('/sell')
     }
     const filteredContent = pg.filter(item => item.category === category);
     setScl("c");
@@ -140,7 +142,9 @@ function App() {
   // 찜목록
   function handleLikedPosts() {
     if (window.location.pathname !== '/sell') {
-      window.location.href = '/sell';
+      // window.location.href = '/sell';
+      navigate('/sell')
+
     }
     const filteredContent = pg.filter(item => item.likedUsernames.includes(loggedInUser.username));
     setScl("l");
@@ -154,13 +158,14 @@ function App() {
     <div className={'App '}>
       <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
         <Container fluid style={{ width: '80%', padding: '10px' }}>
-          <Navbar.Brand onClick={() => { navigate('/sell'); setCd(pg) }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
+          <Navbar.Brand onClick={() => { navigate('/') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
               className="me-auto my-2 my-lg-0"
               style={{ maxHeight: '100px' }}
               navbarScroll>
+              <Nav.Link onClick={() => { navigate('/sell'); setCd(pg); setScl("") }}>중고거래</Nav.Link>
               <Nav.Link onClick={() => {
                 if (loggedInUser == null) {
                   navigate('/signin');
@@ -233,6 +238,19 @@ function App() {
       </Navbar>
 
       <Routes>
+        <Route
+          path="/"
+          element={
+            <div style={{
+              width: '100vw',
+              height: '100vh',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              marginTop: '-20px',
+              backgroundImage: `url(https://images.unsplash.com/photo-1584910308431-40e853627585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3262&q=80)`,
+            }}></div>
+          }
+        />
         <Route path='/sell' element={<Main scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
