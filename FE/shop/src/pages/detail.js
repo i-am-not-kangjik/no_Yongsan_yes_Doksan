@@ -1,13 +1,15 @@
 /*eslint-disable*/
 import { useEffect } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
+import { Carousel, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faCircleArrowLeft, faHeart } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 
 function Detail(props) {
 
     const item = props.cd.find(item => item.id === props.id);
+
+    const username = localStorage.getItem('username')
 
     const handleLike = () => {
         const token = localStorage.getItem('token');
@@ -25,7 +27,18 @@ function Detail(props) {
                     const fetchData = async () => {
                         try {
                             const response = await axios.get('http://13.209.183.88:8081/api/sell/');
-                            props.setCd(response.data);
+                            if (props.scl == 's') {
+                                props.setCd(response.data.filter(item =>
+                                    item.title.toLowerCase().includes(props.search.toLowerCase())
+                                ));
+                            } else if (props.scl == 'c') {
+                                props.setCd(response.data.filter(item => item.category === props.search));
+                            } else if (props.scl == 'l') {
+                                window.location.reload()
+                            } else {
+                                props.setPg(response.data);
+                                props.setCd(response.data);
+                            }
                         } catch (error) {
                             console.error(error);
                         }
@@ -82,12 +95,12 @@ function Detail(props) {
         <div className='detail'>
             <Carousel variant="light" style={{ width: '65%' }} prevIcon={<FontAwesomeIcon icon={faCircleArrowLeft} size='2x' />} nextIcon={<FontAwesomeIcon icon={faCircleArrowLeft} rotation={180} size='2x' />}>
                 {
-                    item.imgPaths.map(function (item, i) {
+                    item.imgPaths.map(function (url, i) {
                         return (
                             <Carousel.Item key={i}>
                                 <img
                                     className="d-block w-100 detail_img"
-                                    src={item}
+                                    src={url}
                                     alt="First slide"
                                 />
                             </Carousel.Item>
@@ -111,10 +124,29 @@ function Detail(props) {
                 <div className='detail_margin' style={{ padding: '30px 0', borderTop: '1px solid black', borderBottom: '1px solid black', lineHeight: '1.8' }}>
                     <p className='detail_content'>{item.content}</p>
                 </div>
-                <div className='detail_margin grey' style={{ fontSize: '13px' }}>
+                <div className='detail_margin grey' style={{ fontSize: '14px', marginBottom : '25px' }}>
                     <p className='detail_price'>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
                 </div>
-                <span onClick={handleLike}>좋아요</span>
+                <OverlayTrigger
+                    trigger="click"
+                    key={'bottom'}
+                    placement={'bottom'}
+                    rootCloseEvent="rootCloseEvent"
+                    overlay={
+                        <Tooltip id={`tooltip-bottom`}>
+                            {item.likedUsernames.includes(username) ? (
+                                <span>상품이 <strong>찜</strong>되었습니다.</span>
+                            ) : (
+                                <span>찜이 해제되었습니다.</span>
+
+                            )}
+                        </Tooltip>
+                    }>
+                    {
+                        item.likedUsernames.includes(username) ? <Button variant="danger" style={{ width: '100px', fontSize : '20px'  }} onClick={handleLike}>찜 <FontAwesomeIcon icon={faHeart} /></Button> 
+                        : <Button variant="secondary" style={{ width: '100px', fontSize : '20px' }} onClick={handleLike}>찜 <FontAwesomeIcon icon={faHeart} /></Button>
+                    }
+                </OverlayTrigger>
             </div>
         </div>
     );
