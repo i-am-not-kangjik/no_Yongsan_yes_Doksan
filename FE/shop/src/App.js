@@ -5,6 +5,7 @@ import { Button, Navbar, Container, Nav, Spinner, Card, NavDropdown, Form } from
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 
 import './App.css';
+import Home from './pages/home'
 import Detail from './pages/detail'
 import Post from './pages/post'
 import SignIn from './pages/signin'
@@ -237,16 +238,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            <div style={{
-              width: '100vw',
-              height: '100vh',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              marginTop: '-20px',
-              backgroundImage: `url(https://images.unsplash.com/photo-1584910308431-40e853627585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3262&q=80)`,
-            }}></div>
-          }
+          element={<Home></Home>}
         />
         <Route path='/sell' element={<Main setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
@@ -402,6 +394,40 @@ function MainCard(props) {
         <Link className='Link'>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <p className='main_price maincolor'>{props.item.price.toLocaleString()}원</p>
+            {props.item.sellState === 'RESERVED' && (
+              <div
+                style={{
+                  width: '130px',
+                  height: '30px',
+                  backgroundColor: '#65D35D',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: '1px solid #eee',
+                  borderRadius: '7px',
+                  marginRight: '20px',
+                }}
+              >
+                <span style={{ color: 'white' }}>예약중</span>
+              </div>
+            )}
+            {props.item.sellState === 'COMPLETED' && (
+              <div
+                style={{
+                  width: '130px',
+                  height: '30px',
+                  backgroundColor: '#ddd',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: '1px solid #eee',
+                  borderRadius: '7px',
+                  marginRight: '20px',
+                }}
+              >
+                <span style={{ color: 'black' }}>거래완료</span>
+              </div>
+            )}
             {props.item.likedUsernames.length > 0 && (
               <>
                 <span style={{ marginRight: '3px', fontSize: '18px' }}>
