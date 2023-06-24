@@ -2,12 +2,14 @@
 import { useEffect } from 'react';
 import { Carousel, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faCircleArrowLeft, faHeart } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 
 function Detail(props) {
 
     const item = props.cd.find(item => item.id === props.id);
+
+    const username = localStorage.getItem('username')
 
     const handleLike = () => {
         const token = localStorage.getItem('token');
@@ -122,21 +124,28 @@ function Detail(props) {
                 <div className='detail_margin' style={{ padding: '30px 0', borderTop: '1px solid black', borderBottom: '1px solid black', lineHeight: '1.8' }}>
                     <p className='detail_content'>{item.content}</p>
                 </div>
-                <div className='detail_margin grey' style={{ fontSize: '13px' }}>
+                <div className='detail_margin grey' style={{ fontSize: '14px', marginBottom : '25px' }}>
                     <p className='detail_price'>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
                 </div>
-                <span onClick={handleLike}>좋아요</span>
                 <OverlayTrigger
                     trigger="click"
                     key={'bottom'}
                     placement={'bottom'}
+                    rootCloseEvent="rootCloseEvent"
                     overlay={
                         <Tooltip id={`tooltip-bottom`}>
-                            상품을 <strong>찜</strong>했습니다.
+                            {item.likedUsernames.includes(username) ? (
+                                <span>상품이 <strong>찜</strong>되었습니다.</span>
+                            ) : (
+                                <span>찜이 해제되었습니다.</span>
+
+                            )}
                         </Tooltip>
+                    }>
+                    {
+                        item.likedUsernames.includes(username) ? <Button variant="danger" style={{ width: '100px', fontSize : '20px'  }} onClick={handleLike}>찜 <FontAwesomeIcon icon={faHeart} /></Button> 
+                        : <Button variant="secondary" style={{ width: '100px', fontSize : '20px' }} onClick={handleLike}>찜 <FontAwesomeIcon icon={faHeart} /></Button>
                     }
-                >
-                    <Button variant="secondary">찜</Button>
                 </OverlayTrigger>
             </div>
         </div>
