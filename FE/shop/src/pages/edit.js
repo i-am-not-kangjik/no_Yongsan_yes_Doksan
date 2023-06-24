@@ -44,19 +44,12 @@ const Edit = ({ postId }) => {
           setSelectedRegion(regionName);
           setSelectedDistrict(districtName);
           setCategory(category);
-          console.log(regionName);
-          console.log(districtName);
-          console.log('-----------------------')
-
         } else {
           console.error('Failed to fetch post data');
         }
       } catch (error) {
         console.error('Error fetching post data', error);
       }
-      console.log(selectedRegion);
-      console.log(selectedDistrict);
-      console.log(category);
     };
     fetchPostData();
   }, []);

@@ -5,6 +5,7 @@ import { Button, Navbar, Container, Nav, Spinner, Card, NavDropdown, Form } from
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 
 import './App.css';
+import Home from './pages/home'
 import Detail from './pages/detail'
 import Post from './pages/post'
 import SignIn from './pages/signin'
@@ -237,16 +238,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={
-            <div style={{
-              width: '100vw',
-              height: '100vh',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              marginTop: '-20px',
-              backgroundImage: `url(https://images.unsplash.com/photo-1584910308431-40e853627585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3262&q=80)`,
-            }}></div>
-          }
+          element={<Home></Home>}
         />
         <Route path='/sell' element={<Main setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
