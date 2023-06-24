@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import { useEffect } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
+import { Carousel, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
@@ -28,13 +28,14 @@ function Detail(props) {
                             if (props.scl == 's') {
                                 props.setCd(response.data.filter(item =>
                                     item.title.toLowerCase().includes(props.search.toLowerCase())
-                                  ));
+                                ));
                             } else if (props.scl == 'c') {
                                 props.setCd(response.data.filter(item => item.category === props.search));
                             } else if (props.scl == 'l') {
-                                // props.setCd(response.data.filter(item => item.likedUsernames.includes(props.search)));
+                                window.location.reload()
                             } else {
-                                props.setCd(response.data)
+                                props.setPg(response.data);
+                                props.setCd(response.data);
                             }
                         } catch (error) {
                             console.error(error);
@@ -125,6 +126,18 @@ function Detail(props) {
                     <p className='detail_price'>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
                 </div>
                 <span onClick={handleLike}>좋아요</span>
+                <OverlayTrigger
+                    trigger="click"
+                    key={'bottom'}
+                    placement={'bottom'}
+                    overlay={
+                        <Tooltip id={`tooltip-bottom`}>
+                            상품을 <strong>찜</strong>했습니다.
+                        </Tooltip>
+                    }
+                >
+                    <Button variant="secondary">찜</Button>
+                </OverlayTrigger>
             </div>
         </div>
     );

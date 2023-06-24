@@ -116,21 +116,19 @@ function App() {
 
   function handleSearch() {
     if (window.location.pathname !== '/sell') {
-      // window.location.href = '/sell';
       navigate('/sell')
     }
     const filteredContent = pg.filter(item =>
       item.title.toLowerCase().includes(searchText.toLowerCase())
     );
     setScl("s");
-    setSearch(setSearch);
+    setSearch(searchText);
     setCd(filteredContent);
   }
 
   //카테고리 기능
   function handleCategorySelect(category) {
     if (window.location.pathname !== '/sell') {
-      // window.location.href = '/sell';
       navigate('/sell')
     }
     const filteredContent = pg.filter(item => item.category === category);
@@ -142,7 +140,6 @@ function App() {
   // 찜목록
   function handleLikedPosts() {
     if (window.location.pathname !== '/sell') {
-      // window.location.href = '/sell';
       navigate('/sell')
 
     }
@@ -251,7 +248,7 @@ function App() {
             }}></div>
           }
         />
-        <Route path='/sell' element={<Main scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
+        <Route path='/sell' element={<Main setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
@@ -382,7 +379,7 @@ function Main(props) {
         </div>
       </div>
       {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
-      {d && <OutsideAlerter scl={props.scl} search={props.search} updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} id={id} />}
+      {d && <OutsideAlerter setPg={props.setPg} scl={props.scl} search={props.search} updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} id={id} />}
     </div>
   )
 }
