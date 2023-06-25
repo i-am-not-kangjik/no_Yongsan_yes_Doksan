@@ -40,11 +40,10 @@ const Edit = ({ postId }) => {
           setTitle(title);
           setContent(content);
           setPrice(String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-          const [regionName, districtName] = (region || 'No Region').split(' ');
+          const [regionName, districtName] = (region).split(' ');
           setSelectedRegion(regionName);
           setSelectedDistrict(districtName);
           setCategory(category);
-
         } else {
           console.error('Failed to fetch post data');
         }
@@ -52,12 +51,31 @@ const Edit = ({ postId }) => {
         console.error('Error fetching post data', error);
       }
     };
-
     fetchPostData();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (imageUploadRef.current.files.length < 1) {
+      alert('이미지를 업로드해주세요.');
+      return;
+    } else if (title.trim() === '') {
+      alert('제목을 입력해주세요.');
+      return;
+    } else if (category.trim() === '') {
+      alert('카테고리를 선택해주세요.');
+      return;
+    } else if (price.trim() === '' || price < 1000) {
+      alert('가격을 입력해주세요.');
+      return;
+    } else if (selectedRegion.trim() === '' || selectedDistrict.trim() === '') {
+      alert('지역을 선택해주세요.');
+      return;
+    } else if (content.trim() === '' || content.length < 10) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('title', title);
@@ -215,8 +233,8 @@ const Edit = ({ postId }) => {
   };
 
   return (
-    // <div style={{ width: '72%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px' }}>
-    <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}>
+    <div style={{ width: '70%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px 30px' }}>
+    {/* <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}> */}
       <h2 style={{ borderBottom: '3px solid', padding: '30px 0' }}>상품 등록</h2>
       <form onSubmit={handleSubmit}>
 
@@ -297,7 +315,7 @@ const Edit = ({ postId }) => {
             <input
               type="text"
               id="title"
-              defaultValue={title}
+              value={title}
               placeholder='상품 제목을 입력해주세요.'
               onChange={((event) => setTitle(event.target.value), handleTitleChange)}
             />
@@ -312,7 +330,7 @@ const Edit = ({ postId }) => {
           <div className='post_box_right'>
             <select
               id="category"
-              defaultValue={category}
+              value={category} // 변경된 부분
               style={{ height: '25px' }}
               onChange={(event) => setCategory(event.target.value)}
             >
@@ -323,6 +341,7 @@ const Edit = ({ postId }) => {
               <option value="스마트워치">스마트워치</option>
               <option value="블루투스이어폰">블루투스이어폰</option>
             </select>
+
           </div>
 
 
@@ -336,7 +355,7 @@ const Edit = ({ postId }) => {
             <input
               type="text"
               id="price"
-              defaultValue={price}
+              value={price}
               style={{ width: '25%', }}
               placeholder='숫자만 입력해주세요.'
               onChange={handlePriceChange}
@@ -350,27 +369,27 @@ const Edit = ({ postId }) => {
             <label htmlFor="region">지역 선택</label>
             <select
               id="region"
-              defaultValue={selectedRegion}
+              value={selectedRegion}
               onChange={handleRegionChange}
               style={{ marginLeft: '10px', height: '25px' }}
             >
               <option value="">시/도 선택</option>
-              <option value="강원도">강원</option>
-              <option value="경기도">경기</option>
-              <option value="경상남도">경남</option>
-              <option value="경상북도">경북</option>
-              <option value="광주광역시">광주</option>
-              <option value="대구광역시">대구</option>
-              <option value="대전광역시">대전</option>
-              <option value="부산광역시">부산</option>
-              <option value="서울특별시">서울</option>
-              <option value="울산광역시">울산</option>
-              <option value="인천광역시">인천</option>
-              <option value="전라남도">전남</option>
-              <option value="전라북도">전북</option>
-              <option value="제주특별자치도">제주</option>
-              <option value="충청남도">충남</option>
-              <option value="충청북도">충북</option>
+              <option value="강원도">강원도</option>
+              <option value="경기도">경기도</option>
+              <option value="경상남도">경상남도</option>
+              <option value="경상북도">경상북도</option>
+              <option value="광주광역시">광주광역시</option>
+              <option value="대구광역시">대구광역시</option>
+              <option value="대전광역시">대전광역시</option>
+              <option value="부산광역시">부산광역시</option>
+              <option value="서울특별시">서울특별시</option>
+              <option value="울산광역시">울산광역시</option>
+              <option value="인천광역시">인천광역시</option>
+              <option value="전라남도">전라남도</option>
+              <option value="전라북도">전라북도</option>
+              <option value="충청남도">충청남도</option>
+              <option value="충청북도">충청북도</option>
+              <option value="제주특별자치도">제주특별자치도</option>
             </select>
           </div>
 
@@ -378,7 +397,7 @@ const Edit = ({ postId }) => {
             <label htmlFor="district">구역 선택</label>
             <select
               id="district"
-              defaultValue={selectedDistrict}
+              value={selectedDistrict}
               onChange={handleDistrictChange}
               style={{ marginLeft: '10px', height: '25px' }}
             >
@@ -490,7 +509,7 @@ const Edit = ({ postId }) => {
           <div className='post_box_right'>
             <textarea
               id="content"
-              defaultValue={content}
+              value={content}
               rows={6}
               placeholder='상품에 대한 설명을 적어주세요.'
               style={{ width: '80%', padding: '5px', overflow: 'auto' }}
