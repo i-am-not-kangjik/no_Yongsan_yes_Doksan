@@ -6,6 +6,8 @@ import kjkim.kjkimspring.message.MessageRepository;
 import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,37 +41,39 @@ public class MessageService {
         }
     }
 
-    public MessageDto getMessageById(Long messageId) {
+    public MessageDto getMessageById(Long messageId, String username) {
         Optional<Message> optionalMessage = messageRepository.findById(messageId);
         if (optionalMessage.isPresent()) {
             Message message = optionalMessage.get();
-            return new MessageDto(message);
+            if (message.getSender().getUsername().equals(username) || message.getReceiver().getUsername().equals(username)) {
+                return new MessageDto(message);
+            } else {
+                throw new AccessDeniedException("Access is denied.");
+            }
         } else {
             // handle the case when message does not exist
             return null;
         }
     }
 
+
     public List<MessageDto> getReceivedMessages(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            List<Message> messages = messageRepository.findByReceiver(user.get());
-            return messages.stream().map(MessageDto::new).collect(Collectors.toList());
-        } else {
-            // handle the case when user does not exist
-            return new ArrayList<>();
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return messageRepository.findByReceiver(user)
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
     }
 
     public List<MessageDto> getSentMessages(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            List<Message> messages = messageRepository.findBySender(user.get());
-            return messages.stream().map(MessageDto::new).collect(Collectors.toList());
-        } else {
-            // handle the case when user does not exist
-            return new ArrayList<>();
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return messageRepository.findBySender(user)
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
     }
+
 }
 

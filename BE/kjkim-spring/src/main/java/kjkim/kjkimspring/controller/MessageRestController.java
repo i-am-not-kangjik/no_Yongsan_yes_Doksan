@@ -15,6 +15,7 @@ public class MessageRestController {
     @Autowired
     private MessageService messageService;
 
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     public void sendMessage(@RequestBody MessageDto messageDto) {
@@ -32,4 +33,10 @@ public class MessageRestController {
     public List<MessageDto> getSentMessages(@PathVariable String username) {
         return messageService.getSentMessages(username);
     }
+    @PreAuthorize("#username == authentication.principal.username")
+    @GetMapping("/{username}/{messageId}")
+    public MessageDto getMessage(@PathVariable String username, @PathVariable Long messageId) {
+        return messageService.getMessageById(messageId, username);
+    }
+
 }
