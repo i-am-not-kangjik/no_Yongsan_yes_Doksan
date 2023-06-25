@@ -1,9 +1,12 @@
 package kjkim.kjkimspring.dto;
 
 import kjkim.kjkimspring.message.Message;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor  // Lombok이 기본 생성자를 자동으로 추가
+@AllArgsConstructor // 모든 필드를 매개변수로 갖는 생성자를 추가
 public class MessageDto {
     private Long id;
     private String senderUsername;

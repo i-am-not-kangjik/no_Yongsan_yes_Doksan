@@ -5,6 +5,7 @@ import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,7 @@ public class MessageService {
     }
 
 
+    @Transactional
     public void deleteReceivedMessage(Long messageId, String username) {
         Optional<Message> messageOptional = messageRepository.findById(messageId);
         if (messageOptional.isPresent()) {
@@ -78,6 +80,7 @@ public class MessageService {
             if (message.getReceiver().getUsername().equals(username)) {
                 message.setIsDeletedByReceiver(true);
                 messageRepository.save(message);
+                messageRepository.flush();
             } else {
                 // handle the case when user is not the receiver of the message
             }
@@ -85,6 +88,7 @@ public class MessageService {
             // handle the case when message does not exist
         }
     }
+
 
 
     public void deleteSentMessage(Long messageId, String username) {
