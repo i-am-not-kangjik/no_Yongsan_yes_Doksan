@@ -1,5 +1,8 @@
 package kjkim.kjkimspring.user;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import kjkim.kjkimspring.message.Message;
 import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +16,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "\"member\"")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
 
     @Id
@@ -51,4 +55,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<UserLikesSell> likedSells;
+
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMessages;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receivedMessages;
 }
