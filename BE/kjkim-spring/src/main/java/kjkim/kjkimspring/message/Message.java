@@ -10,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -31,36 +30,7 @@ public class Message {
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private boolean isRead = false;
-
-    @Column
-    private boolean isDeletedBySender = false;
-
-    @Column
-    private boolean isDeletedByReceiver = false;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    public void setIsDeletedBySender(boolean isDeletedBySender) {
-        this.isDeletedBySender = isDeletedBySender;
-    }
-
-    public void setIsDeletedByReceiver(boolean isDeletedByReceiver) {
-        this.isDeletedByReceiver = isDeletedByReceiver;
-    }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Message message = (Message) o;
-//        return Objects.equals(id, message.id);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
-//    }
 }
+

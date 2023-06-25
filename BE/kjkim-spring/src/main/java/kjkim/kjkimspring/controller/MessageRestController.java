@@ -22,12 +22,6 @@ public class MessageRestController {
         messageService.sendMessage(messageDto.getSenderUsername(), messageDto.getReceiverUsername(), messageDto.getContent());
     }
 
-//    @PreAuthorize("#username == authentication.principal.username")
-//    @GetMapping("/unread/{username}")
-//    public List<MessageDto> getUnreadMessages(@PathVariable String username) {
-//        return messageService.getUnreadMessages(username);
-//    }
-
     @PreAuthorize("#username == authentication.principal.username")
     @GetMapping("/received/{username}")
     public List<MessageDto> getReceivedMessages(@PathVariable String username) {
@@ -39,6 +33,7 @@ public class MessageRestController {
     public List<MessageDto> getSentMessages(@PathVariable String username) {
         return messageService.getSentMessages(username);
     }
+
 
 
 //    @PreAuthorize("#username == authentication.principal.username")
