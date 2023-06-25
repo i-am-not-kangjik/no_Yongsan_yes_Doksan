@@ -22,11 +22,11 @@ public class MessageRestController {
         messageService.sendMessage(messageDto.getSenderUsername(), messageDto.getReceiverUsername(), messageDto.getContent());
     }
 
-    @PreAuthorize("#username == authentication.principal.username")
-    @GetMapping("/unread/{username}")
-    public List<MessageDto> getUnreadMessages(@PathVariable String username) {
-        return messageService.getUnreadMessages(username);
-    }
+//    @PreAuthorize("#username == authentication.principal.username")
+//    @GetMapping("/unread/{username}")
+//    public List<MessageDto> getUnreadMessages(@PathVariable String username) {
+//        return messageService.getUnreadMessages(username);
+//    }
 
     @PreAuthorize("#username == authentication.principal.username")
     @GetMapping("/received/{username}")
@@ -41,15 +41,15 @@ public class MessageRestController {
     }
 
 
-    @PreAuthorize("#username == authentication.principal.username")
-    @DeleteMapping("/received/{username}/{messageId}")
-    public void deleteReceivedMessage(@PathVariable Long messageId, @PathVariable String username) {
-        messageService.deleteReceivedMessage(messageId, username);
-    }
-
-    @PreAuthorize("#username == authentication.principal.username")
-    @DeleteMapping("/sent/{username}/{messageId}")
-    public void deleteSentMessage(@PathVariable Long messageId, @PathVariable String username) {
-        messageService.deleteSentMessage(messageId, username);
-    }
+//    @PreAuthorize("#username == authentication.principal.username")
+//    @DeleteMapping("/received/{username}/{messageId}")
+//    public void deleteReceivedMessage(@PathVariable Long messageId, @PathVariable String username) {
+//        messageService.deleteReceivedMessage(messageId, username);
+//    }
+//
+//    @PreAuthorize("#username == authentication.principal.username")
+//    @DeleteMapping("/sent/{username}/{messageId}")
+//    public void deleteSentMessage(@PathVariable Long messageId, @PathVariable String username) {
+//        messageService.deleteSentMessage(messageId, username);
+//    }
 }

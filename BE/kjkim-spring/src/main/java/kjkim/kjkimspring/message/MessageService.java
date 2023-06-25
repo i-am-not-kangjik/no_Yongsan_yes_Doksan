@@ -37,16 +37,16 @@ public class MessageService {
         }
     }
 
-    public List<MessageDto> getUnreadMessages(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            List<Message> messages = messageRepository.findByReceiverAndIsReadAndIsDeletedByReceiver(user.get(), false, false);
-            return messages.stream().map(MessageDto::new).collect(Collectors.toList());
-        } else {
-            // handle the case when user does not exist
-            return new ArrayList<>();
-        }
-    }
+//    public List<MessageDto> getUnreadMessages(String username) {
+//        Optional<User> user = userRepository.findByUsername(username);
+//        if (user.isPresent()) {
+//            List<Message> messages = messageRepository.findByReceiverAndIsReadAndIsDeletedByReceiver(user.get(), false, false);
+//            return messages.stream().map(MessageDto::new).collect(Collectors.toList());
+//        } else {
+//            // handle the case when user does not exist
+//            return new ArrayList<>();
+//        }
+//    }
 
 
     public List<MessageDto> getReceivedMessages(String username) {
@@ -72,35 +72,35 @@ public class MessageService {
     }
 
 
-    @Transactional
-    public void deleteReceivedMessage(Long messageId, String username) {
-        Optional<Message> messageOptional = messageRepository.findById(messageId);
-        if (messageOptional.isPresent()) {
-            Message message = messageOptional.get();
-            if (message.getReceiver().getUsername().equals(username)) {
-                message.setIsDeletedByReceiver(true);
-                messageRepository.save(message);
-                messageRepository.flush();
-            } else {
-                // handle the case when user is not the receiver of the message
-            }
-        } else {
-            // handle the case when message does not exist
-        }
-    }
+//    @Transactional
+//    public void deleteReceivedMessage(Long messageId, String username) {
+//        Optional<Message> messageOptional = messageRepository.findById(messageId);
+//        if (messageOptional.isPresent()) {
+//            Message message = messageOptional.get();
+//            if (message.getReceiver().getUsername().equals(username)) {
+//                message.setIsDeletedByReceiver(true);
+//                messageRepository.save(message);
+//                messageRepository.flush();
+//            } else {
+//                // handle the case when user is not the receiver of the message
+//            }
+//        } else {
+//            // handle the case when message does not exist
+//        }
+//    }
 
 
 
-    public void deleteSentMessage(Long messageId, String username) {
-        Optional<Message> optionalMessage = messageRepository.findById(messageId);
-        if (optionalMessage.isPresent()) {
-            Message message = optionalMessage.get();
-            Optional<User> user = userRepository.findByUsername(username);
-            if (user.isPresent() && message.getSender().getId().equals(user.get().getId())) {
-                message.setIsDeletedBySender(true);
-                messageRepository.save(message);
-            }
-        }
-    }
+//    public void deleteSentMessage(Long messageId, String username) {
+//        Optional<Message> optionalMessage = messageRepository.findById(messageId);
+//        if (optionalMessage.isPresent()) {
+//            Message message = optionalMessage.get();
+//            Optional<User> user = userRepository.findByUsername(username);
+//            if (user.isPresent() && message.getSender().getId().equals(user.get().getId())) {
+//                message.setIsDeletedBySender(true);
+//                messageRepository.save(message);
+//            }
+//        }
+//    }
 }
 

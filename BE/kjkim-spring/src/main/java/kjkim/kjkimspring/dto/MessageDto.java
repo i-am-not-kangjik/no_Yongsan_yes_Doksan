@@ -3,6 +3,8 @@ package kjkim.kjkimspring.dto;
 import kjkim.kjkimspring.message.Message;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor  // Lombok이 기본 생성자를 자동으로 추가
@@ -12,17 +14,19 @@ public class MessageDto {
     private String senderUsername;
     private String receiverUsername;
     private String content;
-    private boolean isRead;
-    private boolean isDeletedBySender;
-    private boolean isDeletedByReceiver;
+    private LocalDateTime createdAt;
+//    private boolean isRead;
+//    private boolean isDeletedBySender;
+//    private boolean isDeletedByReceiver;
 
     public MessageDto(Message message) {
         this.id = message.getId();
         this.senderUsername = message.getSender().getUsername();
         this.receiverUsername = message.getReceiver().getUsername();
         this.content = message.getContent();
-        this.isRead = message.isRead();
-        this.isDeletedBySender = message.isDeletedBySender();
-        this.isDeletedByReceiver = message.isDeletedByReceiver();
+        this.createdAt = message.getCreatedAt();
+//        this.isRead = message.isRead();
+//        this.isDeletedBySender = message.isDeletedBySender();
+//        this.isDeletedByReceiver = message.isDeletedByReceiver();
     }
 }
