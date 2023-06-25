@@ -1,5 +1,7 @@
 package kjkim.kjkimspring.user;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import kjkim.kjkimspring.message.Message;
 import kjkim.kjkimspring.userlikessell.UserLikesSell;
 import lombok.Getter;
@@ -14,6 +16,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "\"member\"")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
 
     @Id
