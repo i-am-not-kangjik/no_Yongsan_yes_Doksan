@@ -10,6 +10,7 @@ h4 {
 p {
     margin: 0;
 }
+
 .navbar .nav-link {
     /* color: white; */
     /* Set the desired font color */
@@ -172,4 +173,14 @@ p {
 .radio {
     font-size: 20px;
     margin-right: 5px;
+}
+
+.sendInput {
+    width: 440px;
+    padding: 15px 0;
+    font-size: 15px;
+    border: 0;
+    outline: none;
+    overflow-wrap: break-word;
+    overflow-y: auto;  
 }

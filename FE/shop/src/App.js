@@ -15,6 +15,7 @@ import FindPw from './pages/findpw'
 import Myshop from './pages/myshop'
 import axios from 'axios';
 import Edit from './pages/edit'
+import Message from './pages/message'
 
 import OutsideAlerter from './pages/detailEffect';
 
@@ -152,10 +153,13 @@ function App() {
 
   const [postId, setPostId] = useState('');
 
+  // 쪽지 컴포넌트
+  const [message, setMessage] = useState(false);
+
   return (
     <div className={'App '}>
       <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
-        <Container fluid style={{ width: '80%', padding: '10px' }}>
+        <Container fluid style={{ width: '85%', padding: '10px' }}>
           <Navbar.Brand onClick={() => { navigate('/') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -219,10 +223,11 @@ function App() {
 
             {loggedInUser ? (
               // 로그인된 사용자인 경우
-              <div>
-                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px' }}>
+              <div style={{ display: 'flex' }}>
+                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px', marginRight: '20px' }}>
                   {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
                 </Nav.Link>
+                <Nav.Link onClick={() => { setMessage(true) }}>쪽지함</Nav.Link>
               </div>
             ) : (
               // 로그인되지 않은 사용자인 경우
@@ -230,6 +235,7 @@ function App() {
                 로그인/회원가입
               </Nav.Link>
             )}
+
 
           </Navbar.Collapse>
         </Container>
@@ -240,7 +246,7 @@ function App() {
           path="/"
           element={<Home></Home>}
         />
-        <Route path='/sell' element={<Main setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
+        <Route path='/sell' element={<Main message={message} setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
@@ -311,14 +317,18 @@ function Main(props) {
   return (
     <div>
       <div>
+
+        {
+          props.message == true ? <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex : '1' }}><Message></Message></div> : null
+        }
         {/* 최근본 상품 */}
-        <div style={{ position: 'fixed', top: '100px', right: '1.75%' }}>
+        <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex : '0' }}>
           <Card style={{ width: '180px' }}>
             <Card.Title style={{ borderBottom: '1px solid gray', padding: '10px' }}>최근본상품</Card.Title>
             {
               props.recentList.map(function (id, i) {
                 return (
-                  <Link onClick={() => { setd(true); props.setblur('blurOn'); setd(true); setid(id); }} key={i}>
+                  <Link onClick={() => { setd(true); props.setblur('blurOn'); setid(id); }} key={i}>
                     <Card.Img src={props.pg.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
                   </Link>
                 )
@@ -389,7 +399,7 @@ function MainCard(props) {
       </div>
       {/* 컨텐츠영역 */}
       <div style={{ textAlign: "left", width: '70%', margin: 'auto' }}>
-        <Link className='Link'><h5 className='main_title text_overflow'>{props.item.title}</h5></Link>
+        <Link className='Link'><h5 className='main_title text_overflow' style={{ marginTop: '5px' }}>{props.item.title}</h5></Link>
         <Link className='Link'><p className='main_area'>{props.item.region}</p></Link>
         <Link className='Link'>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -399,7 +409,7 @@ function MainCard(props) {
                 style={{
                   width: '130px',
                   height: '30px',
-                  backgroundColor: '#65D35D',
+                  backgroundColor: '#0052A4',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
