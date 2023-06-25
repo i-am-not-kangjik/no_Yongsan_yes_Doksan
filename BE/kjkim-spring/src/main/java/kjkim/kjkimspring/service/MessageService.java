@@ -1,6 +1,8 @@
-package kjkim.kjkimspring.message;
+package kjkim.kjkimspring.service;
 
 import kjkim.kjkimspring.dto.MessageDto;
+import kjkim.kjkimspring.message.Message;
+import kjkim.kjkimspring.message.MessageRepository;
 import kjkim.kjkimspring.user.User;
 import kjkim.kjkimspring.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
