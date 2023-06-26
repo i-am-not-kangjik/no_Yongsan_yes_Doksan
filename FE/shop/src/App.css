@@ -195,4 +195,6 @@ p {
     outline: none;
     overflow-wrap: break-word;
     overflow-y: auto;  
+    background-color: #EBF7FF;
 }
+
