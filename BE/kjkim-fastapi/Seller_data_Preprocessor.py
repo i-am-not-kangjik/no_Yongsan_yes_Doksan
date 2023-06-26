@@ -6,6 +6,7 @@ from phone_CrawlingDataPreprocessor import modeling_processing
 from phone_CrawlingDataPreprocessor import remove_y
 import numpy as np
 import pickle
+import math
 
 class seller_data_processor:
     '''
@@ -252,6 +253,33 @@ class seller_data_processor:
             result_string += f"이를 바탕으로 중고사이트의 판매가에 대한 AI 가격 예측 결과는 {self.predicted_price}원입니다."
         
         return result_string
+    
+    def generate_result_dict(self):
+        if self.min_price is None or self.max_price is None or math.isnan(self.min_price) or math.isnan(self.max_price):
+            result_dict = {
+                "product_name": self.product_name,
+                "capacity": self.capacity,
+                "quality": self.quality,
+                "min_price": None,
+                "max_price": None,
+                "predicted_price": int(self.predicted_price) if self.predicted_price else None
+            }
+        else :
+            result_dict = {
+                "product_name": self.product_name,
+                "capacity": self.capacity,
+                "quality": self.quality,
+                "min_price": int(self.min_price) if self.min_price else None,
+                "max_price": int(self.max_price) if self.max_price else None,
+                "predicted_price": int(self.predicted_price) if self.predicted_price else None
+            }
+        return result_dict
+
+
+
+
+
+
 
     def execute(self):
         self.basic_adding()
@@ -263,6 +291,6 @@ class seller_data_processor:
         self.change_data_type()
         self.modeling_Preprocessor()
         self.load_no_scaling_price_prdict_model()
-        result = self.generate_result_string()
+        result = self.generate_result_dict()
         
         return result
