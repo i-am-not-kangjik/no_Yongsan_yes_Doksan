@@ -1,50 +1,63 @@
 /*eslint-disable*/
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button, Tooltip, OverlayTrigger, Table } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestion, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios';
+import Loading from './loading';
 
 function PhoneSelectionForm() {
     const [selectedProduct, setSelectedProduct] = useState('');
     const [selectedModel, setSelectedModel] = useState('');
     const [selectedSeries, setSelectedSeries] = useState('');
     const [selectedCapacity, setSelectedCapacity] = useState('');
+
+    const [productName, setproductName] = useState("")
+
     const [grade, setGrade] = useState('');
 
     const [result, setResult] = useState(null);
 
-    const handleSubmit = async (e) => {
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
 
+        setLoading(true)
+
         if (selectedModel.includes('노트')) {
-            const product_name = selectedProduct + selectedSeries
+            setproductName(selectedProduct + selectedSeries)
         } else {
-            const product_name = selectedProduct + " " + selectedSeries
+            setproductName(selectedProduct + " " + selectedSeries)
         }
 
-        console.log(product_name)
-        console.log(selectedCapacity)
-        console.log(grade)
+        // Create the payload object
+        const payload = {
+            product_name: productName,
+            capacity: parseInt(selectedCapacity),
+            quality: grade,
+        };
 
-        try {
-            const response = await axios.post('http://3.37.220.88:8000/predict_price', {
-                product_name: selectedProduct + selectedSeries,
-                capacity: selectedCapacity,
-                quality: grade,
-            });
-            setResult(response.data);
-            alert("성공")
-        } catch (error) {
-            console.error(error);
-        }
+        console.log("모델명: ", productName)
+        console.log("용량: ", selectedCapacity)
+        console.log("등급: ", grade)
+
+        // Send the POST request
+        fetch('http://3.37.220.88:8000/predict_price', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+            .then((response) => response.json())
+            .then((data) => setResult(data))
+            .catch((error) => console.error(error));
+            console.log(result)
+            setLoading(false)
     };
 
 
-    const a = (e) => {
-        if (selectedModel.includes('노트')) {
-            console.log(selectedProduct + selectedSeries)
-        } else {
-            console.log(selectedProduct + " " + selectedSeries)
-        }
-        console.log(selectedCapacity)
-    };
 
     const handleGradeChange = (e) => {
         setGrade(e.target.value);
@@ -72,14 +85,28 @@ function PhoneSelectionForm() {
         setSelectedCapacity(e.target.value);
     };
 
+    // 등급 표 호버
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
     return (
         <div className='model_box'>
-            <form>
-                <div style={{ display: 'flex' }}>
+            {/* {loading ? null: <Loading /> } */}
+            {/* <Loading /> */}
+            {loading ? <Loading /> : null}
+            <h2 style={{ marginBottom: '40px' }}>중고가 예측</h2>
+            <form onSubmit={handleSubmit}>
+                <div style={{ display: '' }}>
                     <div>
-                        <label>제품 선택:</label>
-                        <select value={selectedProduct} onChange={handleProductChange} required>
-                            <option value="">선택하세요</option>
+                        <select className='model_input' value={selectedProduct} onChange={handleProductChange} required>
+                            <option value="">제품 선택</option>
                             <option value="아이폰">아이폰</option>
                             <option value="갤럭시">갤럭시</option>
                         </select>
@@ -88,9 +115,8 @@ function PhoneSelectionForm() {
                     {/* 아이폰 */}
                     {selectedProduct === '아이폰' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedModel} onChange={handleModelChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedModel} onChange={handleModelChange} required>
+                                <option value="">시리즈 선택</option>
                                 <option value="아이폰 11">아이폰 11</option>
                                 <option value="아이폰 12">아이폰 12</option>
                                 <option value="아이폰 13">아이폰 13</option>
@@ -104,9 +130,8 @@ function PhoneSelectionForm() {
                     {/* 모델 */}
                     {selectedModel === '아이폰 11' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="11">11</option>
                                 <option value="11 Pro">11 Pro</option>
                                 <option value="11 Pro Max">11 Pro Max</option>
@@ -116,9 +141,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === '아이폰 12' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="12">12</option>
                                 <option value="12 Mini">12 Mini</option>
                                 <option value="12 Pro">12 Pro</option>
@@ -129,9 +153,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === '아이폰 13' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="13">13</option>
                                 <option value="13 Mini">13 Mini</option>
                                 <option value="13 Pro">13 Pro</option>
@@ -142,9 +165,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === '아이폰 14' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="14">14</option>
                                 <option value="14 Plus">14 Plus</option>
                                 <option value="14 Pro">14 Pro</option>
@@ -155,9 +177,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === '아이폰 SE' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="2세대">2세대</option>
                                 <option value="3세대">3세대</option>
                             </select>
@@ -168,9 +189,8 @@ function PhoneSelectionForm() {
                     {/* 용량 */}
                     {selectedSeries === '11' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="64">64GB</option>
                                 <option value="128">128GB</option>
                             </select>
@@ -179,9 +199,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '11 Pro' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="64">64GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -191,9 +210,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '11 Pro Max' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="64">64GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -203,9 +221,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '12' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="64">64GB</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
@@ -215,9 +232,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '12 Mini' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="64">64GB</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
@@ -227,9 +243,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '12 Pro' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -239,9 +254,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '12 Pro Max' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -251,9 +265,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '13' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -263,9 +276,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '13 Mini' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -275,9 +287,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '13 Pro' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -288,9 +299,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '13 Pro Max' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -301,9 +311,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '14' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -313,9 +322,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '14 Plus' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -325,9 +333,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '14 Pro' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -338,9 +345,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '14 Pro Max' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
@@ -351,9 +357,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '2세대' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="64">64GB</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
@@ -364,9 +369,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '3세대' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="64">64GB</option>
                                 <option value="128">128GB</option>
                                 <option value="256">256GB</option>
@@ -379,9 +383,8 @@ function PhoneSelectionForm() {
                     {/* 갤럭시 */}
                     {selectedProduct === '갤럭시' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedModel} onChange={handleModelChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedModel} onChange={handleModelChange} required>
+                                <option value="">시리즈 선택</option>
                                 <option value="폴드">폴드</option>
                                 <option value="플립">플립</option>
                                 <option value="S 20">S 20</option>
@@ -398,9 +401,8 @@ function PhoneSelectionForm() {
                     {/* 모델 */}
                     {selectedModel === '폴드' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="Z 폴드 2">Z 폴드 2</option>
                                 <option value="Z 폴드 3">Z 폴드 3</option>
                                 <option value="Z 폴드 4">Z 폴드 4</option>
@@ -410,9 +412,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === '플립' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="Z 플립 LTE">Z 플립 LTE</option>
                                 <option value="Z 플립 5G">Z 플립 5G</option>
                                 <option value="Z 플립 3">Z 플립 3</option>
@@ -423,9 +424,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === 'S 20' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="S 20">S 20</option>
                                 <option value="S 20 플러스">S 20 플러스</option>
                                 <option value="S 20 울트라">S 20 울트라</option>
@@ -435,9 +435,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === 'S 21' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="S 21">S 21</option>
                                 <option value="S 21 플러스">S 21 플러스</option>
                                 <option value="S 21 울트라">S 21 울트라</option>
@@ -447,9 +446,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === 'S 22' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="S 22">S 22</option>
                                 <option value="S 22 플러스">S 22 플러스</option>
                                 <option value="S 22 울트라">S 22 울트라</option>
@@ -459,9 +457,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === 'S 23' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="S 23">S 23</option>
                                 <option value="S 23 플러스">S 23 플러스</option>
                                 <option value="S 23 울트라">S 23 울트라</option>
@@ -471,9 +468,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === '노트 10' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="노트 10">노트 10</option>
                                 <option value="노트 10 플러스">노트 10 플러스</option>
                             </select>
@@ -482,9 +478,8 @@ function PhoneSelectionForm() {
 
                     {selectedModel === '노트 20' && (
                         <div>
-                            <label>모델 선택:</label>
-                            <select value={selectedSeries} onChange={handleSeriesChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
+                                <option value="">모델 선택</option>
                                 <option value="노트 20">노트 20</option>
                                 <option value="노트 20 울트라">노트 20 플러스</option>
                             </select>
@@ -495,9 +490,8 @@ function PhoneSelectionForm() {
                     {/* 용량 */}
                     {selectedSeries === 'Z 폴드 2' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -505,9 +499,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'Z 폴드 3' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                             </select>
@@ -516,9 +509,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'Z 폴드 4' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                                 <option value="1000">1TB</option>
@@ -528,9 +520,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'Z 플립 LTE' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -538,9 +529,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'Z 플립 5G' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -548,9 +538,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'Z 플립 3' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -558,9 +547,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'Z 플립 4' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                             </select>
@@ -569,9 +557,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 20' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="128">128GB</option>
                             </select>
                         </div>
@@ -579,9 +566,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 20 플러스' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -589,9 +575,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 20 울트라' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -599,9 +584,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 21' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -609,9 +593,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 21 플러스' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -619,9 +602,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 21 울트라' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                             </select>
@@ -630,9 +612,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 22' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -640,9 +621,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 22 플러스' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -650,9 +630,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 22 울트라' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                                 <option value="1000">1TB</option>
@@ -662,9 +641,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 23' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                             </select>
@@ -673,9 +651,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 23 플러스' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                             </select>
@@ -684,9 +661,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === 'S 23 울트라' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                                 <option value="1000">1TB</option>
@@ -696,9 +672,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '노트 10' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -706,9 +681,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '노트 10 플러스' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                                 <option value="512">512GB</option>
                             </select>
@@ -717,9 +691,8 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '노트 20' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
@@ -727,29 +700,84 @@ function PhoneSelectionForm() {
 
                     {selectedSeries === '노트 20 울트라' && (
                         <div>
-                            <label>용량 선택:</label>
-                            <select value={selectedCapacity} onChange={handleCapacityChange} required>
-                                <option value="">선택하세요</option>
+                            <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
+                                <option value="">용량 선택</option>
                                 <option value="256">256GB</option>
                             </select>
                         </div>
                     )}
                 </div>
 
-                <div>
-                    <label>등급 선택:</label>
-                    <select value={grade} onChange={handleGradeChange} required>
-                        <option value="">선택하세요</option>
-                        <option value="미개봉">미개봉</option>
-                        <option value="S급">S급</option>
-                        <option value="A급">A급</option>
-                        <option value="B급">B급</option>
-                        <option value="C급">C급</option>
-                    </select>
+                <div style={{ position: "relative", top: '50px', right: '-100px' }}>
+                    <div style={{ display: 'flex' }}>
+                        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    paddingTop : '5px',
+                                    width: '50px',
+                                    height: '50px',
+                                    borderRadius: '50%',
+                                    // backgroundColor: 'red',
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faMagnifyingGlass} style={{ fontSize: '25px' }} />
+                            </div>
+                            {isHovered && (
+                                <Table style={{ position: 'absolute', zIndex : '0', backgroundColor : 'white'}} striped>
+                                    <thead>
+                                        <tr>
+                                            <th>등급</th>
+                                            <th>외관</th>
+                                            <th>기능</th>
+                                            <th>배터리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>S급</td>
+                                            <td>사용감이 거의 없는 상태</td>
+                                            <td>정상</td>
+                                            <td>85% 이상</td>
+                                        </tr>
+                                        <tr>
+                                            <td>A급</td>
+                                            <td>미세한 스크래치 또는 약간 찍힘(1~3곳)</td>
+                                            <td>정상</td>
+                                            <td>85% 이상</td>
+                                        </tr>
+                                        <tr>
+                                            <td>B급</td>
+                                            <td>눈에 띄는 스크래치 또는 생활 찍힘(3곳 이상), 약잔상이 있을 수 있음</td>
+                                            <td>정상</td>
+                                            <td>80% 이상</td>
+                                        </tr>
+                                        <tr>
+                                            <td>C급</td>
+                                            <td>스크래치 또는 찍힘 다수, 약~중잔상이 있을 수 있음</td>
+                                            <td>정상</td>
+                                            <td>80% 이상</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </Table>
+                            )}
+                        </div>
+                        <div>
+                            <select className='model_input' value={grade} onChange={handleGradeChange} required>
+                                <option value="">등급 선택</option>
+                                <option value="미개봉">미개봉</option>
+                                <option value="S급">S급</option>
+                                <option value="A급">A급</option>
+                                <option value="B급">B급</option>
+                                <option value="C급">C급</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-
-                <p onClick={a}>확인</p>
-                <button type="submit">예측하기</button>
+                <Button style={{ marginTop : '' }} type="submit" className='model_btn'>예측하기</Button>
             </form>
             {result && (
                 <div>
@@ -761,5 +789,6 @@ function PhoneSelectionForm() {
         </div>
     );
 }
+
 
 export default PhoneSelectionForm;
