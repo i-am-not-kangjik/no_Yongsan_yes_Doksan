@@ -9,7 +9,6 @@ import kjkim.kjkimspring.service.SellService;
 import kjkim.kjkimspring.service.UserService;
 import kjkim.kjkimspring.user.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,8 +57,9 @@ public class SellRestController {
      * @param principal 보안 주체(principal)입니다.
      * @return 인증된 사용자 객체입니다.
      */
+
     private User getAuthenticatedUser(Principal principal) {
-        return userService.getUser(principal.getName());
+        return userService.getUserByUsername(principal.getName());
     }
 
 
@@ -160,6 +160,7 @@ public class SellRestController {
 
         return ResponseEntity.ok().build();
     }
+
 
     /**
      * HTTP PUT 요청을 처리하여 판매 항목의 상태를 변경합니다.

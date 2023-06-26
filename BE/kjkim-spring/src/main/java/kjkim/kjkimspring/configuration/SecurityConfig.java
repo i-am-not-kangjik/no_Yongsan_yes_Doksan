@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/sell/**").authenticated() // 판매 관련 API는 POST 메소드에 대해 인증된 사용자만 허용
                 .antMatchers(HttpMethod.PUT, "/api/sell/**").authenticated() // 판매 관련 API는 PUT 메소드에 대해 인증된 사용자만 허용
                 .antMatchers(HttpMethod.DELETE, "/api/sell/**").authenticated() // 판매 관련 API는 DELETE 메소드에 대해 인증된 사용자만 허용
+                .antMatchers(HttpMethod.POST, "/api/messages").authenticated() // POST /api/messages는 인증된 사용자만 허용
                 .antMatchers("/api/**").authenticated() // 그 외 API는 인증된 사용자만 허용
                 .anyRequest().permitAll() // 나머지 요청에 대해 모두 허용
                 .and()
