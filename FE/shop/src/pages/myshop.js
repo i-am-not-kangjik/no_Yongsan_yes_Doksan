@@ -145,7 +145,7 @@ const Myshop = ({ pg, setPostId, postId }) => {
                     style={{
                       width: '80px',
                       height: '30px',
-                      backgroundColor: '#65D35D',
+                      backgroundColor: '#0052A4',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',

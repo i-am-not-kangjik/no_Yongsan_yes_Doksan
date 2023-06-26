@@ -476,7 +476,7 @@ const Post = () => {
               value={content}
               rows={6}
               placeholder='상품에 대한 설명을 적어주세요.'
-              style={{ width: '80%', padding: '5px', overflow: 'auto' }}
+              style={{ width: '80%', padding: '5px', overflow: 'auto', resize: 'none' }}
               onChange={((event) => setContent(event.target.value), handleContentChange)}
             />
             {showWarningC && <p style={{ color: 'orange' }}>내용은 최소 10자 이상이어야 합니다.</p>}
