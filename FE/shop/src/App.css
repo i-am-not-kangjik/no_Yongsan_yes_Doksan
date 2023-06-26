@@ -195,6 +195,15 @@ p {
     outline: none;
     overflow-wrap: break-word;
     overflow-y: auto;  
-    background-color: #EBF7FF;
+    background-color: white;
 }
 
+.model_box {
+    width: 800px;
+    height: 800px;
+    background-color: #F6F6f6;
+    padding-top: 50px;
+    margin: 150px auto;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+}
