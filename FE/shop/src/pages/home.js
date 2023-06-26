@@ -20,7 +20,7 @@ export default function App() {
                 }}
                 navigation={false}
                 className="mySwiper"
-                style={{ width: '100vw', height: '100vh', marginTop: '-20px', color: 'white' }}
+                style={{ width: '100vw', height: '100vh', marginTop: '-20px', color: '' }}
             >
                 <SwiperSlide style={{
                     display: 'flex',

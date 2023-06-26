@@ -171,8 +171,7 @@ export default function App(props) {
 
     return (
         <div>
-            {/* <CloseButton style={{ position: 'absolute', right: '-22px', top: "-22px",  }} onClick={() => { props.setMessage(false) }} /> */}
-            <div style={{ width: '400px', minHeight: '400px', backgroundColor: '#F6F6F6', borderRadius: '10px', fontSize: "18px", boxShadow: 'rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px' }}>
+            <div style={{ width: '400px', minHeight: '400px', backgroundColor: '#F3F3F3', borderRadius: '10px', fontSize: "18px", boxShadow: 'rgba(136, 165, 191, 0.78) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px' }}>
                 <Tabs
                     defaultActiveKey="받은 쪽지함"
                     className="mb-3"
@@ -198,9 +197,6 @@ export default function App(props) {
                             </div>
                         ))}
                         <div style={{ width: '100%', height: '45px' }}></div>
-                        {/* {
-                            m == true ? <div style={{ width: '400px', minHeight: '200px', backgroundColor: 'beige', padding: '20px' }}>{content}</div> : null
-                        } */}
                     </Tab>
                     <Tab eventKey="보낸 쪽지함" title="보낸 쪽지함" onClick={handleTabClickS}>
                         <div style={{ display: 'flex', textAlign: 'center', paddingBottom: '7px', borderBottom: '1px solid #E7E7E7' }}>
@@ -225,19 +221,19 @@ export default function App(props) {
                 </Tabs>
             </div>
             {
-                m == true ? <div><div style={{ width: '400px', height: '360px', backgroundColor: '#F6F6F6', padding: '20px 35px', position: 'absolute', top: '40px', borderBottomRightRadius: "10px", borderBottomLeftRadius: "10px", textAlign: 'left', border: '1px solid #E7E7E7', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }}>
+                m == true ? <div><div style={{ width: '400px', height: '360px', backgroundColor: '#F3F3F3', padding: '20px 35px', position: 'absolute', top: '45px', borderBottomRightRadius: "10px", borderBottomLeftRadius: "10px", textAlign: 'left', border: '1px solid #E7E7E7', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }}>
                     {content}
                     {
                         sr == "r" ? <span onClick={handleReply} style={{ position: 'absolute', bottom: '15px', right: '20px' }}>답장하기</span> : null
                     }
 
                 </div>
-                    <CloseButton style={{ position: 'absolute', right: '10px', top: "50px" }} onClick={() => { handleCloseClick(); }} />
+                    <CloseButton style={{ position: 'absolute', right: '10px', top: "55px" }} onClick={() => { handleCloseClick(); }} />
                 </div> : null
             }
 
             {
-                reply == true ? <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', top: "405px", backgroundColor : 'white', borderRadius : '10px', boxShadow: 'rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px' }}>
+                reply == true ? <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', top: "410px", backgroundColor : 'white', borderRadius : '10px', boxShadow: 'rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px' }}>
                     <textarea
                         className='sendInput_m'
                         type="text"

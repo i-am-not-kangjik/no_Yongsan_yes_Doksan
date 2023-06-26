@@ -16,6 +16,7 @@ import Myshop from './pages/myshop'
 import axios from 'axios';
 import Edit from './pages/edit'
 import Message from './pages/message'
+import Model from './pages/model'
 
 import OutsideAlerter from './pages/detailEffect';
 
@@ -206,6 +207,7 @@ function App() {
                 <NavDropdown.Item onClick={() => { handleCategorySelect('스마트워치') }}>스마트워치</NavDropdown.Item>
                 <NavDropdown.Item onClick={() => { handleCategorySelect('블루투스이어폰') }}>블루투스이어폰</NavDropdown.Item>
               </NavDropdown>
+              <Nav.Link onClick={() => { navigate('/model') }}>AI 예측</Nav.Link>
               {/* <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link> */}
             </Nav>
             <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
@@ -244,6 +246,10 @@ function App() {
         </Container>
       </Navbar>
 
+      {
+        message == true ? <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex: '1' }}><Message setMessage={setMessage}></Message></div> : null
+      }
+
       <Routes>
         <Route
           path="/"
@@ -252,6 +258,7 @@ function App() {
         <Route path='/sell' element={<Main setMessage={setMessage} message={message} setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
+        <Route path='/model' element={<Model></Model>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
         <Route path='/signin' element={<SignIn></SignIn>} />
         <Route path='/signup' element={<SignUp></SignUp>} />
@@ -320,12 +327,8 @@ function Main(props) {
   return (
     <div>
       <div>
-
-        {
-          props.message == true ? <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex : '1' }}><Message setMessage={props.setMessage}></Message></div> : null
-        }
         {/* 최근본 상품 */}
-        <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex : '0' }}>
+        <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex: '0' }}>
           <Card style={{ width: '180px' }}>
             <Card.Title style={{ borderBottom: '1px solid gray', padding: '10px' }}>최근본상품</Card.Title>
             {
