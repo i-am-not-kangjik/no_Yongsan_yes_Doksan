@@ -156,6 +156,10 @@ function App() {
   // 쪽지 컴포넌트
   const [message, setMessage] = useState(false);
 
+  const handleClick = () => {
+    setMessage((prevMessage) => !prevMessage);
+  };
+
   return (
     <div className={'App '}>
       <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
@@ -186,14 +190,6 @@ function App() {
                   return;
                 }
               }}>내상점</Nav.Link>
-              <Nav.Link href="#action3">채팅</Nav.Link>
-              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item onClick={() => { handleCategorySelect('노트북') }}>노트북</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('핸드폰') }}>핸드폰</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('태블릿') }}>태블릿</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('스마트워치') }}>스마트워치</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('블루투스이어폰') }}>블루투스이어폰</NavDropdown.Item>
-              </NavDropdown>
               <Nav.Link onClick={() => {
                 if (loggedInUser == null) {
                   navigate('/signin');
@@ -203,7 +199,14 @@ function App() {
                   return;
                 }
               }}>찜목록</Nav.Link>
-              <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link>
+              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
+                <NavDropdown.Item onClick={() => { handleCategorySelect('노트북') }}>노트북</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('핸드폰') }}>핸드폰</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('태블릿') }}>태블릿</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('스마트워치') }}>스마트워치</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('블루투스이어폰') }}>블루투스이어폰</NavDropdown.Item>
+              </NavDropdown>
+              {/* <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link> */}
             </Nav>
             <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
               <Form.Control
@@ -227,7 +230,7 @@ function App() {
                 <Nav.Link style={{ fontSize: '15px', marginLeft: '30px', marginRight: '20px' }}>
                   {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
                 </Nav.Link>
-                <Nav.Link onClick={() => { setMessage(true) }}>쪽지함</Nav.Link>
+                <Nav.Link onClick={handleClick}>쪽지함</Nav.Link>
               </div>
             ) : (
               // 로그인되지 않은 사용자인 경우
@@ -246,7 +249,7 @@ function App() {
           path="/"
           element={<Home></Home>}
         />
-        <Route path='/sell' element={<Main message={message} setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
+        <Route path='/sell' element={<Main setMessage={setMessage} message={message} setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
@@ -319,7 +322,7 @@ function Main(props) {
       <div>
 
         {
-          props.message == true ? <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex : '1' }}><Message></Message></div> : null
+          props.message == true ? <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex : '1' }}><Message setMessage={props.setMessage}></Message></div> : null
         }
         {/* 최근본 상품 */}
         <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex : '0' }}>

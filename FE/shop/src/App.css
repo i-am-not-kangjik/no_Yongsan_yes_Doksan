@@ -184,3 +184,15 @@ p {
     overflow-wrap: break-word;
     overflow-y: auto;  
 }
+
+.sendInput_m {
+    width: 360px;
+    padding: 15px 0;
+    padding-left: 15px;
+    font-size: 15px;
+    border: 0;
+    border-radius: 10px;
+    outline: none;
+    overflow-wrap: break-word;
+    overflow-y: auto;  
+}
