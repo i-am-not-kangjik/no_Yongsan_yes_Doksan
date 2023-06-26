@@ -1,18 +1,61 @@
 /*eslint-disable*/
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { Carousel, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleArrowLeft, faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faCircleArrowLeft, faHeart, faComment } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 
 function Detail(props) {
+
+    let navigate = useNavigate();
 
     const item = props.cd.find(item => item.id === props.id);
 
     const username = localStorage.getItem('username')
 
-    const handleLike = () => {
+    const token = localStorage.getItem('token')
+
+    // 쪽지기능
+    const [content, setContent] = useState('');
+    const [showMessageInput, setShowMessageInput] = useState(false);
+    
+    const handleSendMessageClick = () => {
+      setShowMessageInput(true);
+    };
+    
+    const handleMessageInputChange = (e) => {
+      setContent(e.target.value);
+    };
+    
+    const handleSendMessage = async () => {
         const token = localStorage.getItem('token');
+        const apiUrl = 'http://13.209.183.88:8081/api/messages';
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        };
+      
+        const messageData = {
+          senderUsername: username,
+          receiverUsername: item.authorUsername,
+          content: content,
+        };
+      
+        try {
+          const response = await axios.post(apiUrl, JSON.stringify(messageData), { headers });
+          alert("쪽지가 전송되었습니다.")
+          setContent("")
+          console.log(item.authorUsername)
+          // TODO: Handle successful message submission
+        } catch (error) {
+          console.error('Error sending message:', error);
+          // TODO: Handle message submission error
+        }
+      };
+
+    // 찜기능
+    const handleLike = () => {
         const url = `http://13.209.183.88:8081/api/sell/${item.id}/like`;
 
         fetch(url, {
@@ -47,6 +90,8 @@ function Detail(props) {
                     fetchData();
                 } else {
                     console.error('Error liking the post.');
+                    props.setblur(false)
+                    navigate('/signin');
                 }
             })
             .catch((error) => {
@@ -108,7 +153,7 @@ function Detail(props) {
                     })
                 }
             </Carousel>
-            <div style={{ width: '35%', padding: '15px', textAlign: 'left' }}>
+            <div style={{ width: '35%', padding: '15px 15px 0', textAlign: 'left' }}>
                 <div className='detail_margin'>
                     <h4 className='detail_title'>{item.title}</h4>
                 </div>
@@ -118,13 +163,13 @@ function Detail(props) {
                 </div>
 
                 <div className='detail_margin'>
-                    <h4 className='detail_price'>{price}원</h4>
+                    <h4 className='detail_price maincolor' style={{ fontWeight: 'bold' }}>{price}원</h4>
                 </div>
 
-                <div className='detail_margin' style={{ padding: '30px 0', borderTop: '1px solid black', borderBottom: '1px solid black', lineHeight: '1.8' }}>
+                <div className='detail_margin' style={{ padding: '30px 0', lineHeight: '1.8' }}>
                     <p className='detail_content'>{item.content}</p>
                 </div>
-                <div className='detail_margin grey' style={{ fontSize: '14px', marginBottom : '25px' }}>
+                <div className='detail_margin grey' style={{ fontSize: '14px', marginBottom: '25px' }}>
                     <p className='detail_price'>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
                 </div>
                 <OverlayTrigger
@@ -137,16 +182,42 @@ function Detail(props) {
                             {item.likedUsernames.includes(username) ? (
                                 <span>상품이 <strong>찜</strong>되었습니다.</span>
                             ) : (
-                                <span>찜이 해제되었습니다.</span>
+                                <span><strong>찜</strong>이 해제되었습니다.</span>
 
                             )}
                         </Tooltip>
                     }>
                     {
-                        item.likedUsernames.includes(username) ? <Button variant="danger" style={{ width: '100px', fontSize : '20px'  }} onClick={handleLike}>찜 <FontAwesomeIcon icon={faHeart} /></Button> 
-                        : <Button variant="secondary" style={{ width: '100px', fontSize : '20px' }} onClick={handleLike}>찜 <FontAwesomeIcon icon={faHeart} /></Button>
+                        item.likedUsernames.includes(username) ? <span style={{ fontSize: '30px', }} onClick={handleLike}><FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} /></span>
+                            : <span style={{ fontSize: '30px' }} onClick={handleLike}><FontAwesomeIcon icon={faHeart} /></span>
                     }
                 </OverlayTrigger>
+                <span
+                            style={{ fontSize: '30px', marginLeft: '20px' }}
+                            onClick={handleSendMessageClick}
+                        >
+                            <FontAwesomeIcon icon={faComment} />
+                        </span>
+                
+                <div style={{ display : 'flex', position: 'absolute', bottom: 0, alignItems: 'center', borderTop: '1px solid #eee'}}>
+                    {/* Other detail content */}
+                    {showMessageInput ? (
+                        <>
+                            <textarea
+                                className='sendInput'
+                                type="text"
+                                value={content}
+                                placeholder='내용 입력...'
+                                onChange={handleMessageInputChange}
+                                rows={1}
+                                style={{ border: 'none', outline: 'none', resize: 'none' }}
+                            />
+                            <p onClick={handleSendMessage}>전송</p>
+                        </>
+                    ) : (
+                        null
+                    )}
+                </div>
             </div>
         </div>
     );
