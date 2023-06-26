@@ -15,6 +15,7 @@ npm install express pg
 npm install cors
 npm install swiper
 
-
+npm i react-spinners --save
+yarn add react-spinners
 
 
