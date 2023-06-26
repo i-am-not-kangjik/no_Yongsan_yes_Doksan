@@ -777,7 +777,7 @@ function PhoneSelectionForm() {
                         </div>
                     </div>
                 </div>
-                <Button style={{ marginTop : '' }} type="submit" className='model_btn'>예측하기</Button>
+                <Button type="submit" className='model_btn'>예측하기</Button>
             </form>
             {result && (
                 <div>
