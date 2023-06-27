@@ -119,7 +119,7 @@ function PhoneSelectionForm() {
 
 
     return (
-        <div>
+        <div style={{  }}>
             {loading ? <PuffLoader size={400} color={"#0D3FA5"} style={{ position: "relative", right: '200px', top: '150px', }} /> : null}
             <div className={`${blur} model_box`}>
                 <h2 style={{ marginBottom: '40px' }}>AI 예측</h2>
@@ -802,7 +802,7 @@ function PhoneSelectionForm() {
             </div>
 
             {result && (
-                <div className='result'>
+                <div className={`${blur} result`}>
                     <h2 className='result_text' style={{ paddingTop: '10px', alignItems: 'center', }}>*** AI 예측결과 ***</h2>
                     <h4 className='result_text' style={{ padding: '10px' }}>{result.product_name}</h4>
                     <p style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start', fontSize : '14px' }}>
@@ -831,7 +831,7 @@ function PhoneSelectionForm() {
                         }
                     </p>
                     <div className='' style={{ marginTop: '10px' }}>
-                        <img src='https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/qrcode.png?raw=true' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
+                        <img src='qrcode.png' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
                     </div>
                 </div>
             )}

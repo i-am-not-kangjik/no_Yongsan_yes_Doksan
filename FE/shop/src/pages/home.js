@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
@@ -37,9 +38,9 @@ export default function App(props) {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundImage: `url()`,
-                    backgroundColor: '#A0BAED'
+                    backgroundColor: '#A0BAED',
                 }}>
-                    <div style={{ width: '600px', textAlign: 'left', marginBottom: '200px', paddingLeft: '200px', paddingTop: '50px' }}>
+                    <div style={{ width: '', textAlign: 'left', marginBottom: '160px', }}>
                         <p style={{ fontSize: '50px', fontWeight: 'bold', marginBottom: '20px' }}>용산위에 독산</p>
                         <h1 style={{ fontSize: '60px', fontWeight: 'bold' }}>전자기기 <br></br>중고 가격 산정 <br></br>고민 해결</h1>
                         <p style={{ fontSize: '20px', marginTop: '40px' }}>로그인하고 예측하러가기<Button variant="light" style={{ marginLeft: '20px', width: '80px', }} onClick={() => {
@@ -52,13 +53,10 @@ export default function App(props) {
                             }
                         }}><FontAwesomeIcon icon={faRightLong} size="lg" /></Button></p>
                     </div>
-                    <div style={{
-                        width: '900px', height: '900px', textAlign: 'left', backgroundSize: 'contain',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center',
-                        backgroundImage: `url(https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/mac%201.png?raw=true)`,
-                    }}>
-                    </div>
+                    <img style={{
+                        width: '600px', textAlign: 'left', backgroundSize: 'contain', marginBottom : '50px'
+                    }} src="mac 1.png">
+                    </img>
                 </SwiperSlide>
                 <SwiperSlide style={{
                     display: 'flex',
@@ -67,17 +65,13 @@ export default function App(props) {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundImage: `url()`,
-                    backgroundColor: '#A3A0ED'
+                    backgroundColor: '#A3A0ED',
                 }}>
-                    
-                    <div style={{
-                        width: '600px', height: '600px', textAlign: 'left', backgroundSize: 'contain', marginRight: '200px',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center',
-                        backgroundImage: `url(https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/%ED%83%9C%EB%B8%94%EB%A6%BF.png?raw=true)`,
-                    }}>
-                    </div>
-                    <div style={{ width: '600px', textAlign: 'left', marginBottom: '200px', paddingTop: '100px' }}>
+                    <img style={{
+                        width: '450px', textAlign: 'left', backgroundSize: 'contain', marginRight: '120px'
+                    }} src="태블릿.png">
+                    </img>
+                    <div style={{ width: '', textAlign: 'left', marginBottom: '170px', paddingTop: '100px' }}>
                         <p style={{ fontSize: '50px', fontWeight: 'bold', marginBottom: '20px' }}>용산위에 독산</p>
                         <h1 style={{ fontSize: '60px', fontWeight: 'bold' }}>전자기기 <br></br>중고 가격 산정 <br></br>고민 해결</h1>
                         <p style={{ fontSize: '20px', marginTop: '40px' }}>로그인하고 예측하러가기<Button variant="light" style={{ marginLeft: '20px', width: '80px', }} onClick={() => {
