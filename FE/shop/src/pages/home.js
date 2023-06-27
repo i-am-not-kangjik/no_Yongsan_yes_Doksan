@@ -37,7 +37,7 @@ export default function App() {
                     </div>
                     <div style={{ width: '50%', height: '100%', textAlign: 'left',backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    backgroundImage: `url(https://d1unjqcospf8gs.cloudfront.net/assets/home/main/3x/image-top-d6869a79bc4cb58ea59aa5a408decfdf4a4ba60ac639837081da12861083cdbb.webp)`, }}>
+                    backgroundImage: `url(https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/mac.png?raw=true)`, }}>
                     </div>
                 </SwiperSlide>
                 <SwiperSlide style={{
