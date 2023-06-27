@@ -171,7 +171,7 @@ export default function App(props) {
 
     return (
         <div>
-            <div style={{ width: '400px', minHeight: '400px', backgroundColor: '#F3F3F3', borderRadius: '10px', fontSize: "18px", boxShadow: 'rgba(136, 165, 191, 0.78) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px' }}>
+            <div style={{ width: '400px', minHeight: '400px', backgroundColor: 'white', borderRadius: '10px', fontSize: "18px", boxShadow: 'rgba(136, 165, 191, 0.99) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px' }}>
                 <Tabs
                     defaultActiveKey="받은 쪽지함"
                     className="mb-3"

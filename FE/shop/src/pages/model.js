@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useDebugValue } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faInfinity } from '@fortawesome/free-solid-svg-icons'
 import { PuffLoader } from 'react-spinners'
 
 function PhoneSelectionForm() {
@@ -810,15 +810,24 @@ function PhoneSelectionForm() {
                     </p>
                     <p className='' style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         최대가격 -
-                        <span style={{ marginLeft: 'auto' }}>₩{String(result.max_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        {
+                            result.max_price == null ? <span style={{ marginLeft: 'auto' }}>+<FontAwesomeIcon icon={faInfinity} /></span> : 
+                            <span style={{ marginLeft: 'auto' }}>₩{String(result.max_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        }
                     </p>
                     <p style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         예측가격 -
-                        <span style={{ marginLeft: 'auto' }}>₩{String(result.predicted_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        {
+                            result.predicted_price == null ? <span style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faInfinity} /></span> : 
+                            <span style={{ marginLeft: 'auto' }}>₩{String(result.predicted_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        }
                     </p>
                     <p style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         최소가격 -
-                        <span style={{ marginLeft: 'auto' }}>₩{String(result.min_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        {
+                            result.min_price == null ? <span style={{ marginLeft: 'auto' }}>-<FontAwesomeIcon icon={faInfinity} /></span> : 
+                            <span style={{ marginLeft: 'auto' }}>₩{String(result.min_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        }
                     </p>
                     <div className='' style={{ marginTop: '10px' }}>
                         <img src='https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/qrcode_localhost.png?raw=true' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
