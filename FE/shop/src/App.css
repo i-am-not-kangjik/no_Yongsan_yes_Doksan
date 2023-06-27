@@ -70,8 +70,9 @@ p {
 .outside-alerter.show {
     transform: scale(1);
     position: fixed;
-    left: 12.5%;
+    left: 50%;
     top: 10%;
+    transform: translateX(-50%);
 }
 
 .maincolor {
@@ -164,7 +165,7 @@ p {
 }
 
 .sendInput {
-    width: 440px;
+    width: 360px;
     padding: 15px 0;
     font-size: 15px;
     border: 0;
@@ -219,9 +220,10 @@ p {
     background-color: white;
     width: 350px;
     height: 620px; 
-    position : absolute;
-    top : 190px;
-    right: 200px;
+    position : relative;
+    top : 50%;
+    transform: translateY(-130%);
+    right: -70%;
     padding: 25px;
 }
 

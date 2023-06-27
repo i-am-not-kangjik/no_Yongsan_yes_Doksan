@@ -81,10 +81,10 @@ const Edit = ({ postId }) => {
     } else if (content.trim() === '' || content.length < 10) {
       alert('내용을 입력해주세요.');
       return;
-    } else if (content.trim() === '' || content.length > 600) {
+    } else if (content.trim() === '' || content.length > 500) {
       alert('글자수 제한을 확인해주세요.');
       return;
-    } 
+    }
 
     const formData = new FormData();
     formData.append('title', title);
@@ -222,7 +222,7 @@ const Edit = ({ postId }) => {
     setContent(inputContent);
     setInputCount(inputContent.length);
 
-    if (inputContent.length > 600) {
+    if (inputContent.length > 500) {
       setShowWarningL(true);
     } else {
       setShowWarningL(false);
@@ -381,7 +381,7 @@ const Edit = ({ postId }) => {
         </div>
 
         <div className='post_box'>
-          <div style={{ width: '20%' }}>
+          <div style={{ marginRight: '10px' }}>
             <label htmlFor="region">지역 선택</label>
             <select
               id="region"
@@ -410,7 +410,7 @@ const Edit = ({ postId }) => {
           </div>
 
           <div>
-            <label htmlFor="district">구역 선택</label>
+            <label htmlFor="district"></label>
             <select
               id="district"
               value={selectedDistrict}
@@ -520,7 +520,7 @@ const Edit = ({ postId }) => {
 
         <div className='post_box'>
           <div className='post_box_left'>
-            <label htmlFor="content">설명<span style={{ fontSize: '15px', color: 'gray', marginLeft: '5px' }}>({inputCount}/600)</span></label>
+            <label htmlFor="content">설명<span style={{ fontSize: '15px', color: 'gray', marginLeft: '5px' }}>({inputCount}/500)</span></label>
           </div>
           <div className='post_box_right'>
             <textarea
@@ -532,7 +532,7 @@ const Edit = ({ postId }) => {
               onChange={((event) => setContent(event.target.value), handleContentChange)}
             />
             {showWarningC && <p style={{ color: 'orange' }}>내용은 최소 10자 이상이어야 합니다.</p>}
-            {showWarningL && <p style={{ color: 'orange' }}>내용은 최대 600글자입니다.</p>}
+            {showWarningL && <p style={{ color: 'orange' }}>내용은 최대 500글자입니다.</p>}
           </div>
         </div>
         <div style={{ padding: '30px', borderTop: '3px solid', textAlign: 'right' }}>
