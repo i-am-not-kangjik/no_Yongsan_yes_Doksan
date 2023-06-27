@@ -831,7 +831,7 @@ function PhoneSelectionForm() {
                         }
                     </p>
                     <div className='' style={{ marginTop: '10px' }}>
-                        <img src='https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/qrcode_localhost.png?raw=true' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
+                        <img src='https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/qrcode.png?raw=true' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
                     </div>
                 </div>
             )}
