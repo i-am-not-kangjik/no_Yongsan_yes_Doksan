@@ -38,7 +38,7 @@ function PhoneSelectionForm() {
         console.log("----------------------")
 
         // Send the POST request
-        fetch('http://127.0.0.1:8000/predict_price', {
+        fetch('http://3.37.220.88:80/predict_price', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

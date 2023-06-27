@@ -261,7 +261,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home></Home>}
+          element={<Home loggedInUser={loggedInUser}></Home>}
         />
         <Route path='/sell' element={<Main setMessage={setMessage} message={message} setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
