@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useDebugValue } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faInfinity } from '@fortawesome/free-solid-svg-icons'
 import { PuffLoader } from 'react-spinners'
 
 function PhoneSelectionForm() {
@@ -38,7 +38,8 @@ function PhoneSelectionForm() {
         console.log("----------------------")
 
         // Send the POST request
-        fetch('http://127.0.0.1:8000/predict_price', {
+        // fetch('http://127.0.0.1:8000/predict_price', {
+        fetch('http://3.37.220.88:80/predict_price', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,10 +119,10 @@ function PhoneSelectionForm() {
 
 
     return (
-        <div>
+        <div style={{  }}>
             {loading ? <PuffLoader size={400} color={"#0D3FA5"} style={{ position: "relative", right: '200px', top: '150px', }} /> : null}
             <div className={`${blur} model_box`}>
-                <h2 style={{ marginBottom: '40px' }}>중고가 예측</h2>
+                <h2 style={{ marginBottom: '40px' }}>AI 예측</h2>
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: '' }}>
                         <div>
@@ -801,7 +802,7 @@ function PhoneSelectionForm() {
             </div>
 
             {result && (
-                <div className='result'>
+                <div className={`${blur} result`}>
                     <h2 className='result_text' style={{ paddingTop: '10px', alignItems: 'center', }}>*** AI 예측결과 ***</h2>
                     <h4 className='result_text' style={{ padding: '10px' }}>{result.product_name}</h4>
                     <p style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start', fontSize : '14px' }}>
@@ -810,18 +811,27 @@ function PhoneSelectionForm() {
                     </p>
                     <p className='' style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         최대가격 -
-                        <span style={{ marginLeft: 'auto' }}>₩{String(result.max_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        {
+                            result.max_price == null ? <span style={{ marginLeft: 'auto' }}>+<FontAwesomeIcon icon={faInfinity} /></span> : 
+                            <span style={{ marginLeft: 'auto' }}>₩{String(result.max_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        }
                     </p>
                     <p style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         예측가격 -
-                        <span style={{ marginLeft: 'auto' }}>₩{String(result.predicted_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        {
+                            result.predicted_price == null ? <span style={{ marginLeft: 'auto' }}><FontAwesomeIcon icon={faInfinity} /></span> : 
+                            <span style={{ marginLeft: 'auto' }}>₩{String(result.predicted_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        }
                     </p>
                     <p style={{ paddingTop: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         최소가격 -
-                        <span style={{ marginLeft: 'auto' }}>₩{String(result.min_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        {
+                            result.min_price == null ? <span style={{ marginLeft: 'auto' }}>-<FontAwesomeIcon icon={faInfinity} /></span> : 
+                            <span style={{ marginLeft: 'auto' }}>₩{String(result.min_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+                        }
                     </p>
                     <div className='' style={{ marginTop: '10px' }}>
-                        <img src='' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
+                        <img src='qrcode.png' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
                     </div>
                 </div>
             )}

@@ -207,7 +207,15 @@ function App() {
                 <NavDropdown.Item onClick={() => { handleCategorySelect('스마트워치') }}>스마트워치</NavDropdown.Item>
                 <NavDropdown.Item onClick={() => { handleCategorySelect('블루투스이어폰') }}>블루투스이어폰</NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link onClick={() => { navigate('/model') }}>AI 예측</Nav.Link>
+              <Nav.Link onClick={() => {
+                if (loggedInUser == null) {
+                  navigate('/signin');
+                  return;
+                } else {
+                  navigate('/model')
+                  return;
+                }
+              }}>AI 예측</Nav.Link>
               {/* <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link> */}
             </Nav>
             <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
@@ -253,7 +261,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home></Home>}
+          element={<Home loggedInUser={loggedInUser}></Home>}
         />
         <Route path='/sell' element={<Main setMessage={setMessage} message={message} setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />

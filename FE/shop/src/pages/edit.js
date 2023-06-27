@@ -11,6 +11,8 @@ const Edit = ({ postId }) => {
   const [showWarningT, setShowWarningT] = useState(false); // 제목 경고 state
   const [content, setContent] = useState(''); // 내용
   const [showWarningC, setShowWarningC] = useState(false); // 내용 경고 state
+  const [showWarningL, setShowWarningL] = useState(false); // 내용 경고 state
+
   const [images, setImages] = useState([]); // 이미지
   const [imagePreviews, setImagePreviews] = useState([]); // 이미지 미리보기
   const [selectedRegion, setSelectedRegion] = useState(''); // 선택된 지역
@@ -20,6 +22,9 @@ const Edit = ({ postId }) => {
   const [showWarningP, setShowWarningP] = useState(false); // 가격 경고 state
 
   let navigate = useNavigate();
+
+  // 글자 수 제한
+  let [inputCount, setInputCount] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,6 +49,7 @@ const Edit = ({ postId }) => {
           setSelectedRegion(regionName);
           setSelectedDistrict(districtName);
           setCategory(category);
+          setInputCount(content.length);
         } else {
           console.error('Failed to fetch post data');
         }
@@ -74,6 +80,9 @@ const Edit = ({ postId }) => {
       return;
     } else if (content.trim() === '' || content.length < 10) {
       alert('내용을 입력해주세요.');
+      return;
+    } else if (content.trim() === '' || content.length > 500) {
+      alert('글자수 제한을 확인해주세요.');
       return;
     }
 
@@ -211,6 +220,13 @@ const Edit = ({ postId }) => {
   const handleContentChange = (event) => {
     const inputContent = event.target.value;
     setContent(inputContent);
+    setInputCount(inputContent.length);
+
+    if (inputContent.length > 500) {
+      setShowWarningL(true);
+    } else {
+      setShowWarningL(false);
+    }
 
     // content의 길이가 10자 미만인 경우 경고 표시
     if (inputContent.length < 10) {
@@ -233,8 +249,8 @@ const Edit = ({ postId }) => {
   };
 
   return (
-    <div style={{ width: '70%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px 30px' }}>
-    {/* <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}> */}
+    <div style={{ width: '70%', margin: 'auto', textAlign: 'left', backgroundColor: '#F6F6f6', borderRadius: '10px', padding: '10px 30px' }}>
+      {/* <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}> */}
       <h2 style={{ borderBottom: '3px solid', padding: '30px 0' }}>상품 등록</h2>
       <form onSubmit={handleSubmit}>
 
@@ -365,7 +381,7 @@ const Edit = ({ postId }) => {
         </div>
 
         <div className='post_box'>
-          <div style={{ width: '20%' }}>
+          <div style={{ marginRight: '10px' }}>
             <label htmlFor="region">지역 선택</label>
             <select
               id="region"
@@ -394,7 +410,7 @@ const Edit = ({ postId }) => {
           </div>
 
           <div>
-            <label htmlFor="district">구역 선택</label>
+            <label htmlFor="district"></label>
             <select
               id="district"
               value={selectedDistrict}
@@ -504,7 +520,7 @@ const Edit = ({ postId }) => {
 
         <div className='post_box'>
           <div className='post_box_left'>
-            <label htmlFor="content">설명</label>
+            <label htmlFor="content">설명<span style={{ fontSize: '15px', color: 'gray', marginLeft: '5px' }}>({inputCount}/500)</span></label>
           </div>
           <div className='post_box_right'>
             <textarea
@@ -516,6 +532,7 @@ const Edit = ({ postId }) => {
               onChange={((event) => setContent(event.target.value), handleContentChange)}
             />
             {showWarningC && <p style={{ color: 'orange' }}>내용은 최소 10자 이상이어야 합니다.</p>}
+            {showWarningL && <p style={{ color: 'orange' }}>내용은 최대 500글자입니다.</p>}
           </div>
         </div>
         <div style={{ padding: '30px', borderTop: '3px solid', textAlign: 'right' }}>
