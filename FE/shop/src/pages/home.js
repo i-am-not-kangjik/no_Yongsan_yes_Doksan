@@ -60,14 +60,14 @@ export default function App(props) {
                     }}>
                     </div>
                 </SwiperSlide>
-                {/* <SwiperSlide style={{
+                <SwiperSlide style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundImage: `url()`,
-                    backgroundColor: '#BFEAFF'
+                    backgroundColor: '#A3A0ED'
                 }}>
                     <div style={{ width: '', textAlign: 'left', marginBottom: '200px' }}>
                         <h1 style={{ fontSize: '45px', fontWeight: 'bold' }}>전자기기 중고 가격 산정, 고민 해결</h1>
@@ -80,7 +80,7 @@ export default function App(props) {
                     }}>
                     </div>
                 </SwiperSlide>
-                <SwiperSlide style={{
+                {/* <SwiperSlide style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
