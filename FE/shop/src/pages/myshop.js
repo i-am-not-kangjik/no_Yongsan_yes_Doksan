@@ -95,7 +95,7 @@ const Myshop = ({ pg, setPostId, postId }) => {
         // 날짜 계산 로직
         const detailDate = (dateString) => {
           const a = new Date(dateString);
-          const milliSeconds = new Date() - a;
+          const milliSeconds = new Date() - a - (9 * 60 * 60 * 1000);
           const seconds = milliSeconds / 1000;
           if (seconds < 60) return `방금 전`;
           const minutes = seconds / 60;

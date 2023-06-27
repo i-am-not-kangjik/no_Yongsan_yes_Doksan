@@ -115,7 +115,7 @@ function Detail(props) {
 
 
     const detailDate = (a) => {
-        const milliSeconds = new Date() - a;
+        const milliSeconds = new Date() - a - (9 * 60 * 60 * 1000); // Add 9 hours in milliseconds
         const seconds = milliSeconds / 1000;
         if (seconds < 60) return `방금 전`;
         const minutes = seconds / 60;
@@ -130,9 +130,10 @@ function Detail(props) {
         if (months < 12) return `${Math.floor(months)}개월 전`;
         const years = days / 365;
         return `${Math.floor(years)}년 전`;
-    };
-
-    const nowDate = detailDate(new Date(item.createdAt));
+      };
+      
+      const nowDate = detailDate(new Date(item.createdAt));
+      
 
     const price = String(item.price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 

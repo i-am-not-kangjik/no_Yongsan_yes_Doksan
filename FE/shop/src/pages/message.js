@@ -46,7 +46,7 @@ export default function App(props) {
     }, []);
 
     const detailDate = (a) => {
-        const milliSeconds = new Date() - a;
+        const milliSeconds = new Date() - a - (9 * 60 * 60 * 1000);
         const seconds = milliSeconds / 1000;
         if (seconds < 60) return `방금 전`;
         const minutes = seconds / 60;
@@ -63,7 +63,7 @@ export default function App(props) {
         return `${Math.floor(years)}년 전`;
     };
 
-    const nowDate = detailDate(new Date("2023-06-25T12:08:11.911741"));
+    // const nowDate = detailDate(new Date("2023-06-25T12:08:11.911741"));
 
     // 쪽지 내용 보기
     let [m, setM] = useState(false)

@@ -121,7 +121,7 @@ function PhoneSelectionForm() {
         <div>
             {loading ? <PuffLoader size={400} color={"#0D3FA5"} style={{ position: "relative", right: '200px', top: '150px', }} /> : null}
             <div className={`${blur} model_box`}>
-                <h2 style={{ marginBottom: '40px' }}>중고가 예측</h2>
+                <h2 style={{ marginBottom: '40px' }}>AI 예측</h2>
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: '' }}>
                         <div>
@@ -821,7 +821,7 @@ function PhoneSelectionForm() {
                         <span style={{ marginLeft: 'auto' }}>₩{String(result.min_price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
                     </p>
                     <div className='' style={{ marginTop: '10px' }}>
-                        <img src='' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
+                        <img src='https://github.com/i-am-not-kangjik/no_Yongsan_yes_Doksan/blob/main/FE/shop/src/img/qrcode_localhost.png?raw=true' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
                     </div>
                 </div>
             )}
