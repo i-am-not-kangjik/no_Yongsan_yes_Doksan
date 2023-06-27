@@ -9,6 +9,7 @@ app = FastAPI()
 # CORS 설정
 origins = [
     "http://localhost:3000",
+    "http://13.124.46.240:3000"
     # 다른 허용할 Origin을 필요에 따라 추가할 수 있습니다.
 ]
 
