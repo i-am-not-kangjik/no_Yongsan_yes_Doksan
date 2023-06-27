@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -35,7 +34,7 @@ public class UserService {
         return user;
     }
 
-    public User getUser(String username) {
+    public User getUserByUsername(String username) {
         // 사용자명으로 사용자를 검색합니다. 사용자가 없으면 예외를 던집니다.
         return this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new DataNotFoundException("User is not found"));

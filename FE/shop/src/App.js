@@ -5,16 +5,18 @@ import { Button, Navbar, Container, Nav, Spinner, Card, NavDropdown, Form } from
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 
 import './App.css';
+import Home from './pages/home'
 import Detail from './pages/detail'
 import Post from './pages/post'
 import SignIn from './pages/signin'
 import SignUp from './pages/signup'
 import FindId from './pages/findid'
 import FindPw from './pages/findpw'
-import Temporarydata from './Temporarydata'
 import Myshop from './pages/myshop'
 import axios from 'axios';
 import Edit from './pages/edit'
+import Message from './pages/message'
+import Model from './pages/model'
 
 import OutsideAlerter from './pages/detailEffect';
 
@@ -48,6 +50,7 @@ function App() {
   };
 
   const [loggedInUser, setLoggedInUser] = useState(null); // 로그인한 사용자
+  const [logoutTimer, setLogoutTimer] = useState(null); // 로그아웃 타이머
 
   useEffect(() => {
     checkLoggedInUser(); // 사용자가 이미 로그인되어 있는지 확인
@@ -60,10 +63,25 @@ function App() {
       // 사용자가 로그인되어 있는 경우
       const username = localStorage.getItem('username'); // 로컬 스토리지 또는 서버에서 사용자 ID 가져오기
       setLoggedInUser({ username: username }); // 사용자 ID를 loggedInUser 상태에 설정
+      startLogoutTimer(); // 로그아웃 타이머 시작
     } else {
       // 사용자가 로그인되어 있지 않은 경우
       setLoggedInUser(null);
+      stopLogoutTimer(); // 로그아웃 타이머 중지
     }
+  };
+
+  const startLogoutTimer = () => {
+    // 1시간 후에 로그아웃 실행
+    const timer = setTimeout(() => {
+      handleLogout();
+    }, 60 * 60 * 1000); // 1시간 (밀리초 단위)
+    setLogoutTimer(timer); // 로그아웃 타이머 설정
+  };
+
+  const stopLogoutTimer = () => {
+    // 로그아웃 타이머 중지
+    clearTimeout(logoutTimer);
   };
 
   const handleLogout = () => {
@@ -78,8 +96,6 @@ function App() {
     window.location.href = '/sell';
   };
 
-  // 임시데이터
-  let [data, setdata] = useState(Temporarydata)
 
   // blur 이펙트
   let [blur, setblur] = useState('blurOff')
@@ -94,48 +110,69 @@ function App() {
   // 네이게이트
   let navigate = useNavigate();
 
+  // 검색과 카테고리와 찜목록 state
+  let [scl, setScl] = useState('')
+  let [search, setSearch] = useState('')
+
   // 검색기능
   const [searchText, setSearchText] = useState('');
 
   function handleSearch() {
-    navigate('/sell');
-    const filteredContent = pg.filter(item => item.title.includes(searchText));
-    setCd(filteredContent);
-  }
-
-  function handleKeyPress(event) {
-    if (event.key === 'Enter') {
-      handleSearch();
+    if (window.location.pathname !== '/sell') {
+      navigate('/sell')
     }
+    const filteredContent = pg.filter(item =>
+      item.title.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setScl("s");
+    setSearch(searchText);
+    setCd(filteredContent);
   }
 
   //카테고리 기능
   function handleCategorySelect(category) {
-    navigate('/sell');
+    if (window.location.pathname !== '/sell') {
+      navigate('/sell')
+    }
     const filteredContent = pg.filter(item => item.category === category);
+    setScl("c");
+    setSearch(category);
     setCd(filteredContent);
   }
 
   // 찜목록
   function handleLikedPosts() {
-    navigate('/sell');
+    if (window.location.pathname !== '/sell') {
+      navigate('/sell')
+
+    }
     const filteredContent = pg.filter(item => item.likedUsernames.includes(loggedInUser.username));
+    setScl("l");
+    setSearch(loggedInUser.username);
     setCd(filteredContent);
   }
 
   const [postId, setPostId] = useState('');
 
+  // 쪽지 컴포넌트
+  const [message, setMessage] = useState(false);
+
+  const handleClick = () => {
+    setMessage((prevMessage) => !prevMessage);
+  };
+
   return (
     <div className={'App '}>
       <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
-        <Container fluid style={{ width: '80%', padding: '10px' }}>
-          <Navbar.Brand onClick={() => { navigate('/sell'); setCd(pg) }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
+        <Container fluid style={{ width: '85%', padding: '10px' }}>
+          <Navbar.Brand onClick={() => { navigate('/') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
               className="me-auto my-2 my-lg-0"
               style={{ maxHeight: '100px' }}
               navbarScroll>
+              <Nav.Link onClick={() => { navigate('/sell'); setCd(pg); setScl("") }}>중고거래</Nav.Link>
               <Nav.Link onClick={() => {
                 if (loggedInUser == null) {
                   navigate('/signin');
@@ -154,14 +191,6 @@ function App() {
                   return;
                 }
               }}>내상점</Nav.Link>
-              <Nav.Link href="#action3">채팅</Nav.Link>
-              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
-                <NavDropdown.Item onClick={() => { handleCategorySelect('노트북') }}>노트북</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('핸드폰') }}>핸드폰</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('태블릿') }}>태블릿</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('스마트워치') }}>스마트워치</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => { handleCategorySelect('블루투스이어폰') }}>블루투스이어폰</NavDropdown.Item>
-              </NavDropdown>
               <Nav.Link onClick={() => {
                 if (loggedInUser == null) {
                   navigate('/signin');
@@ -171,9 +200,17 @@ function App() {
                   return;
                 }
               }}>찜목록</Nav.Link>
-              <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link>
+              <NavDropdown title="카테고리" id="navbarScrollingDropdown">
+                <NavDropdown.Item onClick={() => { handleCategorySelect('노트북') }}>노트북</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('핸드폰') }}>핸드폰</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('태블릿') }}>태블릿</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('스마트워치') }}>스마트워치</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => { handleCategorySelect('블루투스이어폰') }}>블루투스이어폰</NavDropdown.Item>
+              </NavDropdown>
+              <Nav.Link onClick={() => { navigate('/model') }}>AI 예측</Nav.Link>
+              {/* <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link> */}
             </Nav>
-            <Form className="d-flex">
+            <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
               <Form.Control
                 type="search"
                 placeholder="물품을 검색해주세요"
@@ -182,16 +219,20 @@ function App() {
                 style={{ width: '300px' }}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                onKeyPress={handleKeyPress}
               />
-              <Button onClick={handleSearch} variant="outline-secondary">검색하기</Button>{' '}
+              <Button type="submit" onClick={handleSearch} variant="outline-secondary">
+                검색하기
+              </Button>{' '}
             </Form>
+
+
             {loggedInUser ? (
               // 로그인된 사용자인 경우
-              <div>
-                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px' }}>
+              <div style={{ display: 'flex' }}>
+                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px', marginRight: '20px' }}>
                   {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
                 </Nav.Link>
+                <Nav.Link onClick={handleClick}>쪽지함</Nav.Link>
               </div>
             ) : (
               // 로그인되지 않은 사용자인 경우
@@ -200,21 +241,31 @@ function App() {
               </Nav.Link>
             )}
 
+
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
+      {
+        message == true ? <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex: '1' }}><Message setMessage={setMessage}></Message></div> : null
+      }
+
       <Routes>
-        <Route path='/sell' element={<Main updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} data={data} setdata={setdata} blur={blur} setblur={setblur} pg={pg}></Main>} />
+        <Route
+          path="/"
+          element={<Home></Home>}
+        />
+        <Route path='/sell' element={<Main setMessage={setMessage} message={message} setPg={setPg} scl={scl} search={search} updateCd={updateCd} setCd={setCd} cd={cd} setRecentList={setRecentList} recentList={recentList} blur={blur} setblur={setblur} pg={pg}></Main>} />
         <Route path='/detail/:id' element={<Detail></Detail>} />
         <Route path='/post' element={<Post></Post>} />
+        <Route path='/model' element={<Model></Model>} />
         <Route path='/DetailEffect' element={<DetailEffect></DetailEffect>} />
         <Route path='/signin' element={<SignIn></SignIn>} />
         <Route path='/signup' element={<SignUp></SignUp>} />
         <Route path='/findid' element={<FindId></FindId>} />
         <Route path='/findpw' element={<FindPw></FindPw>} />
         <Route path='/edit' element={<Edit postId={postId}></Edit>} />
-        <Route path='/myshop' element={<Myshop postId={postId} setPostId={setPostId} data={data} setdata={setdata} pg={pg}></Myshop>} />
+        <Route path='/myshop' element={<Myshop postId={postId} setPostId={setPostId} pg={pg}></Myshop>} />
         <Route path='/test' element={<Test />} />
         <Route path='*' element={<div>없는페이지입니다</div>} />
       </Routes>
@@ -239,26 +290,36 @@ function Main(props) {
           // 여기서 응답 데이터를 처리합니다.
           const fetchData = async () => {
             try {
-                const response = await axios.get('http://13.209.183.88:8081/api/sell/');
+              const response = await axios.get('http://13.209.183.88:8081/api/sell/');
+              if (props.scl == 's') {
+                props.setCd(response.data.filter(item =>
+                  item.title.toLowerCase().includes(props.search.toLowerCase())
+                ));
+              } else if (props.scl == 'c') {
+                props.setCd(response.data.filter(item => item.category === props.search));
+              } else if (props.scl == 'l') {
+                props.setCd(response.data.filter(item => item.likedUsernames.includes(props.search)));
+              } else {
                 props.setCd(response.data);
+              }
             } catch (error) {
-                console.error(error);
+              console.error(error);
             }
-        };
+          };
 
-        fetchData();
+          fetchData();
         } catch (error) {
           console.error(error);
         }
       };
-  
+
       fetchData();
     }
   }, [d]);
-  
+
 
   // 페이지추가 state
-  let [datapage, setDatapage] = useState(3)
+  let [datapage, setDatapage] = useState(9)
 
   // 로딩이펙트 상태 state
   let [load, setLoad] = useState(false)
@@ -267,13 +328,13 @@ function Main(props) {
     <div>
       <div>
         {/* 최근본 상품 */}
-        <div style={{ position: 'fixed', top: '100px', right: '1.75%' }}>
+        <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex: '0' }}>
           <Card style={{ width: '180px' }}>
             <Card.Title style={{ borderBottom: '1px solid gray', padding: '10px' }}>최근본상품</Card.Title>
             {
               props.recentList.map(function (id, i) {
                 return (
-                  <Link onClick={() => { setd(true); props.setblur('blurOn'); setd(true); setid(id); }} key={i}>
+                  <Link onClick={() => { setd(true); props.setblur('blurOn'); setid(id); }} key={i}>
                     <Card.Img src={props.pg.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
                   </Link>
                 )
@@ -289,7 +350,7 @@ function Main(props) {
             {
               props.cd ? props.cd.slice(0, datapage).map(function (item, i) {
                 return (
-                  <MainCard item={item} cd={props.cd} key={i} data={props.data} i={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
+                  <MainCard item={item} cd={props.cd} key={i} setd={setd} setblur={props.setblur} setid={setid}></MainCard>
                 )
               }) : []
             }
@@ -300,7 +361,7 @@ function Main(props) {
                 <Link
                   onClick={() => {
                     setLoad(true);
-                    setDatapage(datapage + 3);
+                    setDatapage(datapage + 9);
                     setLoad(false);
                   }}
                   style={{
@@ -326,7 +387,7 @@ function Main(props) {
         </div>
       </div>
       {d && <div style={{ width: '100%', height: '100%', backgroundColor: '#eee', position: 'fixed', top: '0px' }} className={props.blur}></div>}
-      {d && <OutsideAlerter updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} data={props.data} id={id} />}
+      {d && <OutsideAlerter setPg={props.setPg} scl={props.scl} search={props.search} updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} recentList={props.recentList} setRecentList={props.setRecentList} setd={setd} setblur={props.setblur} id={id} />}
     </div>
   )
 }
@@ -344,11 +405,45 @@ function MainCard(props) {
       </div>
       {/* 컨텐츠영역 */}
       <div style={{ textAlign: "left", width: '70%', margin: 'auto' }}>
-        <Link className='Link'><h5 className='main_title text_overflow'>{props.item.title}</h5></Link>
+        <Link className='Link'><h5 className='main_title text_overflow' style={{ marginTop: '5px' }}>{props.item.title}</h5></Link>
         <Link className='Link'><p className='main_area'>{props.item.region}</p></Link>
         <Link className='Link'>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <p className='main_price maincolor'>{props.item.price.toLocaleString()}원</p>
+            {props.item.sellState === 'RESERVED' && (
+              <div
+                style={{
+                  width: '130px',
+                  height: '30px',
+                  backgroundColor: '#0052A4',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: '1px solid #eee',
+                  borderRadius: '7px',
+                  marginRight: '20px',
+                }}
+              >
+                <span style={{ color: 'white' }}>예약중</span>
+              </div>
+            )}
+            {props.item.sellState === 'COMPLETED' && (
+              <div
+                style={{
+                  width: '130px',
+                  height: '30px',
+                  backgroundColor: '#ddd',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: '1px solid #eee',
+                  borderRadius: '7px',
+                  marginRight: '20px',
+                }}
+              >
+                <span style={{ color: 'black' }}>거래완료</span>
+              </div>
+            )}
             {props.item.likedUsernames.length > 0 && (
               <>
                 <span style={{ marginRight: '3px', fontSize: '18px' }}>

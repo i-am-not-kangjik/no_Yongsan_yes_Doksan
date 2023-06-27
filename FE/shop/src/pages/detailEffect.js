@@ -40,7 +40,7 @@ export default function OutsideAlerter(props) {
       className={`outside-alerter ${visible ? 'show' : ''}`}
       style={{ width: '75%' }}
     >
-      <Detail updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} data={props.data} id={props.id} setRecentList={props.setRecentList} recentList={props.recentList}/>
+      <Detail setblur={props.setblur} setPg={props.setPg} scl={props.scl} search={props.search} updateCd={props.updateCd} setCd={props.setCd} cd={props.cd} id={props.id} setRecentList={props.setRecentList} recentList={props.recentList}/>
     </div>
   );
 }
