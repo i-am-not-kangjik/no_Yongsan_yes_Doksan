@@ -167,7 +167,7 @@ function Detail(props) {
                     <h4 className='detail_price maincolor' style={{ fontWeight: 'bold' }}>{price}원</h4>
                 </div>
 
-                <div className='detail_margin' style={{ padding: '30px 0', lineHeight: '1.8' }}>
+                <div className='detail_margin' style={{ padding: '10px 0', lineHeight: '1.8' }}>
                     <p className='detail_content'>{item.content}</p>
                 </div>
                 <div className='detail_margin grey' style={{ fontSize: '14px', marginBottom: '25px' }}>
