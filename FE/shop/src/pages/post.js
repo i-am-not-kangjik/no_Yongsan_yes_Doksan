@@ -214,9 +214,8 @@ const Post = () => {
   let [inputCount, setInputCount] = useState(0);
 
   return (
-    <div style={{ width: '70%', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px 30px' }}>
-    {/* <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}> */}
-      <h2 style={{ borderBottom: '3px solid', padding: '30px 0' }}>상품 등록</h2>
+    <div style={{ width: '900px', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px 30px' }}>
+      <h3 style={{ borderBottom: '3px solid', padding: '20px 0' }}>상품 등록</h3>
       <form onSubmit={handleSubmit}>
 
         <div className='post_box' style={{ paddingBottom: '20px' }}>
@@ -237,8 +236,8 @@ const Post = () => {
               <div
                 className='post_img_box'
                 style={{
-                  width: '200px',
-                  height: '200px',
+                  width: '150px',
+                  height: '150px',
                   backgroundColor: '#eee',
                   textAlign: 'center',
                   display: 'flex',
@@ -248,7 +247,7 @@ const Post = () => {
                 }}
                 onClick={() => imageUploadRef.current.click()}
               >
-                <FontAwesomeIcon icon={faCamera} size='2x' />
+                <FontAwesomeIcon icon={faCamera} style={{ fontSize: '30px' }} />
                 <p style={{ marginTop: '5px' }}>사진 선택</p>
               </div>
               {imagePreviews.length > 0 && (
@@ -258,14 +257,14 @@ const Post = () => {
                     key={index}
                     style={{
                       position: 'relative',
-                      width: '200px',
-                      height: '200px',
+                      width: '150px',
+                      height: '150px',
                     }}
                   >
                     <img
                       src={preview}
                       alt={`미리보기 ${index + 1}`}
-                      style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+                      style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                     />
                     <Link
                       onClick={(event) => handleImageDelete(event, index)}

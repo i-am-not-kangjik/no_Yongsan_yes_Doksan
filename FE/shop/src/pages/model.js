@@ -751,33 +751,28 @@ function PhoneSelectionForm() {
                                             <tr>
                                                 <th>등급</th>
                                                 <th>외관</th>
-                                                <th>기능</th>
                                                 <th>배터리</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>S급</td>
-                                                <td>사용감이 거의 없는 상태</td>
-                                                <td>정상</td>
-                                                <td>85% 이상</td>
+                                                <td>기스가 없는 말끔한 상태</td>
+                                                <td>90% 이상</td>
                                             </tr>
                                             <tr>
                                                 <td>A급</td>
                                                 <td>미세한 스크래치 또는 약간 찍힘(1~3곳)</td>
-                                                <td>정상</td>
                                                 <td>85% 이상</td>
                                             </tr>
                                             <tr>
                                                 <td>B급</td>
-                                                <td>눈에 띄는 스크래치 또는 생활 찍힘(3곳 이상), 약잔상</td>
-                                                <td>정상</td>
+                                                <td>눈에 띄는 스크래치 또는 생활 찍힘(4곳 이상), 약잔상</td>
                                                 <td>80% 이상</td>
                                             </tr>
                                             <tr>
                                                 <td>C급</td>
-                                                <td>스크래치 또는 찍힘 다수, 약~중잔상이 있을 수 있음</td>
-                                                <td>정상</td>
+                                                <td>찍힘 또는 스크래치가 많거나 깨진 부분이 있을 경우</td>
                                                 <td>80% 이상</td>
                                             </tr>
 
@@ -831,7 +826,7 @@ function PhoneSelectionForm() {
                         }
                     </p>
                     <div className='' style={{ marginTop: '10px' }}>
-                        <img src='qrcode.png' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
+                        <img src='qrcode.png' style={{ width: '250px', height: '250px', marginTop: '20px' }}></img>
                     </div>
                 </div>
             )}
