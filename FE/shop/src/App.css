@@ -40,7 +40,7 @@ p {
 }
 
 .detail_img {
-    height: 500px;
+    height: 600px;
     object-fit: cover
 }
 
@@ -101,7 +101,7 @@ p {
 .post_box {
     padding: 30px 0;
     border-bottom: 1px solid grey;
-    font-size: 18px;
+    font-size: 15px;
     display: flex;
 }
 
@@ -115,7 +115,7 @@ p {
 
 .post_box input {
     width: 80%;
-    padding: 5px;
+    padding: 3px;
 }
 
 .text_center {
@@ -124,7 +124,7 @@ p {
 }
 
 .post_img_box {
-    margin-right: 21.6px;
+    margin-right: 10px;
     margin-bottom: 10px;
     background-color: white;
     border: 1px solid grey;
@@ -189,23 +189,23 @@ p {
 }
 
 .model_box {
-    width: 700px;
-    height: 700px;
+    width: 650px;
+    height: 650px;
     background-color: #F6F6f6;
     padding-top: 50px;
-    margin: 150px auto;
+    margin: auto;
     border: 1px solid #ddd;
     border-radius: 15px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 
 .model_input {
-    width: 500px;
-    height: 60px;
+    width: 450px;
+    height: 50px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 20px;
+    padding: 5px;
 }
 
 .model_btn {
@@ -219,12 +219,12 @@ p {
 
 .result {
     background-color: white;
-    width: 350px;
-    height: 620px; 
+    width: 300px;
+    height: 570px; 
     position : relative;
     top : 50%;
-    transform: translateY(-130%);
-    right: -70%;
+    transform: translateY(-107%);
+    right: -75%;
     padding: 25px;
 }
 

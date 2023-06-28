@@ -17,6 +17,7 @@ import axios from 'axios';
 import Edit from './pages/edit'
 import Message from './pages/message'
 import Model from './pages/model'
+import Report from './pages/report'
 
 import OutsideAlerter from './pages/detailEffect';
 
@@ -163,7 +164,7 @@ function App() {
 
   return (
     <div className={'App '}>
-      <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
+      <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light' style={{ fontSize : '13px' }}>
         <Container fluid style={{ width: '85%', padding: '10px', }}>
           <Navbar.Brand onClick={() => { navigate('/') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
@@ -216,6 +217,9 @@ function App() {
                   return;
                 }
               }}>AI 예측</Nav.Link>
+              <Nav.Link onClick={() => {
+                  navigate('/report')
+              }}>중고가</Nav.Link>
               {/* <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link> */}
             </Nav>
             <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
@@ -224,27 +228,27 @@ function App() {
                 placeholder="물품을 검색해주세요"
                 className="me-2"
                 aria-label="Search"
-                style={{ width: '300px' }}
+                style={{ width: '300px',height : '35px' }}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
               />
-              <Button type="submit" onClick={handleSearch} variant="outline-secondary">
+              <Button type="submit" onClick={handleSearch} variant="outline-secondary" style={{ height : '35px', fontSize : '15px' }}>
                 검색하기
-              </Button>{' '}
+              </Button>
             </Form>
 
 
             {loggedInUser ? (
               // 로그인된 사용자인 경우
               <div style={{ display: 'flex' }}>
-                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px', marginRight: '20px' }}>
+                <Nav.Link style={{ marginLeft: '30px', marginRight: '20px' }}>
                   {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
                 </Nav.Link>
                 <Nav.Link onClick={handleClick}>쪽지함</Nav.Link>
               </div>
             ) : (
               // 로그인되지 않은 사용자인 경우
-              <Nav.Link onClick={() => navigate('/signin')} style={{ fontSize: '15px', marginLeft: '30px' }}>
+              <Nav.Link onClick={() => navigate('/signin')} style={{ marginLeft: '30px' }}>
                 로그인/회원가입
               </Nav.Link>
             )}
@@ -274,6 +278,7 @@ function App() {
         <Route path='/findpw' element={<FindPw></FindPw>} />
         <Route path='/edit' element={<Edit postId={postId}></Edit>} />
         <Route path='/myshop' element={<Myshop postId={postId} setPostId={setPostId} pg={pg}></Myshop>} />
+        <Route path='/report' element={<Report />} />
         <Route path='/test' element={<Test />} />
         <Route path='*' element={<div>없는페이지입니다</div>} />
       </Routes>
