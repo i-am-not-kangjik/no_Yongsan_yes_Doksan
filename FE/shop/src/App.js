@@ -219,7 +219,7 @@ function App() {
               }}>AI 예측</Nav.Link>
               <Nav.Link onClick={() => {
                   navigate('/report')
-              }}>중고가</Nav.Link>
+              }}>Report</Nav.Link>
               {/* <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link> */}
             </Nav>
             <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>

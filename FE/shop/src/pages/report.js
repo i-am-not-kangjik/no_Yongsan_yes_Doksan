@@ -7,6 +7,7 @@ function Dashboard() {
 
     return (
         <div style={{ width: '100%', height: '100vh', overflowX: 'auto' }}>
+        <h3>Report</h3>
         <iframe
             title="Dashboard"
             src={dashboardUrl}
