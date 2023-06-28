@@ -21,13 +21,14 @@ p {
 
 .main_area {
     color: gray;
+    font-size: 13px;
     width: 15rem;
     margin: auto;
 }
 
 .main_price {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 17px;
     width: 15rem;
     margin: auto;
 }
@@ -39,7 +40,7 @@ p {
 }
 
 .detail_img {
-    height: 700px;
+    height: 500px;
     object-fit: cover
 }
 
@@ -71,7 +72,7 @@ p {
     transform: scale(1);
     position: fixed;
     left: 50%;
-    top: 10%;
+    top: 15%;
     transform: translateX(-50%);
 }
 
@@ -88,12 +89,12 @@ p {
 }
 
 .detail_margin {
-    margin: 15px auto;
+    margin: 10px auto;
 }
 
 .grey {
     color: grey;
-    font-size: 15px;
+    font-size: 12px;
     word-spacing: -2px;
 }
 
@@ -165,9 +166,9 @@ p {
 }
 
 .sendInput {
-    width: 360px;
-    padding: 15px 0;
-    font-size: 15px;
+    width: 300px;
+    padding: 12px 0;
+    font-size: 12px;
     border: 0;
     outline: none;
     overflow-wrap: break-word;
@@ -176,9 +177,9 @@ p {
 
 .sendInput_m {
     width: 360px;
-    padding: 15px 0;
-    padding-left: 15px;
-    font-size: 15px;
+    padding: 12px 0;
+    padding-left: 12px;
+    font-size: 12px;
     border: 0;
     border-radius: 10px;
     outline: none;
