@@ -38,8 +38,8 @@ function PhoneSelectionForm() {
         console.log("----------------------")
 
         // Send the POST request
-        // fetch('http://127.0.0.1:8000/predict_price', {
-        fetch('http://3.37.220.88:80/predict_price', {
+        fetch('http://127.0.0.1:8000/predict_price', {
+        // fetch('http://3.37.220.88:80/predict_price', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -200,8 +200,8 @@ function PhoneSelectionForm() {
                             <div>
                                 <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
                                     <option value="">모델 선택</option>
-                                    <option value="2세대">2세대</option>
-                                    <option value="3세대">3세대</option>
+                                    <option value="SE(2세대)">SE(2세대)</option>
+                                    <option value="SE(3세대)">SE(3세대)</option>
                                 </select>
                             </div>
                         )}
@@ -376,26 +376,24 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === '2세대' && (
+                        {selectedSeries === 'SE(2세대)' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
                                     <option value="64">64GB</option>
                                     <option value="128">128GB</option>
                                     <option value="256">256GB</option>
-                                    <option value="512">512GB</option>
                                 </select>
                             </div>
                         )}
 
-                        {selectedSeries === '3세대' && (
+                        {selectedSeries === 'SE(3세대)' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
                                     <option value="64">64GB</option>
                                     <option value="128">128GB</option>
                                     <option value="256">256GB</option>
-                                    <option value="512">512GB</option>
                                 </select>
                             </div>
                         )}
@@ -424,9 +422,9 @@ function PhoneSelectionForm() {
                             <div>
                                 <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
                                     <option value="">모델 선택</option>
-                                    <option value="Z 폴드 2">Z 폴드 2</option>
-                                    <option value="Z 폴드 3">Z 폴드 3</option>
-                                    <option value="Z 폴드 4">Z 폴드 4</option>
+                                    <option value="Z 폴드2">Z 폴드2</option>
+                                    <option value="Z 폴드3">Z 폴드3</option>
+                                    <option value="Z 폴드4">Z 폴드4</option>
                                 </select>
                             </div>
                         )}
@@ -437,8 +435,8 @@ function PhoneSelectionForm() {
                                     <option value="">모델 선택</option>
                                     <option value="Z 플립 LTE">Z 플립 LTE</option>
                                     <option value="Z 플립 5G">Z 플립 5G</option>
-                                    <option value="Z 플립 3">Z 플립 3</option>
-                                    <option value="Z 플립 4">Z 플립 4</option>
+                                    <option value="Z 플립3">Z 플립3</option>
+                                    <option value="Z 플립4">Z 플립4</option>
                                 </select>
                             </div>
                         )}
@@ -509,7 +507,7 @@ function PhoneSelectionForm() {
 
 
                         {/* 용량 */}
-                        {selectedSeries === 'Z 폴드 2' && (
+                        {selectedSeries === 'Z 폴드2' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -518,7 +516,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 폴드 3' && (
+                        {selectedSeries === 'Z 폴드3' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -528,7 +526,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 폴드 4' && (
+                        {selectedSeries === 'Z 폴드4' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -557,7 +555,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 플립 3' && (
+                        {selectedSeries === 'Z 플립3' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -566,7 +564,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 플립 4' && (
+                        {selectedSeries === 'Z 플립4' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -787,7 +785,7 @@ function PhoneSelectionForm() {
                                     <option value="S급">S급</option>
                                     <option value="A급">A급</option>
                                     <option value="B급">B급</option>
-                                    <option value="C급">C급</option>
+                                    {/* <option value="C급">C급</option> */}
                                 </select>
                             </div>
                         </div>
