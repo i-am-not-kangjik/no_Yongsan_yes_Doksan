@@ -42,6 +42,9 @@ const Edit = ({ postId }) => {
           const data = await response.json();
           const { title, content, price, region, category, imgPaths } = data;
 
+          
+          // setImages(imgPaths)
+          // setImagePreviews(imgPaths)
           setTitle(title);
           setContent(content);
           setPrice(String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
@@ -63,7 +66,7 @@ const Edit = ({ postId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (imageUploadRef.current.files.length < 1) {
+    if (images.length < 1) {
       alert('이미지를 업로드해주세요.');
       return;
     } else if (title.trim() === '') {
@@ -92,6 +95,8 @@ const Edit = ({ postId }) => {
     formData.append('price', price.replace(/,/g, ''));
     formData.append('region', selectedRegion + ' ' + selectedDistrict);
     formData.append('category', category);
+
+    console.log(images)
 
     for (let i = 0; i < images.length; i++) {
       formData.append('files', images[i]);

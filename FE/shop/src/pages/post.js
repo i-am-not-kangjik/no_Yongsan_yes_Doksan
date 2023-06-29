@@ -24,7 +24,7 @@ const Post = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (imageUploadRef.current.files.length < 1) {
+    if (images.length < 1) {
       alert('이미지를 업로드해주세요.');
       return;
     } else if (title.trim() === '') {
@@ -58,9 +58,10 @@ const Post = () => {
     for (let i = 0; i < images.length; i++) {
       formData.append('files', images[i]);
     }
-    // formData.append('files', imageUploadRef.current.files[0]);
 
     const token = localStorage.getItem('token');
+
+    console.log(images)
 
     try {
       const response = await fetch('http://13.209.183.88:8081/api/sell/', {
@@ -243,7 +244,7 @@ const Post = () => {
                   justifyContent: 'center',
                   flexDirection: 'column',
                 }}
-                onClick={() => imageUploadRef.current.click()}
+                onClick={() => {imageUploadRef.current.click()}}
               >
                 <FontAwesomeIcon icon={faCamera} style={{ fontSize: '30px' }} />
                 <p style={{ marginTop: '5px' }}>사진 선택</p>
