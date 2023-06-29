@@ -26,7 +26,6 @@ export default function OutsideAlerter(props) {
   useOutsideAlerter(wrapperRef, setd, setblur);
 
   useEffect(() => {
-    // Delay the appearance of the OutsideAlerter for demonstration purposes
     const timeout = setTimeout(() => {
       setVisible(true);
     }, 10);

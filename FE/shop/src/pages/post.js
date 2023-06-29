@@ -115,8 +115,6 @@ const Post = () => {
   const handleImageChange = (event) => {
     const selectedImages = Array.from(event.target.files);
 
-    console.log(images)
-
     if (selectedImages.length > 0) {
       const totalImages = images.length + selectedImages.length;
       if (totalImages > 11) {

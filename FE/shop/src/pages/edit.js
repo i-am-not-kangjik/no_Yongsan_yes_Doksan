@@ -113,7 +113,6 @@ const Edit = ({ postId }) => {
       if (response.ok) {
         // Request successful
         alert("상품이 수정되었습니다.");
-        console.log('상품이 수정되었습니다.');
         window.location.href = '/myshop';
       } else {
         // Request failed

@@ -32,11 +32,6 @@ function PhoneSelectionForm() {
             quality: grade,
         };
 
-        console.log("모델명: ", productName)
-        console.log("용량: ", selectedCapacity)
-        console.log("등급: ", grade)
-        console.log("----------------------")
-
         // Send the POST request
         fetch('http://127.0.0.1:8000/predict_price', {
         // fetch('http://3.37.220.88:80/predict_price', {
@@ -49,7 +44,6 @@ function PhoneSelectionForm() {
             .then((response) => response.json())
             .then((data) => setResult(data))
             .catch((error) => console.error(error));
-        console.log(result)
     };
 
     useEffect(() => {
