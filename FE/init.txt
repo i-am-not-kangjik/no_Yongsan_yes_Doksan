@@ -1,3 +1,0 @@
-초기 설정
-git push test 찐막..
-pr test
