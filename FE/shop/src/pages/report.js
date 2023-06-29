@@ -6,7 +6,7 @@ function Dashboard() {
     const dashboardUrl = `http://13.209.228.199:8088/superset/dashboard/2/?placeid=${1}&standalone=2&show_filters=0&expand_filters=0`;
 
     return (
-        <div style={{ width: '100%', height: '100vh', overflowX: 'auto' }}>
+        <div style={{ width: '100%', height: '100%', overflowX: 'auto' }}>
         <h3>Report</h3>
         <iframe
             title="Dashboard"
