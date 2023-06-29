@@ -46,7 +46,6 @@ function Detail(props) {
           const response = await axios.post(apiUrl, JSON.stringify(messageData), { headers });
           alert("쪽지가 전송되었습니다.")
           setContent("")
-          console.log(item.authorUsername)
           // TODO: Handle successful message submission
         } catch (error) {
           console.error('Error sending message:', error);
@@ -66,7 +65,6 @@ function Detail(props) {
         })
             .then((response) => {
                 if (response.ok) {
-                    console.log('Post liked successfully!');
                     const fetchData = async () => {
                         try {
                             const response = await axios.get('http://13.209.183.88:8081/api/sell/');

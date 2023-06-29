@@ -32,14 +32,9 @@ function PhoneSelectionForm() {
             quality: grade,
         };
 
-        console.log("모델명: ", productName)
-        console.log("용량: ", selectedCapacity)
-        console.log("등급: ", grade)
-        console.log("----------------------")
-
         // Send the POST request
-        fetch('http://127.0.0.1:8000/predict_price', {
-        // fetch('http://3.37.220.88:80/predict_price', {
+        // fetch('http://127.0.0.1:8000/predict_price', {
+        fetch('http://3.37.220.88:80/predict_price', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,7 +44,6 @@ function PhoneSelectionForm() {
             .then((response) => response.json())
             .then((data) => setResult(data))
             .catch((error) => console.error(error));
-        console.log(result)
     };
 
     useEffect(() => {
@@ -768,12 +762,11 @@ function PhoneSelectionForm() {
                                                 <td>눈에 띄는 스크래치 또는 생활 찍힘(4곳 이상), 약잔상</td>
                                                 <td>80% 이상</td>
                                             </tr>
-                                            <tr>
+                                            {/* <tr>
                                                 <td>C급</td>
                                                 <td>찍힘 또는 스크래치가 많거나 깨진 부분이 있을 경우</td>
                                                 <td>80% 이상</td>
-                                            </tr>
-
+                                            </tr> */}
                                         </tbody>
                                     </Table>
                                 )}

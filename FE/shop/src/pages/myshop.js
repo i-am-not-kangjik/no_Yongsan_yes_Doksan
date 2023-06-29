@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { DropdownButton, Dropdown, ButtonGroup, Button, Offcanvas } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 
 const Myshop = ({ pg, setPostId, postId }) => {
 
