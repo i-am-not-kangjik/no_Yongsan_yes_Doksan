@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### Image Files ###
+/src/main/resources/static/images
+
+.DS_Store
