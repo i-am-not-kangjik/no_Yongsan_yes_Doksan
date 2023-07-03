@@ -17,6 +17,7 @@ import axios from 'axios';
 import Edit from './pages/edit'
 import Message from './pages/message'
 import Model from './pages/model'
+import Report from './pages/report'
 
 import OutsideAlerter from './pages/detailEffect';
 
@@ -163,8 +164,8 @@ function App() {
 
   return (
     <div className={'App '}>
-      <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light'>
-        <Container fluid style={{ width: '85%', padding: '10px' }}>
+      <Navbar expand="lg" className={`fixed-top ${blur}`} bg='light' style={{ fontSize : '13px' }}>
+        <Container fluid style={{ width: '85%', padding: '10px', }}>
           <Navbar.Brand onClick={() => { navigate('/') }}><p className='maincolor'>용산위에독산</p></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -216,6 +217,9 @@ function App() {
                   return;
                 }
               }}>AI 예측</Nav.Link>
+              <Nav.Link onClick={() => {
+                  navigate('/report')
+              }}>Report</Nav.Link>
               {/* <Nav.Link onClick={() => { navigate('/test') }}>테스트</Nav.Link> */}
             </Nav>
             <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
@@ -224,27 +228,27 @@ function App() {
                 placeholder="물품을 검색해주세요"
                 className="me-2"
                 aria-label="Search"
-                style={{ width: '300px' }}
+                style={{ width: '300px',height : '35px' }}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
               />
-              <Button type="submit" onClick={handleSearch} variant="outline-secondary">
+              <Button type="submit" onClick={handleSearch} variant="outline-secondary" style={{ height : '35px', fontSize : '15px' }}>
                 검색하기
-              </Button>{' '}
+              </Button>
             </Form>
 
 
             {loggedInUser ? (
               // 로그인된 사용자인 경우
               <div style={{ display: 'flex' }}>
-                <Nav.Link style={{ fontSize: '15px', marginLeft: '30px', marginRight: '20px' }}>
+                <Nav.Link style={{ marginLeft: '30px', marginRight: '20px' }}>
                   {loggedInUser.username} / <span onClick={handleLogout}>로그아웃</span>
                 </Nav.Link>
                 <Nav.Link onClick={handleClick}>쪽지함</Nav.Link>
               </div>
             ) : (
               // 로그인되지 않은 사용자인 경우
-              <Nav.Link onClick={() => navigate('/signin')} style={{ fontSize: '15px', marginLeft: '30px' }}>
+              <Nav.Link onClick={() => navigate('/signin')} style={{ marginLeft: '30px' }}>
                 로그인/회원가입
               </Nav.Link>
             )}
@@ -274,6 +278,7 @@ function App() {
         <Route path='/findpw' element={<FindPw></FindPw>} />
         <Route path='/edit' element={<Edit postId={postId}></Edit>} />
         <Route path='/myshop' element={<Myshop postId={postId} setPostId={setPostId} pg={pg}></Myshop>} />
+        <Route path='/report' element={<Report />} />
         <Route path='/test' element={<Test />} />
         <Route path='*' element={<div>없는페이지입니다</div>} />
       </Routes>
@@ -337,13 +342,13 @@ function Main(props) {
       <div>
         {/* 최근본 상품 */}
         <div style={{ position: 'fixed', top: '100px', right: '1.75%', zIndex: '0' }}>
-          <Card style={{ width: '180px' }}>
-            <Card.Title style={{ borderBottom: '1px solid gray', padding: '10px' }}>최근본상품</Card.Title>
+          <Card style={{ width: '120px' }}>
+            <Card.Title style={{ borderBottom: '1px solid gray', padding: '10px', fontSize:'12px' }}>최근본상품</Card.Title>
             {
               props.recentList.map(function (id, i) {
                 return (
                   <Link onClick={() => { setd(true); props.setblur('blurOn'); setid(id); }} key={i}>
-                    <Card.Img src={props.pg.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '100px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
+                    <Card.Img src={props.pg.find(item => item.id === id).imgPaths[0]} style={{ width: '70%', height: '70px', display: 'block', margin: '15px auto', objectFit: 'cover' }} />
                   </Link>
                 )
               })
@@ -351,7 +356,7 @@ function Main(props) {
           </Card>
         </div>
 
-        <div className="container" style={{ marginTop: '30px' }}>
+        <div className="container" style={{ marginTop: '30px', width : '80%' }}>
           <div className="row" style={{ backgroundColor: '#fff', borderRadius: '10px', width: '85%', margin: 'auto' }}>
             <h4 style={{ padding: '20px' }}>중고거래</h4>
             {/* 메인컨텐츠영역 */}
@@ -407,7 +412,7 @@ function MainCard(props) {
     <div className="col-md-4" onClick={() => { props.setd(true); props.setblur('blurOn'); props.setid(props.item.id) }}
       style={{ margin: '20px auto' }}>
       {/* 사진영역 */}
-      <div style={{ overflow: 'hidden', borderRadius: '10px', width: '250px', height: "180px", margin: 'auto' }}>
+      <div style={{ overflow: 'hidden', borderRadius: '10px', width: '210px', height: "150px", margin: 'auto' }}>
         <Link className='Link'><img src={props.item.imgPaths[0]}
           className='main_img' /></Link>
       </div>
@@ -421,8 +426,8 @@ function MainCard(props) {
             {props.item.sellState === 'RESERVED' && (
               <div
                 style={{
-                  width: '130px',
-                  height: '30px',
+                  width: '110px',
+                  height: '25px',
                   backgroundColor: '#0052A4',
                   display: 'flex',
                   justifyContent: 'center',
@@ -430,6 +435,7 @@ function MainCard(props) {
                   border: '1px solid #eee',
                   borderRadius: '7px',
                   marginRight: '20px',
+                  fontSize: '12px'
                 }}
               >
                 <span style={{ color: 'white' }}>예약중</span>
@@ -438,8 +444,8 @@ function MainCard(props) {
             {props.item.sellState === 'COMPLETED' && (
               <div
                 style={{
-                  width: '130px',
-                  height: '30px',
+                  width: '120px',
+                  height: '25px',
                   backgroundColor: '#ddd',
                   display: 'flex',
                   justifyContent: 'center',
@@ -447,6 +453,7 @@ function MainCard(props) {
                   border: '1px solid #eee',
                   borderRadius: '7px',
                   marginRight: '20px',
+                  fontSize: '12px'
                 }}
               >
                 <span style={{ color: 'black' }}>거래완료</span>

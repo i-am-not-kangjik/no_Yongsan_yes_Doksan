@@ -46,7 +46,6 @@ function Detail(props) {
           const response = await axios.post(apiUrl, JSON.stringify(messageData), { headers });
           alert("쪽지가 전송되었습니다.")
           setContent("")
-          console.log(item.authorUsername)
           // TODO: Handle successful message submission
         } catch (error) {
           console.error('Error sending message:', error);
@@ -66,7 +65,6 @@ function Detail(props) {
         })
             .then((response) => {
                 if (response.ok) {
-                    console.log('Post liked successfully!');
                     const fetchData = async () => {
                         try {
                             const response = await axios.get('http://13.209.183.88:8081/api/sell/');
@@ -154,24 +152,24 @@ function Detail(props) {
                     })
                 }
             </Carousel>
-            <div style={{ width: '35%', padding: '15px 15px 0', textAlign: 'left' }}>
+            <div style={{ width: '35%', padding: '10px 15px 0', textAlign: 'left' }}>
                 <div className='detail_margin'>
-                    <h4 className='detail_title'>{item.title}</h4>
+                    <h5 className='detail_title'>{item.title}</h5>
                 </div>
 
-                <div className='detail_margin grey'>
-                    <p className='detail_ct'>{item.category} ∙ {nowDate}</p>
+                <div className='detail_margin grey' style={{ display : 'flex', justifyContent : 'space-between', paddingRight: '7px' }}>
+                    <p className='detail_ct'>{item.category} ∙ {nowDate}</p><p>작성자: {item.authorUsername}</p>
                 </div>
 
                 <div className='detail_margin'>
-                    <h4 className='detail_price maincolor' style={{ fontWeight: 'bold' }}>{price}원</h4>
+                    <h4 className='maincolor' style={{ fontWeight: 'bold', fontSize: '20px' }}>{price}원</h4>
                 </div>
 
-                <div className='detail_margin' style={{ padding: '10px 0', lineHeight: '1.8' }}>
-                    <p className='detail_content'>{item.content}</p>
+                <div className='detail_margin' style={{ padding: '5px 0', fontSize : '15px' }}>
+                    <p>{item.content}</p>
                 </div>
-                <div className='detail_margin grey' style={{ fontSize: '14px', marginBottom: '25px' }}>
-                    <p className='detail_price'>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
+                <div className='detail_margin grey' style={{ fontSize: '12px', marginBottom: '' }}>
+                    <p>관심 {item.likedUsernames.length} ∙ 조회 {item.viewCount}</p>
                 </div>
                 <OverlayTrigger
                     trigger="click"
@@ -189,12 +187,12 @@ function Detail(props) {
                         </Tooltip>
                     }>
                     {
-                        item.likedUsernames.includes(username) ? <span style={{ fontSize: '30px', }} onClick={handleLike}><FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} /></span>
-                            : <span style={{ fontSize: '30px' }} onClick={handleLike}><FontAwesomeIcon icon={faHeart} /></span>
+                        item.likedUsernames.includes(username) ? <span style={{ fontSize: '20px', }} onClick={handleLike}><FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} /></span>
+                            : <span style={{ fontSize: '20px' }} onClick={handleLike}><FontAwesomeIcon icon={faHeart} /></span>
                     }
                 </OverlayTrigger>
                 <span
-                            style={{ fontSize: '30px', marginLeft: '20px' }}
+                            style={{ fontSize: '20px', marginLeft: '20px' }}
                             onClick={handleSendMessageClick}
                         >
                             <FontAwesomeIcon icon={faComment} />
@@ -213,7 +211,7 @@ function Detail(props) {
                                 rows={1}
                                 style={{ border: 'none', outline: 'none', resize: 'none' }}
                             />
-                            <p onClick={handleSendMessage}>전송</p>
+                            <p onClick={handleSendMessage} style={{ fontSize : '12px' }}>전송</p>
                         </>
                     ) : (
                         null

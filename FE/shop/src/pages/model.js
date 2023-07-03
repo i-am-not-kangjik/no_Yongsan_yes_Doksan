@@ -32,11 +32,6 @@ function PhoneSelectionForm() {
             quality: grade,
         };
 
-        console.log("모델명: ", productName)
-        console.log("용량: ", selectedCapacity)
-        console.log("등급: ", grade)
-        console.log("----------------------")
-
         // Send the POST request
         // fetch('http://127.0.0.1:8000/predict_price', {
         fetch('http://3.37.220.88:80/predict_price', {
@@ -49,7 +44,6 @@ function PhoneSelectionForm() {
             .then((response) => response.json())
             .then((data) => setResult(data))
             .catch((error) => console.error(error));
-        console.log(result)
     };
 
     useEffect(() => {
@@ -200,8 +194,8 @@ function PhoneSelectionForm() {
                             <div>
                                 <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
                                     <option value="">모델 선택</option>
-                                    <option value="2세대">2세대</option>
-                                    <option value="3세대">3세대</option>
+                                    <option value="SE(2세대)">SE(2세대)</option>
+                                    <option value="SE(3세대)">SE(3세대)</option>
                                 </select>
                             </div>
                         )}
@@ -376,26 +370,24 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === '2세대' && (
+                        {selectedSeries === 'SE(2세대)' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
                                     <option value="64">64GB</option>
                                     <option value="128">128GB</option>
                                     <option value="256">256GB</option>
-                                    <option value="512">512GB</option>
                                 </select>
                             </div>
                         )}
 
-                        {selectedSeries === '3세대' && (
+                        {selectedSeries === 'SE(3세대)' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
                                     <option value="64">64GB</option>
                                     <option value="128">128GB</option>
                                     <option value="256">256GB</option>
-                                    <option value="512">512GB</option>
                                 </select>
                             </div>
                         )}
@@ -424,9 +416,9 @@ function PhoneSelectionForm() {
                             <div>
                                 <select className='model_input' value={selectedSeries} onChange={handleSeriesChange} required>
                                     <option value="">모델 선택</option>
-                                    <option value="Z 폴드 2">Z 폴드 2</option>
-                                    <option value="Z 폴드 3">Z 폴드 3</option>
-                                    <option value="Z 폴드 4">Z 폴드 4</option>
+                                    <option value="Z 폴드2">Z 폴드2</option>
+                                    <option value="Z 폴드3">Z 폴드3</option>
+                                    <option value="Z 폴드4">Z 폴드4</option>
                                 </select>
                             </div>
                         )}
@@ -437,8 +429,8 @@ function PhoneSelectionForm() {
                                     <option value="">모델 선택</option>
                                     <option value="Z 플립 LTE">Z 플립 LTE</option>
                                     <option value="Z 플립 5G">Z 플립 5G</option>
-                                    <option value="Z 플립 3">Z 플립 3</option>
-                                    <option value="Z 플립 4">Z 플립 4</option>
+                                    <option value="Z 플립3">Z 플립3</option>
+                                    <option value="Z 플립4">Z 플립4</option>
                                 </select>
                             </div>
                         )}
@@ -509,7 +501,7 @@ function PhoneSelectionForm() {
 
 
                         {/* 용량 */}
-                        {selectedSeries === 'Z 폴드 2' && (
+                        {selectedSeries === 'Z 폴드2' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -518,7 +510,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 폴드 3' && (
+                        {selectedSeries === 'Z 폴드3' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -528,7 +520,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 폴드 4' && (
+                        {selectedSeries === 'Z 폴드4' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -557,7 +549,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 플립 3' && (
+                        {selectedSeries === 'Z 플립3' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -566,7 +558,7 @@ function PhoneSelectionForm() {
                             </div>
                         )}
 
-                        {selectedSeries === 'Z 플립 4' && (
+                        {selectedSeries === 'Z 플립4' && (
                             <div>
                                 <select className='model_input' value={selectedCapacity} onChange={handleCapacityChange} required>
                                     <option value="">용량 선택</option>
@@ -751,36 +743,30 @@ function PhoneSelectionForm() {
                                             <tr>
                                                 <th>등급</th>
                                                 <th>외관</th>
-                                                <th>기능</th>
                                                 <th>배터리</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>S급</td>
-                                                <td>사용감이 거의 없는 상태</td>
-                                                <td>정상</td>
-                                                <td>85% 이상</td>
+                                                <td>기스가 없는 말끔한 상태</td>
+                                                <td>90% 이상</td>
                                             </tr>
                                             <tr>
                                                 <td>A급</td>
                                                 <td>미세한 스크래치 또는 약간 찍힘(1~3곳)</td>
-                                                <td>정상</td>
                                                 <td>85% 이상</td>
                                             </tr>
                                             <tr>
                                                 <td>B급</td>
-                                                <td>눈에 띄는 스크래치 또는 생활 찍힘(3곳 이상), 약잔상</td>
-                                                <td>정상</td>
+                                                <td>눈에 띄는 스크래치 또는 생활 찍힘(4곳 이상), 약잔상</td>
                                                 <td>80% 이상</td>
                                             </tr>
-                                            <tr>
+                                            {/* <tr>
                                                 <td>C급</td>
-                                                <td>스크래치 또는 찍힘 다수, 약~중잔상이 있을 수 있음</td>
-                                                <td>정상</td>
+                                                <td>찍힘 또는 스크래치가 많거나 깨진 부분이 있을 경우</td>
                                                 <td>80% 이상</td>
-                                            </tr>
-
+                                            </tr> */}
                                         </tbody>
                                     </Table>
                                 )}
@@ -792,7 +778,7 @@ function PhoneSelectionForm() {
                                     <option value="S급">S급</option>
                                     <option value="A급">A급</option>
                                     <option value="B급">B급</option>
-                                    <option value="C급">C급</option>
+                                    {/* <option value="C급">C급</option> */}
                                 </select>
                             </div>
                         </div>
@@ -831,7 +817,7 @@ function PhoneSelectionForm() {
                         }
                     </p>
                     <div className='' style={{ marginTop: '10px' }}>
-                        <img src='qrcode.png' style={{ width: '300px', height: '300px', marginTop: '20px' }}></img>
+                        <img src='qrcode.png' style={{ width: '250px', height: '250px', marginTop: '20px' }}></img>
                     </div>
                 </div>
             )}

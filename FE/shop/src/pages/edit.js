@@ -42,6 +42,9 @@ const Edit = ({ postId }) => {
           const data = await response.json();
           const { title, content, price, region, category, imgPaths } = data;
 
+          
+          // setImages(imgPaths)
+          // setImagePreviews(imgPaths)
           setTitle(title);
           setContent(content);
           setPrice(String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
@@ -63,7 +66,7 @@ const Edit = ({ postId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (imageUploadRef.current.files.length < 1) {
+    if (images.length < 1) {
       alert('이미지를 업로드해주세요.');
       return;
     } else if (title.trim() === '') {
@@ -93,6 +96,8 @@ const Edit = ({ postId }) => {
     formData.append('region', selectedRegion + ' ' + selectedDistrict);
     formData.append('category', category);
 
+    console.log(images)
+
     for (let i = 0; i < images.length; i++) {
       formData.append('files', images[i]);
     }
@@ -113,7 +118,6 @@ const Edit = ({ postId }) => {
       if (response.ok) {
         // Request successful
         alert("상품이 수정되었습니다.");
-        console.log('상품이 수정되었습니다.');
         window.location.href = '/myshop';
       } else {
         // Request failed
@@ -249,78 +253,77 @@ const Edit = ({ postId }) => {
   };
 
   return (
-    <div style={{ width: '70%', margin: 'auto', textAlign: 'left', backgroundColor: '#F6F6f6', borderRadius: '10px', padding: '10px 30px' }}>
-      {/* <div style={{ width: '70%', margin: 'auto', textAlign: 'left' }}> */}
-      <h2 style={{ borderBottom: '3px solid', padding: '30px 0' }}>상품 등록</h2>
-      <form onSubmit={handleSubmit}>
+    <div style={{ width: '900px', margin: 'auto', textAlign: 'left',backgroundColor : '#F6F6f6', borderRadius : '10px', padding : '10px 30px' }}>
+    <h3 style={{ borderBottom: '3px solid', padding: '20px 0' }}>상품 등록</h3>
+    <form onSubmit={handleSubmit}>
 
-        <div className='post_box' style={{ paddingBottom: '20px' }}>
-          <div className='post_box_left'>
-            <label htmlFor="image" style={{ marginBottom: '10px' }}>상품이미지 <span style={{ fontSize: '15px', color: 'gray' }}>({images.length}/11개)</span></label>
-            <input
-              type="file"
-              id="image"
-              onChange={handleImageChange}
-              multiple
-              ref={imageUploadRef}
-              style={{ display: 'none' }}
-            />
-          </div>
+      <div className='post_box' style={{ paddingBottom: '20px' }}>
+        <div className='post_box_left'>
+          <label htmlFor="image" style={{ marginBottom: '10px' }}>상품이미지 <span style={{ fontSize: '15px', color: 'gray' }}>({images.length}/11개)</span></label>
+          <input
+            type="file"
+            id="image"
+            onChange={handleImageChange}
+            multiple
+            ref={imageUploadRef}
+            style={{ display: 'none' }}
+          />
+        </div>
 
-          <div className='post_box_right'>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              <div
-                className='post_img_box'
-                style={{
-                  width: '200px',
-                  height: '200px',
-                  backgroundColor: '#eee',
-                  textAlign: 'center',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                }}
-                onClick={() => imageUploadRef.current.click()}
-              >
-                <FontAwesomeIcon icon={faCamera} size='2x' />
-                <p style={{ marginTop: '5px' }}>사진 선택</p>
-              </div>
-              {imagePreviews.length > 0 && (
-                imagePreviews.map((preview, index) => (
-                  <div
-                    className='post_img_box'
-                    key={index}
+        <div className='post_box_right'>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div
+              className='post_img_box'
+              style={{
+                width: '150px',
+                height: '150px',
+                backgroundColor: '#eee',
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+              onClick={() => imageUploadRef.current.click()}
+            >
+              <FontAwesomeIcon icon={faCamera} style={{ fontSize: '30px' }} />
+              <p style={{ marginTop: '5px' }}>사진 선택</p>
+            </div>
+            {imagePreviews.length > 0 && (
+              imagePreviews.map((preview, index) => (
+                <div
+                  className='post_img_box'
+                  key={index}
+                  style={{
+                    position: 'relative',
+                    width: '150px',
+                    height: '150px',
+                  }}
+                >
+                  <img
+                    src={preview}
+                    alt={`미리보기 ${index + 1}`}
+                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                  />
+                  <Link
+                    onClick={(event) => handleImageDelete(event, index)}
                     style={{
-                      position: 'relative',
-                      width: '200px',
-                      height: '200px',
+                      position: 'absolute',
+                      top: '5px',
+                      right: '5px',
+                      padding: '5px',
+                      color: '#eee'
                     }}
                   >
-                    <img
-                      src={preview}
-                      alt={`미리보기 ${index + 1}`}
-                      style={{ width: '200px', height: '200px', objectFit: 'cover' }}
-                    />
-                    <Link
-                      onClick={(event) => handleImageDelete(event, index)}
-                      style={{
-                        position: 'absolute',
-                        top: '5px',
-                        right: '5px',
-                        padding: '5px',
-                        color: '#eee'
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faCircleXmark} />
-                    </Link>
-                  </div>
-                ))
-              )}
-            </div>
-
+                    <FontAwesomeIcon icon={faCircleXmark} />
+                  </Link>
+                </div>
+              ))
+            )}
           </div>
+
         </div>
+      </div>
 
 
         <div className='post_box'>
